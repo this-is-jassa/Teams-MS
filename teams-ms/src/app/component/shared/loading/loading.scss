@@ -1,0 +1,244 @@
+
+@function url-friendly-color($color) {
+    @return '%23' + str-slice('#{$color}', 2, -1)
+}
+
+$color1: #141414;
+$color2: #2092ED;
+$width: 500px;
+
+@keyframes up {
+  0% { top: -$width/4+$width/40; }
+  100% { top: $width/4-$width/40; }
+}
+@keyframes down {
+  0% { bottom: $width/4-$width/40; }
+  100% { bottom: -$width/4+$width/40; }
+}
+@keyframes rotate {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }  
+}
+@keyframes jump {
+  0% { bottom: -$width/20; }
+  50% { bottom: -$width/20; }
+  100% { bottom: $width/4-$width/40; }
+}
+@keyframes fade {
+  0% { opacity: 0; }
+  50% { opacity: 0; }
+  51% { opacity: 1; }
+  100% { opacity: 1; }
+}
+@keyframes spin1 {
+  0% { transform: rotate(0); }
+  75% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes spin2 {
+  0% { transform: rotate(0); }
+  75% { transform: rotate(0); }
+  100% { transform: rotate(-360deg); }
+}
+@keyframes dolphin {
+  0% { transform: rotate(45deg); }
+  75% { transform: rotate(45deg); }
+  100% { transform: rotate(-70deg); }
+}
+@keyframes splash {
+  0% { transform: scale(1, 0); }
+  75% { transform: scale(1, 0); }
+  100% { transform: scale(1, 1); }
+}
+@keyframes slide1 {
+  0% { transform: translate(0); }
+  52% { transform: translate(0); }
+  100% { transform: translate(-$width/8); }
+}
+@keyframes slide2 {
+  0% { transform: translate(0); }
+  52% { transform: translate(0); }
+  100% { transform: translate($width/8); }
+}
+
+#blur{
+    opacity: 0.8;
+    background-color: black;
+}
+
+.bapp{
+    width: 100%;
+    position: fixed;
+    height: 100%;
+    padding: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.container {
+  overflow: hidden;
+  position: relative;
+  width: $width;
+  height: $width/2;
+  top: 50%;
+  left: 50%;
+  margin-left: -1*$width/2;
+  margin-top: -1*$width/4;
+  z-index: 2;
+  
+  .subcontainer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: rotate 4s linear infinite;
+    
+    *, *:before, *:after {
+      position: absolute;
+      content: "";
+      display: block;
+      
+    }
+    .half {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      
+      .splash {
+        height: $width/40*4;
+        width: $width/20*5;
+        bottom: 0;
+        margin-bottom: -3px;
+        left: 50%;
+        margin-left: -($width/20*5)/2;
+        overflow: hidden;
+  
+        .splash-container {
+          height: 100%;
+          width: 100%;
+          transform-origin: bottom center;
+          
+          .circle {
+            left: 50%;
+            top: 30%;
+            width: $width/22;
+            height: $width/22;
+            margin-top: -$width/44;
+            margin-left: -$width/44;
+            border-radius: 50%;
+          }
+          
+          &:before, &:after {
+            height: 70%;
+            width: 50%;
+          }
+          &:before {
+            left: 0;
+            bottom: 0;
+            border-bottom-right-radius: 100%;
+            margin-left: -$width/44;
+          }
+          &:after {
+            right: 0;
+            bottom: 0;
+            border-bottom-left-radius: 100%;
+            margin-right: -$width/44;
+          }
+        }
+      }
+      
+      .droplet {
+        width: $width/20;
+        height: $width/20;
+        left: 50%;
+        margin-left: -$width/40;
+        
+        &:before, &:after {
+            background-size: 100% 100%;
+          }
+      }
+      
+      &:nth-child(1) {
+        box-shadow: 0 #{-$width/4} 0 $width/4 $color1;
+        background-color: $color1;
+        margin-top: -25%;
+        animation: up 1s infinite alternate ease-in-out;
+        
+        .splash {
+          animation: slide1 1s infinite linear;
+        
+          .splash-container {
+            animation: splash 1s infinite -.25s alternate;
+          
+            .circle {
+              background-color: $color2;
+            }
+          
+            &:before, &:after {
+              box-shadow: 0 $width/22+2 0 $width/22 $color2;
+            }
+          }
+        }
+        
+        .droplet {
+          animation: jump 1s infinite alternate;
+          
+          &:before, &:after {
+            height: 100%;
+            width: 100%;
+          }
+          &:before {
+            border-radius: 50%;
+            background-color: $color2;
+            animation: fade 4s infinite;
+          }
+          &:after{
+            background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 10 10' xmlns='http://www.w3.org/2000/svg'><path fill='#{url-friendly-color($color2)}' d='M0,10L5,0L10,10Z'/></svg>");
+            animation: fade 4s infinite -2s, spin1 4s infinite -2.5s linear;
+          }
+        }
+      }
+      &:nth-child(2) {
+        box-shadow: 0 #{-$width/4} 0 $width/4 $color2;
+        bottom: 0;
+        margin-bottom: -25%;
+        background-color: $color2;
+        transform: rotate(180deg);
+        animation: down 1s infinite alternate ease-in-out;
+        
+        .splash {
+          animation: slide2 1s infinite -1s linear;
+        
+          .splash-container {
+            animation: splash 1s infinite -1.25s alternate;
+          
+            .circle {
+              background-color: $color1;
+            }
+          
+            &:before, &:after {
+              box-shadow: 0 $width/22+2 0 $width/22 $color1;
+            }
+          }
+        }
+        
+        .droplet {
+          animation: jump 1s infinite -1s alternate;
+          
+          &:before {
+            height: 200%;
+            width: 200%;
+            left: -50%;
+            background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 419 281' xmlns='http://www.w3.org/2000/svg'><path fill='#{url-friendly-color($color1)}' d='m212.0052,5.32781c-7.8024,2.96131 -14.9229,6.90809 -22.0992,10.425c-2.4471,1.19639 -5.22542,3.1008 -7.49191,3.68309c-5.77739,1.47781 -14.81609,-1.10729 -22.179,-1.37699c-18.40649,-0.66899 -30.32219,0.7197 -45.45239,3.05969c-7.08029,1.09351 -14.4105,2.1165 -20.62619,3.9858c-5.3085,1.5984 -11.3964,5.1678 -17.33671,8.16899c-9.3879,4.74719 -15.7815,9.21451 -23.1009,14.93549c-12.2334,9.55801 -19.9362,21.58951 -28.88922,34.80841c-3.90819,5.7702 -9.54024,14.36819 -9.81912,21.1968c-5.175,8.04479 -13.03829,12.9561 -15.01056,24.7347c2.75742,6.88829 9.90351,0.76289 14.20899,-1.5303c3.56133,-1.902 7.39218,-4.1754 10.5492,-5.08739c16.40151,-4.74239 39.25791,2.03699 55.22571,-2.3085c5.6613,-1.5399 10.5633,-4.64761 16.1871,-5.96371c5.3403,-1.25369 9.4242,0.96451 13.2318,2.65201c2.02261,0.89999 4.1541,2.1153 5.9907,3.08309c11.898,6.30601 23.7888,12.9927 39.76289,15.51c12.82021,2.019 23.95889,-1.8318 34.38031,-3.9117c2.646,-0.52859 6.06209,-0.33751 8.06848,-2.6532c-8.31808,-1.9278 -15.22049,-5.2149 -23.90639,-8.7222c-11.4093,-4.6044 -20.2722,-7.7193 -24.5847,-16.96291c5.1069,-1.37251 11.02139,-0.35519 16.3383,0.6c5.80531,1.04041 11.5665,2.01541 17.13629,2.95651c23.5218,3.9714 41.23351,10.63949 59.1387,19.29149c8.69879,4.1988 16.71451,10.0452 24.08551,14.9553c15.0972,10.0665 27.98669,22.56691 40.14209,36.183c5.505,6.16621 10.41599,13.8855 16.38599,21.246c2.60703,3.21811 5.22903,6.8064 8.01901,10.77661c2.66098,3.77579 6.72601,8.4012 7.29001,11.7036c0.633,3.64319 -1.25403,7.64159 -2.202,11.62379c-1.64401,6.9234 -2.853,14.34599 -2.30402,21.45111c0.71701,9.19218 2.72104,18.14415 6.92102,25.1086c1.82098,-1.6629 2.56497,-4.58673 3.50098,-7.26801c4.60199,-6.03394 10.72501,-12.05856 10.87802,-22.10036c12.57001,6.66328 36.98401,6.10312 51.64499,5.9332c4.40698,-0.05275 8.89801,0.4254 12.54898,-1.33243c-7.69797,-4.57968 -13.34998,-10.37592 -20.04297,-16.28682c-10.125,-8.9355 -18.49802,-16.4637 -33.42603,-21.24359c-4.83899,-1.54921 -10.37698,-2.38831 -13.02896,-5.25931c-2.03702,-2.19749 -2.65805,-7.06529 -3.69003,-11.75159c-2.78101,-12.675 -6.39899,-26.1201 -9.621,-36.78511c-9.68097,-32.06039 -24.45297,-60.5544 -44.1084,-82.6842c-9.9585,-11.2218 -21.85529,-20.35889 -34.67789,-30.5202c-2.1915,-3.52379 -6.2955,-8.27941 -7.1451,-13.6548c-0.86821,-5.5335 0.69719,-10.39079 4.03139,-14.10809c7.29239,-5.4585 18.74762,-6.06211 23.7045,-14.23471c-6.47791,-4.78261 -14.51581,-6.1842   -22.4025,-6.96691c-17.04269,-1.6899 -33.0072,-0.37859 -46.2258,4.64072'/></svg>"); 
+            animation: fade 4s infinite -1s, dolphin 4s infinite -1.5s ease-in-out;
+          }
+          &:after {
+            height: 100%;
+            width: 100%;
+            background-color: $color1;
+            animation: fade 4s infinite -3s, spin2 4s infinite -3.5s linear;
+          }
+        }
+      }
+    }
+  }
+}

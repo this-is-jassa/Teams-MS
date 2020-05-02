@@ -1,0 +1,47 @@
+<div class="card card-project">
+
+    <div class="progress">
+        <div class="progress-bar bg-danger" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0"
+            aria-valuemax="100"></div>
+    </div>
+
+    <div class="card-body">
+        <div class="card-options">
+            <span style="font-size: 12px;" class="badge badge-pill badge-primary ml-1"
+                [ngClass]="badgeStyleClass[userInProjectData.permission]">
+                {{userInProjectData.permission}}
+            </span>
+        </div>
+        <div class="card-title">
+            <a href="#">
+                <h5 data-filter-by="text">
+                    {{projectData.name}}
+                </h5>
+            </a>
+        </div>
+        <hr>
+        <app-avatar-list (click)="loadMembersmodel()" [images]='userImages' data-toggle="modal" data-target= '#projectMembers'>
+        </app-avatar-list>
+
+        <!-- Modal -->
+
+
+
+        <div class="card-meta d-flex justify-content-between">
+            <div class="d-flex align-items-center">
+                <div class="input-group mb-3">
+
+                    <select [(ngModel)]="userInProjectData.status.value" (ngModelChange)="OnstatusChanged()"
+                        class="custom-select" id="inputGroupSelect02">
+
+                        <option *ngFor="let status of [ 'Break', 'Working','Do Not Disturb']">{{status}}
+                        </option>
+                    </select>
+
+                </div>
+            </div>
+            <span class="text-small" data-filter-by="text">Due 4 days</span>
+        </div>
+
+    </div>
+</div>

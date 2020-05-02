@@ -1,0 +1,38 @@
+<div class="row content-list-head">
+    <div class="col-auto">
+        <h3>Members</h3>
+        <button class="btn btn-round" (click)="alert('userAdded')">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+    <form class="col-md-auto">
+        <div class="input-group input-group-round">
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <i class="material-icons">filter_list</i>
+                </span>
+            </div>
+            <input type="search" class="form-control filter-list-input" placeholder="Filter members"
+                aria-label="Filter Members">
+        </div>
+    </form>
+</div>
+<!--end of content list head-->
+
+<div class="content-list-body row">
+
+    <div class="col-6" *ngFor="let item of usersData">
+        <a class="media media-member" href="#">
+            <img alt="Claire Connors" src="https://pipeline.mediumra.re/assets/img/avatar-female-1.jpg"
+                class="avatar avatar-lg" />
+            <div class="media-body">
+                <h6 class="mb-0" data-filter-by="text">{{item.name}}</h6>
+                <span data-filter-by="text" class="badge badge-pill badge-primary my-1" [ngClass]="badgeStyleClass[item.permission]">
+                    {{item.permission}}
+                </span>
+                
+            </div>
+        </a>
+    </div>
+
+</div>

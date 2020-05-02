@@ -1,0 +1,9 @@
+<div class="main">
+    <p class="sign" align="center">Sign in</p>
+    <form class="form1">
+        <input class="un " name="userName" [(ngModel)]="userName" type="text" align="center" required minlength="1" maxlength="16" placeholder="Username">
+        <input class="pass" name="password" [(ngModel)]="password" type="password" align="center" required minlength="8" maxlength="16" placeholder="Password">
+        <a class="submit" (click)="signIn()" align="center">Sign in</a>
+        <p class="create" align="center"><a [routerLink] ='["/auth/signup"]' routerLinkActive="active"> Create Account.</a> </p>
+    </form>
+</div>
