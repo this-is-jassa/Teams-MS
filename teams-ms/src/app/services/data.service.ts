@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable()
 export class DataService {
     
-    private userData = {};
+    private userData: any = {};
     private $userdata = new BehaviorSubject(this.userData);
 
     constructor(private _http: HttpService) {
@@ -34,12 +34,8 @@ export class DataService {
     }
 
     getUser(): Observable<any> {
-        this.refreshData()
+        // this.refreshData()
         return this.$userdata
-    }
-
-    getStaticUser(): any {
-        return this.userData;
     }
 
 

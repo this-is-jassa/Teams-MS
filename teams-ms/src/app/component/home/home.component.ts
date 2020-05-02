@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
 
 
     ngOnInit(): void {
-        // this._data.refreshData();
+        this._data.refreshData();
         this._view.setObs('navbar', 'isVisible', true);
 
         this.fetchData();
@@ -58,80 +58,6 @@ export class HomeComponent implements OnInit {
                 this._view.setObs('loader', 'isVisible', false);
             });
     }
-
-
-
-
-    // HTTP REQUEST Functions Down Below
-
-    // Fetching All the necessory data from server
-
-
-
-
-
-
-    // reqNewPNote() {
-
-    //     this._view.setObs('loader', 'isVisible', true);
-
-    //     this._http.POST('/personalnotes/post', { name: this.formModuleData.NewPNoteForm.name, message: this.formModuleData.NewPNoteForm.message })
-    //         .toPromise()
-    //         .then(res => {
-    //             this.personalNotesData.push(res.data);
-
-    //             // Reset Form
-    //             this.formModuleData.NewPNoteForm = {
-    //                 _id: '',
-    //                 name: '',
-    //                 message: '',
-    //                 crossOff: false,
-    //                 index: 0
-    //             }
-
-    //             // Exit Loader
-    //             this._view.setObs('loader', 'isVisible', false);
-    //         })
-    //         .catch(error => {
-    //             alert("Error Occured Loading The forms")
-    //         });
-
-    // }
-
-    // deletePnote(data, index) {
-    //     this._view.setObs('loader', 'isVisible', true);
-
-    //     this._http.POST('/personalnotes/delete', { id: data._id })
-    //         .toPromise()
-    //         .then(res => {
-    //             this._view.setObs('loader', 'isVisible', false);
-    //         });
-
-    //     if (this.personalNotesData[0] === data) {
-    //         this.personalNotesData.shift();
-    //     } else {
-    //         this.personalNotesData = this.personalNotesData.splice(0, index).concat(this.personalNotesData.splice(index));
-    //     }
-    // }
-
-    // async reqEditPNote(data, index) {
-
-    //     this._view.setObs('loader', 'isVisible', true);
-
-    //     const editReq = await this._http.POST('/personalnotes/update',
-    //         {
-    //             name: data.name,
-    //             message: data.message,
-    //             crossOff: data.crossOff,
-    //             id: data._id
-    //         })
-    //         .toPromise()
-    //         .then(res => {
-    //             this._view.setObs('loader', 'isVisible', false);
-    //             this.personalNotesData[index] = data;
-    //         });
-
-    // }
 
 
 }

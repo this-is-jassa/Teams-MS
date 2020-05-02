@@ -44,6 +44,7 @@ export class ProjectTableRowComponent implements OnInit {
     }
 
     loadMembersmodel(): void {
+        
         this.OnshowMembers.emit(this.members);
     }
 

@@ -17,6 +17,7 @@ import { ViewService } from './services/view.service';
 import { environment } from '../environments/environment';
 import * as firebase from 'firebase';
 import { DataService } from './services/data.service';
+import { ProjectFeatureModule } from './module/project.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { DataService } from './services/data.service';
     AuthFeatureModule,
     HttpClientModule,
     HomeFeatureModule,
+    ProjectFeatureModule
     
   ],
   providers: [

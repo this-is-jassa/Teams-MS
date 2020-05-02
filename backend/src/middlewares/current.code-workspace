@@ -5,6 +5,7 @@
 		}
 	],
 	"settings": {
-		"git.enabled": false
+		"git.enabled": false,
+		"liveServer.settings.multiRootWorkspaceName": "E commerce"
 	}
 }

@@ -27,7 +27,7 @@
 
         <form class="form-inline my-2 my-lg-0">
             <input id="search-form" class="form-control  border-0  form-control-solid mr-sm-2" type="search"
-                placeholder="Search">
+                placeholder="Searchh" data-toggle="modal" data-target="#findUsers">
         </form>
 
         <ul class="navbar-nav  ml-auto mr-4">
@@ -88,12 +88,76 @@
 
                 <div class="dropdown-menu " aria-labelledby="profile-dropdown">
                     <a class="dropdown-item" href="#">View Profile </a>
-                    
+
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" (click)="logOut()" >Log Out </button>
+                    <button class="dropdown-item" (click)="logOut()">Log Out </button>
                 </div>
             </li>
         </ul>
 
     </div>
 </nav>
+
+
+
+<!-- Model -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="findUsers" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content container m-2">
+
+
+            <div class="mt-2">
+                <button type="button" style="width: 90px; font-size: 11.5px; padding: 2px;" class="btn btn-outline-danger float-right" data-dismiss="modal">Close</button>
+            </div>
+
+            <div class="input-group input-group-round mt-1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="material-icons">filter_list</i>
+                    </span>
+                </div>
+                <input name="search2" type="text" class="form-control" [(ngModel)]="searchText"
+                    (ngModelChange)="searchUsers($event)" autocomplete="off" placeholder="Search ">
+            </div>
+
+
+            <div class="container">
+                <div style="margin: 15px 0 0 5px; font-size: 13px;">Search</div>
+                <div class="form-group-users">
+
+                    <div class="my-2" *ngFor="let item of searchData">
+                        <img alt="Claire Connors" [src]="avatars[item.avatar]" class="avatar mr-2" />
+                        <span class="h6 mb-0"> {{item.userName}} </span>
+
+                        <button style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
+                            class="btn btn-outline-primary float-right" data-dismiss="modal">View Profile</button>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <hr>
+
+            <div style="margin: 15px 0 0 5px; font-size: 13px;">People you might know</div>
+            <div class="form-group-users">
+
+                <div class="my-2" *ngFor="let item of following">
+                    <img alt="Claire Connors" [src]="avatars[item.avatar]" class="avatar mr-2" />
+                    <span class="h6 mb-0"> {{item.userName}} </span>
+
+                    <button style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
+                        class="btn btn-outline-primary float-right" data-dismiss="modal">View Profile</button>
+
+                </div>
+
+            </div>
+
+            
+        </div>
+    </div>
+</div>

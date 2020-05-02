@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { environment } from 'src/environments/environment';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
     selector: 'app-new-project-model',
@@ -32,7 +33,7 @@ export class NewProjectComponent implements OnChanges {
     
 
 
-    constructor(private _http: HttpService) { }
+    constructor(private _http: HttpService, private _data: DataService) { }
 
     ngOnChanges(changes: SimpleChanges){
         if(changes.userInformation){
@@ -67,16 +68,15 @@ export class NewProjectComponent implements OnChanges {
     }
 
     createProject(): void {
-        
-        this._http.POST('/projects/post', 
-        {
+        let payload = {
             name: this.formData.name,
             discription: this.formData.description,
             private: !this.formData.isPrivate,
             isFreeze: this.formData.isFreeze,
             startingDate: this.formData.startingDate,
             endingDate: this.formData.endingDate
-        })
+        }
+        this._http.POST('/projects/post', payload)
         .toPromise()
         .then(data => {
             let promisArr =[];
@@ -86,9 +86,10 @@ export class NewProjectComponent implements OnChanges {
                     .toPromise()
                 )
             });
-            Promise.all(promisArr)
-            .then(data => {
-                // ..
+            Promise.resolve(promisArr)
+            .then(data2 => {
+                this._data.refreshData();
+               
             })
             
         });
