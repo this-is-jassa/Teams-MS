@@ -1,0 +1,329 @@
+const projectModel = require('../model/project.model');
+const userModel = require('../model/user.model');
+
+// standard request - GET- params.name & - POST- body.name
+
+module.exports = {
+
+    get: (req, res, next) => {
+
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        const { name } = req.params;
+
+        projectModel.findOne({ name: name }, (err, response) => {
+            if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+
+            res.status(200).json({ success: true, data: req.user.project });
+            next();
+        })
+
+    }, // O, A, D
+
+    post: (req, res, next) => {
+
+        if (req.user === null) { console.log("Not Authorised"); res.status(500).json({ success: false, msg: "Not Authorised" }); return }
+
+        const { userName } = req.user;
+        const { name, discription, private, isFreeze, startingDate, endingDate } = req.body;
+
+
+        const payload = {
+            name: name,
+            discription: discription,
+            private: private,
+            freeze: {
+                isFreeze: isFreeze
+            },
+            startingDate: startingDate,
+            endingDate: endingDate,
+            members: { name: userName, permission: 'Owner' },
+        };
+
+        projectModel.create(payload, (err, response) => {
+            if (err) {console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
+
+            const userPayload = {
+                $push: { projects: response._id },
+            };
+            
+            userModel.findOneAndUpdate({ userName: userName }, userPayload, { useFindAndModify: false }, (err, response2) => {
+                if (err) { console.log(err); return; }
+
+                res.status(200).json({ success: true, data: response.name });
+            });
+
+        });
+    },
+
+
+
+    update: (req, res, next) => {
+
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+
+        const { userName } = req.user;
+        const { name, discription, private, isFreeze } = req.body;
+
+
+        const payload = {
+
+            discription: discription,
+            private: private,
+            freeze: {
+                isFreeze: isFreeze
+            }
+        };
+
+        projectModel.findOneAndUpdate({ name: name }, payload, (err, response) => {
+
+            if (err) { res.status(500).json({ success: false, msg: "Saving Error" }); return };
+
+            res.status(200).json({ success: true });
+            next();
+        })
+    },
+
+    updateMemberStatus: async (req, res, next) => {
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        try{
+            const {userName} = req.user;
+            const {name} = req.user.project;
+            const { value } = req.body;
+
+            const payload = {
+                $set: {
+                    'members.$.status.value': value
+                }
+            }
+
+            await projectModel.findOneAndUpdate({name: name, 'members.name': userName }, payload);
+            res.status(200).json({success: true});
+            
+
+        }
+        catch(e) {
+            console.log(e);
+            res.status(500).json({ success: false, msg: "Saving Error" });
+        }
+
+    },
+
+
+    addMember: (req, res, next) => {
+
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        const { userName } = req.user;
+        const {_id} = req.user.project;
+        const { member, name } = req.body;
+
+        let IsMemberAlreadyExist = () => {
+
+            const projectmembers = req.user.project.members;
+
+            for (const item of projectmembers) {
+
+                if (item.name === member.name) { return true; }
+            }
+            return false;
+
+        }
+
+
+        if (!!member.name && member.name !== userName && member.permission !== 'Owner' && !IsMemberAlreadyExist()) {
+
+            const payload = {
+                $push: {
+                    projects: _id,
+                    notify: { type: 'Project', message: 'You are added to a project ' + name + 'by' + userName }
+                }
+            };
+
+
+            console.log(member.name + ' - ' + name);
+            
+            userModel.findOneAndUpdate({ userName: member.name }, payload, (err, response) => {
+                if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+            });
+
+            projectModel.findOneAndUpdate({ name: name }, { $push: { members: { name: member.name, permission: member.permission, status: {} } } }, (err, response) => {
+                if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+
+                res.status(200).json({ success: true });
+            });
+
+        } else {
+            res.status(500).json({ success: false, message: "Member Details not valid" })
+        }
+
+    },
+
+
+
+    deleteMember: (req, res, next) => {
+
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        const { userName } = req.user;
+        const {_id} = req.user.project;
+        const { memberName, name } = req.body;
+
+
+        if (member.name !== userName && member.permission !== 'Owner') {
+            const payload = {
+                $pull: { projects: _id },
+                $push: { notify: { type: 'Project', message: 'You are removed from the project ' + name } }
+            };
+
+            userModel.findOneAndUpdate({ userName: memberName }, payload, (err, response) => {
+                if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+            });
+
+            projectModel.findOneAndUpdate({ name: name }, { $pull: { members: { name: memberName } } }, (err, response) => {
+                if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+
+                res.status(200).json({ success: true });
+            });
+
+        } else {
+            res.status(500).json({ success: false, message: "Member Details not valid" })
+        }
+
+    },
+
+
+
+    updateMember: (req, res, next) => {
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        const { userName } = req.user;
+        const { member, name } = req.body;
+
+        if (member.name !== userName && member.permission !== 'Owner') {
+
+            const payload = {
+                $set: {
+                    'members.$.permission': member.permission
+                }
+            }
+
+            projectModel.findOneAndUpdate({ name: name, 'members.name': member.name  }, payload, (err, response) => {
+                if (err) {console.log(err); res.status(500).json({ success: false, msg: err }); return; }
+
+            });
+
+            userModel.findOneAndUpdate({ userName: member.name }, { $push: { notify: { type: 'Project', message: ('Your role of project ' + name + 'has been changed to ' + member.permission) } } },
+                { useFindAndModify: false }, (err, response) => {
+                    if (err) { console.error(err); res.status(500).json({ success: false, msg: err }); return; }
+                    res.status(200).json({ success: true });
+                });
+            
+        } else {
+            res.status(500).json({ success: false, message: "Member Details not valid" })
+        }
+
+    },
+
+
+    update_stickey_req: (req, res, next) => { }, // D
+
+
+    delete: (req, res, next) => {
+
+
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        const { UserName } = req.user;
+        const { name } = req.user.project;
+
+        userModel.findOneAndUpdate({ UserName: UserName }, { $pull: { projects: { name: name } } }, (err, response) => {
+            if (err) { console.log(err); return; };
+
+        })
+
+        projectModel.deleteOne({ name: name }, (err, response) => {
+            if (err) { res.status(500).json({ success: false, msg: "Saving Error" }); return };
+
+            res.status(200).json({ success: true });
+
+        });
+
+
+        // Delete the Directory now
+    },
+
+
+
+    quit: (req, res, next) => {
+        res.send("de");
+    },
+
+
+
+
+    // ***** Always use After sharedMiddleware.checkTokenAndSetUser 
+    permissions: function ($role, $overRidePrivate) {
+        return (req, res, next) => {
+
+            if (req.user === null || req.user === 'undefined') {
+                res.status(500).json({ success: false });
+            }
+
+            else {
+                const { userName } = req.user;
+                const { name } = req.body || req.params;
+
+                projectModel.findOne({ name: name })
+                    .select("_id members private freeze timeStamp name discription members")
+                    .exec((err, response) => {
+                        if (err || response === null) { res.status(500).json({ success: false, message: "Error Loading Projects" }); console.log(err); return; }
+
+                        if (response.private || $overRidePrivate) { // FOR GET REQUEST
+
+                            req.user.project = response;
+
+                            const member = response.members.find(function (item) {
+                                return item.name === userName;
+                            });
+
+                            if (!!member && ($role.includes('ALL') || $role.includes(member.permission))) {
+                                req.user.permission = true;
+                            } else {
+                                req.user.permission = false;
+                            }
+                        } else {
+                            req.user.permission = true;
+                        }
+
+                        next();
+                    });
+            }
+        }
+    }
+
+
+}
