@@ -17,8 +17,7 @@ module.exports = {
         projectModel.findOne({ name: name }, (err, response) => {
             if (err) { res.status(500).json({ success: false }); console.log(err); return; }
 
-            res.status(200).json({ success: true, data: req.user.project });
-            next();
+            res.status(200).json({ success: true, data: response });
         })
 
     }, // O, A, D
@@ -295,10 +294,10 @@ module.exports = {
 
             else {
                 const { userName } = req.user;
-                const { name } = req.body || req.params;
+                const { name } = req.params || req.body;
 
                 projectModel.findOne({ name: name })
-                    .select("_id members private freeze timeStamp name discription members")
+                    .select("_id private name members")
                     .exec((err, response) => {
                         if (err || response === null) { res.status(500).json({ success: false, message: "Error Loading Projects" }); console.log(err); return; }
 

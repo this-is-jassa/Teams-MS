@@ -15,7 +15,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     avatars = environment.userImages;
 
-    @Input() isVisile = false;
+    isVisile = false;
     userData: any;
     searchText: string = '';
     searchData: any;
