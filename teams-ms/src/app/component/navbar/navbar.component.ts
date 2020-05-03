@@ -45,7 +45,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
                             this.following = data.data.following;
                         })
                 }
-                console.log("SWBHWBD")
             });
 
     }

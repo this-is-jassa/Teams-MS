@@ -1,6 +1,6 @@
 const projectModel = require('../model/project.model');
 const userModel = require('../model/user.model');
-
+const directoryModel = require('../model/directory.model');
 // standard request - GET- params.name & - POST- body.name
 
 module.exports = {
@@ -27,8 +27,9 @@ module.exports = {
         if (req.user === null) { console.log("Not Authorised"); res.status(500).json({ success: false, msg: "Not Authorised" }); return }
 
         const { userName } = req.user;
-        const { name, discription, private, isFreeze, startingDate, endingDate } = req.body;
-
+        const { discription, private, isFreeze, startingDate, endingDate } = req.body;
+        let name = req.body.name; 
+        name = name.trim().split(' ').join('-')
 
         const payload = {
             name: name,
@@ -42,14 +43,26 @@ module.exports = {
             members: { name: userName, permission: 'Owner' },
         };
 
+
+
         projectModel.create(payload, (err, response) => {
-            if (err) {console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
+            if (err) { console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
+
+
+            new directoryModel({
+                name: name,
+                filetype: 'dir',
+                text: '',
+                content: []
+            }).save((err, response2) => {
+                if (err) { console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
+            });
 
             const userPayload = {
                 $push: { projects: response._id },
             };
-            
-            userModel.findOneAndUpdate({ userName: userName }, userPayload, { useFindAndModify: false }, (err, response2) => {
+
+            userModel.findOneAndUpdate({ userName: userName }, userPayload, { useFindAndModify: false }, (err, response3) => {
                 if (err) { console.log(err); return; }
 
                 res.status(200).json({ success: true, data: response.name });
@@ -96,9 +109,9 @@ module.exports = {
             return;
         }
 
-        try{
-            const {userName} = req.user;
-            const {name} = req.user.project;
+        try {
+            const { userName } = req.user;
+            const { name } = req.user.project;
             const { value } = req.body;
 
             const payload = {
@@ -107,12 +120,12 @@ module.exports = {
                 }
             }
 
-            await projectModel.findOneAndUpdate({name: name, 'members.name': userName }, payload);
-            res.status(200).json({success: true});
-            
+            await projectModel.findOneAndUpdate({ name: name, 'members.name': userName }, payload);
+            res.status(200).json({ success: true });
+
 
         }
-        catch(e) {
+        catch (e) {
             console.log(e);
             res.status(500).json({ success: false, msg: "Saving Error" });
         }
@@ -128,7 +141,7 @@ module.exports = {
         }
 
         const { userName } = req.user;
-        const {_id} = req.user.project;
+        const { _id } = req.user.project;
         const { member, name } = req.body;
 
         let IsMemberAlreadyExist = () => {
@@ -155,7 +168,7 @@ module.exports = {
 
 
             console.log(member.name + ' - ' + name);
-            
+
             userModel.findOneAndUpdate({ userName: member.name }, payload, (err, response) => {
                 if (err) { res.status(500).json({ success: false }); console.log(err); return; }
             });
@@ -182,7 +195,7 @@ module.exports = {
         }
 
         const { userName } = req.user;
-        const {_id} = req.user.project;
+        const { _id } = req.user.project;
         const { memberName, name } = req.body;
 
 
@@ -227,8 +240,8 @@ module.exports = {
                 }
             }
 
-            projectModel.findOneAndUpdate({ name: name, 'members.name': member.name  }, payload, (err, response) => {
-                if (err) {console.log(err); res.status(500).json({ success: false, msg: err }); return; }
+            projectModel.findOneAndUpdate({ name: name, 'members.name': member.name }, payload, (err, response) => {
+                if (err) { console.log(err); res.status(500).json({ success: false, msg: err }); return; }
 
             });
 
@@ -237,7 +250,7 @@ module.exports = {
                     if (err) { console.error(err); res.status(500).json({ success: false, msg: err }); return; }
                     res.status(200).json({ success: true });
                 });
-            
+
         } else {
             res.status(500).json({ success: false, message: "Member Details not valid" })
         }
@@ -294,7 +307,8 @@ module.exports = {
 
             else {
                 const { userName } = req.user;
-                const { name } = req.params || req.body;
+                const name  = (req.method === 'GET')? req.params.name: req.body.name;
+                console.log(name);
 
                 projectModel.findOne({ name: name })
                     .select("_id private name members")

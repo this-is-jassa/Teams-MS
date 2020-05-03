@@ -11,13 +11,13 @@ import { DataService } from 'src/app/services/data.service';
 export class NewProjectComponent implements OnChanges {
     
 
-    @Input() userInformation;
+    @Input() userInformation: any;
 
     public avatars = environment.userImages;
 
     public searchData = [];
     public membersAdded = new Set();
-    public following: any[];
+    public following: any[] = [];
 
     public formData: any = {
         name: '',
@@ -36,13 +36,15 @@ export class NewProjectComponent implements OnChanges {
     constructor(private _http: HttpService, private _data: DataService) { }
 
     ngOnChanges(changes: SimpleChanges){
-        if(changes.userInformation){
+        if(this.userInformation.userName) {
             this._http.GET('/users/get/following/'+ this.userInformation.userName)
             .toPromise()
             .then(data => {
                 this.following = data.data.following;
             })
+
         }
+        
     }
 
 

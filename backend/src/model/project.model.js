@@ -45,12 +45,7 @@ const projectSchema = mongo.Schema({
         type: types.Date,
         default: Date.now()
     },
-    directoryStructure: [{
-        name: {type: types.String, required: true},
-        type: {required: true, enum:['directory','txt', 'mp3', 'mp4', 'png', 'jpg', 'svg'], type: types.String},
-        access: [types.String],
-        children: [types.Mixed]
-    }],              // Depends
+    
     stickey: [
         {
             group: {
@@ -85,11 +80,11 @@ const projectSchema = mongo.Schema({
     ]
 });
 
-projectSchema.pre('save', function(next){
-    const project = this;
-    project.name = project.name.replace(' ','-');
-    next();
-});
+// projectSchema.pre('save', function(next){
+//     const project = this;
+//     project.name = project.name.replace(' ','-');
+//     next();
+// });
 
 module.exports =  mongo.model('projects', projectSchema);
 
