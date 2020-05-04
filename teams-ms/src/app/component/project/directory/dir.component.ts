@@ -1,3 +1,4 @@
+
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -43,7 +44,7 @@ export class DirectoryComponent implements OnInit {
                 // .toPromise()
                 // .then(data => {
                 //     console.log(data);
-                // });
+                // });  
             }
         })
     }
