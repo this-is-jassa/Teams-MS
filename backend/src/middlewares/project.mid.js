@@ -1,6 +1,7 @@
 const projectModel = require('../model/project.model');
 const userModel = require('../model/user.model');
 const directoryModel = require('../model/directory.model');
+const mongo = require('mongoose');
 // standard request - GET- params.name & - POST- body.name
 
 module.exports = {
@@ -22,53 +23,93 @@ module.exports = {
 
     }, // O, A, D
 
-    post: (req, res, next) => {
+    post: async (req, res, next) => {
 
         if (req.user === null) { console.log("Not Authorised"); res.status(500).json({ success: false, msg: "Not Authorised" }); return }
 
-        const { userName } = req.user;
-        const { discription, private, isFreeze, startingDate, endingDate } = req.body;
-        let name = req.body.name; 
-        name = name.trim().split(' ').join('-')
+        try {
 
-        const payload = {
-            name: name,
-            discription: discription,
-            private: private,
-            freeze: {
-                isFreeze: isFreeze
-            },
-            startingDate: startingDate,
-            endingDate: endingDate,
-            members: { name: userName, permission: 'Owner' },
-        };
-
-
-
-        projectModel.create(payload, (err, response) => {
-            if (err) { console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
-
-
-            new directoryModel({
+            const { userName } = req.user;
+            const { discription, private, isFreeze, startingDate, endingDate } = req.body;
+            let name = req.body.name; 
+            name = name.trim().split(' ').join('-')
+    
+    
+            const projectId = mongo.Types.ObjectId();
+            const dirId = mongo.Types.ObjectId();
+    
+            const payload = {
+                _id: projectId,
+                name: name,
+                discription: discription,
+                private: private,
+                freeze: {
+                    isFreeze: isFreeze
+                },
+                startingDate: startingDate,
+                endingDate: endingDate,
+                members: { name: userName, permission: 'Owner' },
+                dir: dirId
+            };
+    
+            const userPayload = {
+                $push: { projects: projectId },
+            };
+    
+            const dirPayload = {
+                _id: dirId,
+                projectId: projectId,
                 name: name,
                 filetype: 'dir',
                 text: '',
-                content: []
-            }).save((err, response2) => {
-                if (err) { console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
-            });
-
-            const userPayload = {
-                $push: { projects: response._id },
+                child: []
             };
+    
+            const newProject = projectModel.create(payload);
+            const newDir = directoryModel.create(dirPayload);
+    
+        
+    
+            userModel.findOneAndUpdate({ userName: userName }, userPayload, { useFindAndModify: false }, (err, response3) => {});
 
-            userModel.findOneAndUpdate({ userName: userName }, userPayload, { useFindAndModify: false }, (err, response3) => {
-                if (err) { console.log(err); return; }
-
-                res.status(200).json({ success: true, data: response.name });
+            Promise
+            .resolve([newProject, newDir])
+            .then(response => {
+                res.status(200).json({ success: true, data: name });
             });
 
-        });
+        }
+        catch(err) {
+            console.log(err); res.status(500).json({ success: false, msg: "Saving Error" });
+        }
+
+
+        // projectModel.create(payload, (err, response) => {
+        //     if (err) { console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
+
+
+        //     new directoryModel({
+        //         projectId: response._id,
+
+        //         name: name,
+        //         filetype: 'dir',
+        //         text: '',
+        //         content: []
+        //     }).save((err, response2) => {
+        //         if (err) { console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
+        //     });
+
+        //     const userPayload = {
+        //         $push: { projects: response._id },
+        //     };
+
+        //     userModel.findOneAndUpdate({ userName: userName }, userPayload, { useFindAndModify: false }, (err, response3) => {
+        //         if (err) { console.log(err); return; }
+
+        //         res.status(200).json({ success: true, data: response.name });
+        //     });
+
+        // });
     },
 
 
@@ -143,6 +184,8 @@ module.exports = {
         const { userName } = req.user;
         const { _id } = req.user.project;
         const { member, name } = req.body;
+
+        console.log(userName + ' ' + _id + ' ' + member + ' ' + name);
 
         let IsMemberAlreadyExist = () => {
 
@@ -307,13 +350,13 @@ module.exports = {
 
             else {
                 const { userName } = req.user;
-                const name  = (req.method === 'GET')? req.params.name: req.body.name;
-                console.log(name);
+                const name  = (req.method === 'GET')? req.params.name:  req.body.name;
+
 
                 projectModel.findOne({ name: name })
                     .select("_id private name members")
                     .exec((err, response) => {
-                        if (err || response === null) { res.status(500).json({ success: false, message: "Error Loading Projects" }); console.log(err); return; }
+                        if (err || response === null) { res.status(400).json({ success: false, message: "Error Loading Projects" }); console.log(err); return; }
 
                         if (response.private || $overRidePrivate) { // FOR GET REQUEST
 

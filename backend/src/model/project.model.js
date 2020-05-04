@@ -41,6 +41,11 @@ const projectSchema = mongo.Schema({
         }
     }],           // O, A, D( Delete: private )
 
+    dir: {
+        type: types.ObjectId,
+        required: true
+    },
+
     timeStamp: {
         type: types.Date,
         default: Date.now()

@@ -7,7 +7,7 @@ const auth = require('./src/routes/auth.route');
 const personalNotes = require('./src/routes/personalNotes.route');
 const project = require('./src/routes/project.route');
 const user = require('./src/routes/user.route');
-const directory = require('./src/model/directory.model');
+const directory = require('./src/routes/directory.route');
 
 // Middleware
 app.use('/public', express.static('./stat'));
@@ -28,7 +28,7 @@ app.use('/auth', auth);
 app.use('/personalnotes', personalNotes);
 app.use('/projects', project);
 app.use('/users', user);
-app.use('/directory', directory);
+app.use('/dir', directory);
 
 // Connect to the database
 connectDB();

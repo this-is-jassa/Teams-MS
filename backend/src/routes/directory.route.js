@@ -2,33 +2,16 @@ const route = require('express').Router()
 const projectMiddleware = require('../middlewares/project.mid');
 const sharedMiddleware = require('../middlewares/shared.mid')
 const $role = require('../../config/config').role;
+const dirMid = require('../middlewares/directory.mid')
+
+route.get('/get/directory/:name/:dirId', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) , dirMid.get_dir);
+route.post('/update/directory', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) , dirMid.update_dir);
+route.post('/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true) , dirMid.post);
 
 
-/**
+route.get('/get/file/:name/:fileId', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) , dirMid.get_file);
+route.post('/update/file', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true) , dirMid.update_file);
 
-* @ROUTE UPDATE /get
-
-* @DESC Get your project
-
-* @Access Only members can access it
-
-*/
-
-route.get('/get/directory', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) ,projectMiddleware.get);
-
-
-
-/**
-
-* @ROUTE POST /post
-
-* @DESC post your project
-
-* @Access ALL users can access it.
-
-*/
-route.post('/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.post);
-route.post('/post/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.addMember); 
 
 
 

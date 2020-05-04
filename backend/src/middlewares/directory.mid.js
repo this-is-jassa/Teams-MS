@@ -1,51 +1,144 @@
 const projectModel = require('../model/project.model');
 const directoryModel = require('../model/directory.model');
 const codeModel = require('../model/code.model');
+const mongo = require('mongoose');
 
 module.exports = {
-    get_directory: async (req, res, next) => {
-        
-        try{
-            const {_id} = req.user.project; 
-            const directory = await directoryModel.findOne({projectId: _id});
 
-            res.status(200).json({success: true, data: directory});
+    post: async (req, res, next) => {
+        try {
+            const { _id } = req.user.project;
+            const { fileName, fileType, codeText, parentDirId } = req.body;
 
-        }catch (err) {
+            const dirId = mongo.Types.ObjectId();
+
+            let payload = {
+                _id: dirId,
+                name: fileName,
+                fileType: fileType,
+                text: '',
+                child: [],
+                projectId: _id
+            }
+
+            if (['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp', '.py', 'dir'].includes(fileType)) {
+                
+                if(fileType !== 'dir') {
+                    const fileId = mongo.Types.ObjectId();
+                    payload.text = fileId;
+    
+                    const codePayload = {
+                        _id: fileId,
+                        projectId: _id,
+                        code: codeText
+                    }
+                    const createFile = await codeModel.create(codePayload);
+                }
+
+                const createDir = await directoryModel.create(payload);
+                
+                const addInstanceToParent = await directoryModel.findOneAndUpdate({projectId: _id, _id: parentDirId}, {$push: {child: dirId}});
+
+                res.status(200).json({success: true});
+
+            } else {
+                console.log("Not a valid File type")
+                throw 'Not a valid File type';
+            }
+
+
+        } catch (err) {
             console.log(err);
-            res.status(400).json({success: false, message: 'Server Error'})
+            res.status(400).json({ success: false, message: err })
         }
     },
 
-    get_code: async (req, res, next) => {
-        try{
-            const {_id} = req.user.project; 
-            const {id} = req.params;
 
-            const code = await codeModel.findOne({projectId: _id, _id: id});
+    get_dir: async (req, res, next) => {
 
-            res.status(200).json({success: true, data: code});
+        try {
+            const { _id } = req.user.project;
+            const { dirId } = req.params;
 
-        }catch (err) {
+            const directory = await directoryModel.findOne({ projectId: _id, _id: dirId })
+
+
+            res.status(200).json({ success: true, data: directory });
+
+        } catch (err) {
             console.log(err);
-            res.status(400).json({success: false, message: 'Server Error'})
+            res.status(400).json({ success: false, message: 'Server Error' })
         }
     },
 
-    update_code: async (req, res, next) => {
-        try{
-            const {_id} = req.user.project; 
-            const {id, codeText} = req.body;
+    update_dir: async (req, res, next) => {
 
-            const code = await codeModel.findOneAndUpdate({projectId: _id, _id: id}, {code: codeText});
-            
-            res.status(200).json({success: true});
+        try {
+            const { _id } = req.user.project;
+            const { dirId, newName } = req.body;
 
-        }catch (err) {
+            await directoryModel.findOneAndUpdate({ projectId: _id, _id: dirId }, { name: newName })
+            res.status(200).json({ success: true });
+
+        } catch (err) {
             console.log(err);
-            res.status(400).json({success: false, message: 'Server Error'})
+            res.status(400).json({ success: false, message: 'Server Error' })
         }
-    }, 
+
+    },
+
+    get_file: async (req, res, next) => {
+        try {
+            const { _id } = req.user.project;
+            const { fileId } = req.params;
+
+            const code = await codeModel.findOne({ projectId: _id, _id: fileId });
+
+            res.status(200).json({ success: true, data: code });
+
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({ success: false, message: 'Server Error' })
+        }
+    },
+
+
+    update_file: async (req, res, next) => {
+        try {
+            const { _id } = req.user.project;
+            const { fileId, codeText } = req.body;
+
+            await codeModel.findOneAndUpdate({ projectId: _id, _id: fileId }, { code: codeText });
+
+            res.status(200).json({ success: true });
+
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({ success: false, message: 'Server Error' })
+        }
+    },
+
+    // delete_file: async (req, res, next) => {
+
+    //     try {
+
+    //         const { _id } = req.user.project;
+    //         const { dirId, fileId } = req.body;
+
+    //         const deleteInstance = directoryModel.findOneAndUpdate({ projectId: _id, _id: dirId }, { $pull: { clild: fileId } });
+    //         const deleteFile = codeModel.deleteOne({ projectId: _id, _id: fileId });
+
+    //         Promise.resolve([deleteInstance, deleteFile])
+    //             .then(response => {
+    //                 res.status(200).josn({ success: true })
+    //             })
+
+    //     } catch (err) {
+    //         console.log(err);
+    //         res.status(400).json({ success: false, message: 'Server Error' })
+
+    //     }
+    // }
 
 
 }
