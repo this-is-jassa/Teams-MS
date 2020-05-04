@@ -2,13 +2,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { promise } from 'protractor';
+
 
 @Component({
     selector: 'app-project-dir',
     templateUrl: './dir.html',
     styleUrls: ['./dir.scss']
 })
+
 export class DirectoryComponent implements OnInit {
     
     $projectSubscription: Subscription;
@@ -33,18 +34,12 @@ export class DirectoryComponent implements OnInit {
                 
                 this.getDir([project.dir])
                 .then(responseArr => {
-                    for(const promis of responseArr) {
-                        promis.then(dir => {
-                            console.log(dir.data)
-                        })
-                    }
+                    this.getDir(responseArr[0].data.child)
+                    .then(data => {
+                        console.log(data);
+                    })
+                   
                 })
-
-                // this._http.GET('/dir/get/' + project.name + '/' + project.dir )
-                // .toPromise()
-                // .then(data => {
-                //     console.log(data);
-                // });  
             }
         })
     }
@@ -61,6 +56,6 @@ export class DirectoryComponent implements OnInit {
             );
 
         }
-        return Promise.resolve(tasks);
+        return Promise.all(tasks);
     }
 }
