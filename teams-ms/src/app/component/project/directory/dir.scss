@@ -1,0 +1,26 @@
+.border-btn {
+    border: 2px solid #E5E5E5;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    width: 50px;
+}
+
+.border-btn:hover {
+    background-color: rgb(238, 238, 238);
+}
+
+.dir-list{
+    font-size: 13px;
+    color: #414141;
+    
+    .headd {
+        background-color: #FAFAFA;
+
+    }
+    .list-group-item {
+        padding: 11px 16x;
+    }
+}
+
+

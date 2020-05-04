@@ -5,13 +5,13 @@
         <div class="col-lg-12 col-xl-12">
            
             <div class="page-header">
-                <h1>
-                    {{projectName}} &#x2615;
+                <h2>
+                    {{projectName}}
                     <button class="btn btn-round float-right">
                         <i class="material-icons">settings</i>
                     </button>
-                </h1>
-                <p class="lead">{{'Welcome! ' + userData.userName + ' lets make this day a bit more productive.'}}</p>
+                </h2>
+                <p class="lead">{{projectData?.discription}}</p>
                 <div class="d-flex align-items-center">
                     <app-avatar-list [images]='userImages'></app-avatar-list>
                 </div>
@@ -32,17 +32,16 @@
             </ul>
 
 
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="tasks" role="tabpanel"
-                    data-filter-list="content-list-body">
+            <div class="tab-content card">
+                <div class="tab-pane fade show active" id="tasks" role="tabpanel">
 
-                    <h1>Project</h1>
+                    <app-project-dir [projectName]="projectName" ></app-project-dir>
 
                 </div>
                 <!--end of tab-->
 
 
-                <div class="tab-pane fade" id="directory" role="tabpanel" data-filter-list="content-list-body">
+                <div class="tab-pane fade" id="directory" role="tabpanel">
                     <h1>Tasks</h1>
                 </div>
             </div>
