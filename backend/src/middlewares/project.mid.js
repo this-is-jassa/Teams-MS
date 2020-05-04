@@ -358,9 +358,9 @@ module.exports = {
                     .exec((err, response) => {
                         if (err || response === null) { res.status(400).json({ success: false, message: "Error Loading Projects" }); console.log(err); return; }
 
+                        req.user.project = response;
                         if (response.private || $overRidePrivate) { // FOR GET REQUEST
 
-                            req.user.project = response;
 
                             const member = response.members.find(function (item) {
                                 return item.name === userName;

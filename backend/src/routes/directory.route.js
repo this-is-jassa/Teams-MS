@@ -4,8 +4,8 @@ const sharedMiddleware = require('../middlewares/shared.mid')
 const $role = require('../../config/config').role;
 const dirMid = require('../middlewares/directory.mid')
 
-route.get('/get/directory/:name/:dirId', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) , dirMid.get_dir);
-route.post('/update/directory', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) , dirMid.update_dir);
+route.get('/get/:name/:dirId', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) , dirMid.get_dir);
+route.post('/update/dir', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) , dirMid.update_dir);
 route.post('/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true) , dirMid.post);
 
 

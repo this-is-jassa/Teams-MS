@@ -57,8 +57,10 @@ module.exports = {
     get_dir: async (req, res, next) => {
 
         try {
+            
             const { _id } = req.user.project;
             const { dirId } = req.params;
+
 
             const directory = await directoryModel.findOne({ projectId: _id, _id: dirId })
 
