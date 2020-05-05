@@ -24,11 +24,13 @@ export class DirectoryComponent implements OnInit {
     }
 
     public dirStructure: any;
+    public activeDirStructure: any[] = []
 
 
     constructor(private _http: HttpService) { }
 
     ngOnInit(): void {
+
 
         this.$projectSubscription = this.$projectData.subscribe(project => {
 
@@ -47,21 +49,30 @@ export class DirectoryComponent implements OnInit {
 
                     })
             }
-        })
+        });
+
     }
 
     async getDir(dirArr: any[]): Promise<any> {
-
+        
         let tasks = [];
 
         for (const id of dirArr) {
-
+            
             tasks.push(
-                this._http.GET('/dir/get/' + this.projectData.name + '/' + this.projectData.dir)
+                this._http.GET('/dir/get/' + this.projectData.name + '/' + id)
                 .toPromise()
             );
 
         }
         return Promise.all(tasks);
+    }
+
+    dirClick(index): void {
+        this.getDir(this.dirStructure.child[index].child)
+        .then(dir => {
+            this.dirStructure = {child: dir};
+            console.log(dir);
+        })
     }
 }

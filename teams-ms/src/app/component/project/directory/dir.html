@@ -2,12 +2,9 @@
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
-            <li class="breadcrumb-item"><a href="#">Library</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Data</li>
+            <li class="breadcrumb-item active"><a href="#">{{dirStructure?.name}}</a></li>
         </ol>
     </nav>
-
 
     <hr>
 
@@ -48,10 +45,32 @@
 
     <ul class="list-group my-2  dir-list">
         <li class="list-group-item headd"><b>Name</b> <b class="float-right">Last Update</b> </li>
-        <li class="list-group-item">Dapibus ac facilisis in</li>
-        <li class="list-group-item">Morbi leo risus</li>
-        <li class="list-group-item">Porta ac consectetur ac</li>
-        <li class="list-group-item">Vestibulum at eros</li>
+        <li (click)="dirClick(i)" *ngFor="let file of dirStructure?.child; let i = index" class="list-group-item " style="cursor: pointer;">
+            
+            <svg *ngIf="file.fileType !== 'dir'" style="margin-bottom: 3px; margin-right: 3px;" class="bi bi-file-code "
+                width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z"
+                    clip-rule="evenodd" />
+                <path fill-rule="evenodd"
+                    d="M8.646 5.646a.5.5 0 01.708 0l2 2a.5.5 0 010 .708l-2 2a.5.5 0 01-.708-.708L10.293 8 8.646 6.354a.5.5 0 010-.708zm-1.292 0a.5.5 0 00-.708 0l-2 2a.5.5 0 000 .708l2 2a.5.5 0 00.708-.708L5.707 8l1.647-1.646a.5.5 0 000-.708z"
+                    clip-rule="evenodd" />
+            </svg>
+            
+            <svg *ngIf="file.fileType === 'dir'" style="margin-bottom: 3px; margin-right: 3px;" class="bi bi-folder"
+                width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M9.828 4a3 3 0 01-2.12-.879l-.83-.828A1 1 0 006.173 2H2.5a1 1 0 00-1 .981L1.546 4h-1L.5 3a2 2 0 012-2h3.672a2 2 0 011.414.586l.828.828A2 2 0 009.828 3v1z" />
+                <path fill-rule="evenodd"
+                    d="M13.81 4H2.19a1 1 0 00-.996 1.09l.637 7a1 1 0 00.995.91h10.348a1 1 0 00.995-.91l.637-7A1 1 0 0013.81 4zM2.19 3A2 2 0 00.198 5.181l.637 7A2 2 0 002.826 14h10.348a2 2 0 001.991-1.819l.637-7A2 2 0 0013.81 3H2.19z"
+                    clip-rule="evenodd" />
+            </svg>
+
+            <span class="file-name">
+                {{ (file.fileType !== 'dir')? file.name + file.fileType : file.name+''}}
+            </span>
+
+        </li>
     </ul>
 
 </div>

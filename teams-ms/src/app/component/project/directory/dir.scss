@@ -21,6 +21,16 @@
     .list-group-item {
         padding: 11px 16x;
     }
+
+    :hover {
+        background-color: #FAFAFA;
+        .file-name {
+            text-decoration: underline;
+        }
+
+    }
+
 }
+
 
 
