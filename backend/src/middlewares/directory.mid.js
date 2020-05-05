@@ -65,7 +65,7 @@ module.exports = {
             const directory = await directoryModel.findOne({ projectId: _id, _id: dirId })
 
 
-            res.status(200).json({ success: true, data: directory });
+            res.status(200).json(directory);
 
         } catch (err) {
             console.log(err);
