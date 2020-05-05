@@ -1,14 +1,15 @@
 <div class="container mt-2 ">
 
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="#">{{dirStructure?.name}}</a></li>
+        <ol  class="breadcrumb">
+            <li *ngFor="let dir of dirStructure; let index = index" class="breadcrumb-item " (click)="dirJump(index)" ><span style="font-weight: light; font-size: 13px; cursor: pointer; color: rgb(100, 100, 230) ;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" >{{dir.name}}</span></li>
         </ol>
     </nav>
 
-    <hr>
+    <hr class="p-0 my-2" >
 
     <div class="pb-2">
+
         <button style="font-size: 12.5px; color: black;" type="button"
             class="btn btn-outline-light btn-sm mx-2 float-right">AddLICENSE</button>
         <button style="font-size: 12.5px; color: black;" type="button"
@@ -44,8 +45,18 @@
 
 
     <ul class="list-group my-2  dir-list">
-        <li class="list-group-item headd"><b>Name</b> <b class="float-right">Last Update</b> </li>
-        <li (click)="dirClick(i)" *ngFor="let file of dirStructure?.child; let i = index" class="list-group-item " style="cursor: pointer;">
+        
+        <li class="list-group-item headd">
+            <button (click)="backDir()" id="back-btn" style=" color: black;" >
+               <-
+            </button>
+            <b>Name</b> 
+            <b class="float-right">Last Update</b> 
+        </li>
+        
+        <img class="p-3" *ngIf="dirStructure[dirStructure.length-1]?.child.length === 0" height="300px" src="../../../../assets/images/directoryEmpty.svg" alt="">
+        
+        <li (click)="dirClick(i)" *ngFor="let file of dirStructure[dirStructure.length-1]?.child; let i = index" class="list-group-item " style="cursor: pointer;">
             
             <svg *ngIf="file.fileType !== 'dir'" style="margin-bottom: 3px; margin-right: 3px;" class="bi bi-file-code "
                 width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

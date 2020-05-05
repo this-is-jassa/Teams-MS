@@ -23,7 +23,7 @@ export class DirectoryComponent implements OnInit {
         return this.$projectData.getValue();
     }
 
-    public dirStructure: any;
+    public dirStructure: any[] = [];
     public activeDirStructure: any[] = []
 
 
@@ -39,11 +39,13 @@ export class DirectoryComponent implements OnInit {
                 this.getDir([project.dir])
                     .then(responseArr => {
 
-                        this.dirStructure = responseArr[0];
+                        this.dirStructure.push(responseArr[0]);
 
                         this.getDir(responseArr[0].child)
                             .then(resArr => {
-                                this.dirStructure.child = resArr
+                                this.dirStructure[0].child = resArr;
+                                // this.activeDirStructure.push(this.dirStructure);
+
                                 console.log(this.dirStructure)
                             })
 
@@ -69,10 +71,19 @@ export class DirectoryComponent implements OnInit {
     }
 
     dirClick(index): void {
-        this.getDir(this.dirStructure.child[index].child)
+        this.getDir(this.dirStructure[this.dirStructure.length -1].child[index].child)
         .then(dir => {
-            this.dirStructure = {child: dir};
+            this.activeDirStructure.push({child: dir, name: this.dirStructure[this.dirStructure.length -1].child[index].name});
+            this.dirStructure.push({child: dir, name: this.dirStructure[this.dirStructure.length-1].child[index].name});
             console.log(dir);
         })
+    }
+
+    backDir(): void {
+        this.dirStructure.pop();
+    }
+
+    dirJump(to: number): void {
+        this.dirStructure = this.dirStructure.slice(0, to+1);
     }
 }

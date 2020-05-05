@@ -1,11 +1,10 @@
-
-
-<div class="container mt-5" >
-    <div class="row justify-content-center" >
+<div class="container mt-5">
+    <div class="row justify-content-center">
         <div class="col-lg-12 col-xl-12">
-           
+
             <div class="page-header">
                 <h2>
+                    
                     {{projectName}}
                     <button class="btn btn-round float-right">
                         <i class="material-icons">settings</i>
@@ -21,8 +20,8 @@
 
             <ul class="nav nav-tabs nav-fill" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#tasks" role="tab"
-                        aria-controls="projects" aria-selected="true">Project</a>
+                    <a class="nav-link active" data-toggle="tab" href="#tasks" role="tab" aria-controls="projects"
+                        aria-selected="true">Project</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#directory" role="tab" aria-controls="members"
@@ -35,7 +34,7 @@
             <div class="tab-content card">
                 <div class="tab-pane fade show active" id="tasks" role="tabpanel">
 
-                    <app-project-dir [projectData]="projectData" ></app-project-dir>
+                    <app-project-dir [projectData]="projectData"></app-project-dir>
 
                 </div>
                 <!--end of tab-->
