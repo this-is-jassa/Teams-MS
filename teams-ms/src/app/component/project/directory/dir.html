@@ -48,7 +48,7 @@
                 <path fill-rule="evenodd" d="M13 12.5a.5.5 0 01.5-.5h2a.5.5 0 010 1H14v1.5a.5.5 0 01-1 0v-2z"
                     clip-rule="evenodd" />
             </svg>
-            Add New directory
+            New directory
         </button>
         <button style="font-size: 12.5px; color: black;" type="button"
             class="btn btn-outline-light btn-sm mx-2 float-lg-right d-none d-lg-block">
@@ -115,7 +115,7 @@
         <span *ngFor="let line of openedDir?.code" class="tr first-row"><span class="th p-0"></span><code>{{line}}</code></span>
     </pre>
 
-    <div *ngIf="dirStructure" class="alert alert-primary card" role="alert">
+    <div *ngIf="dirStructure.length === 1" class="alert alert-primary card" role="alert">
         <span class="py-2">
             Help people interested in this repository understand your project by adding a README.
         </span>
