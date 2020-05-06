@@ -1,19 +1,29 @@
 <div class="container mt-2 ">
 
     <nav aria-label="breadcrumb">
-        <ol  class="breadcrumb">
-            <li *ngFor="let dir of dirStructure; let index = index" class="breadcrumb-item " (click)="dirJump(index)" ><span style="font-weight: light; font-size: 13px; cursor: pointer; color: rgb(100, 100, 230) ;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" >{{dir.name}}</span></li>
+        <ol class="breadcrumb">
+            <li *ngFor="let dir of dirStructure; let index = index" class="breadcrumb-item " (click)="dirJump(index)">
+                <span
+                    style="font-weight: light; font-size: 13px; cursor: pointer; color: rgb(100, 100, 230) ;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
+                    {{(dir.fileType === 'dir')? dir.name: (dir.name + dir.fileType)}}
+                </span>
+            </li>
         </ol>
     </nav>
 
-    <hr class="p-0 my-2" >
+    <hr class="p-0 my-2">
 
     <div class="pb-2">
-
-        <button style="font-size: 12.5px; color: black;" type="button"
-            class="btn btn-outline-light btn-sm mx-2 float-right">AddLICENSE</button>
-        <button style="font-size: 12.5px; color: black;" type="button"
-            class="btn btn-outline-light btn-sm float-right">+ README</button>
+        <button *ngIf="this.dirStructure.length >1" (click)="backDir()" class="btn btn-outline-light btn-sm mx-2">
+            <svg style="margin-bottom: 4px;" class="bi bi-arrow-left-short" width="1em" height="1em" viewBox="0 0 16 16"
+                fill="black" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M7.854 4.646a.5.5 0 010 .708L5.207 8l2.647 2.646a.5.5 0 01-.708.708l-3-3a.5.5 0 010-.708l3-3a.5.5 0 01.708 0z"
+                    clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M4.5 8a.5.5 0 01.5-.5h6.5a.5.5 0 010 1H5a.5.5 0 01-.5-.5z"
+                    clip-rule="evenodd" />
+            </svg>
+        </button>
         <button style="font-size: 13px; color: black;" type="button" class="btn btn-outline-light btn-sm ">
             <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-file-code " width="1.3em" height="1.3em"
                 viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +36,6 @@
             </svg>
             New File
         </button>
-
         <button style="font-size: 13px; color: black;" type="button" class="btn btn-outline-light btn-sm mx-2 ">
             <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-folder-plus" width="1.3em" height="1.3em"
                 viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -41,23 +50,40 @@
             </svg>
             Add New directory
         </button>
+        <button style="font-size: 12.5px; color: black;" type="button"
+            class="btn btn-outline-light btn-sm mx-2 float-lg-right d-none d-lg-block">
+            <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z"
+                    clip-rule="evenodd" />
+                <path fill-rule="evenodd"
+                    d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
+                    clip-rule="evenodd" />
+            </svg>
+            Search
+        </button>
+        <button style="font-size: 12.5px; color: black;" type="button"
+            class="btn btn-outline-light btn-sm float-lg-right d-none d-lg-block">+ README</button>
+
     </div>
 
+    <ul *ngIf="!openedDir?.code" class="list-group my-2  dir-list" style="width: 100%">
 
-    <ul class="list-group my-2  dir-list">
-        
         <li class="list-group-item headd">
-            <button (click)="backDir()" id="back-btn" style=" color: black;" >
-               <-
-            </button>
-            <b>Name</b> 
-            <b class="float-right">Last Update</b> 
+
+            <b>Name</b>
+            <b class="float-right">Last Update</b>
+
         </li>
-        
-        <img class="p-3" *ngIf="dirStructure[dirStructure.length-1]?.child.length === 0" height="300px" src="../../../../assets/images/directoryEmpty.svg" alt="">
-        
-        <li (click)="dirClick(i)" *ngFor="let file of dirStructure[dirStructure.length-1]?.child; let i = index" class="list-group-item " style="cursor: pointer;">
-            
+
+
+        <img class="p-3" *ngIf="openedDir?.child.length === 0 " height="300px"
+            src="../../../../assets/images/directoryEmpty.svg" alt="">
+
+        <li (click)="dirClick(i)" *ngFor="let file of openedDir?.child; let i = index" class="list-group-item "
+            style="cursor: pointer;">
+
             <svg *ngIf="file.fileType !== 'dir'" style="margin-bottom: 3px; margin-right: 3px;" class="bi bi-file-code "
                 width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -67,7 +93,7 @@
                     d="M8.646 5.646a.5.5 0 01.708 0l2 2a.5.5 0 010 .708l-2 2a.5.5 0 01-.708-.708L10.293 8 8.646 6.354a.5.5 0 010-.708zm-1.292 0a.5.5 0 00-.708 0l-2 2a.5.5 0 000 .708l2 2a.5.5 0 00.708-.708L5.707 8l1.647-1.646a.5.5 0 000-.708z"
                     clip-rule="evenodd" />
             </svg>
-            
+
             <svg *ngIf="file.fileType === 'dir'" style="margin-bottom: 3px; margin-right: 3px;" class="bi bi-folder"
                 width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -83,5 +109,20 @@
 
         </li>
     </ul>
+
+
+    <pre *ngIf="openedDir?.fileType !== 'dir'" class="p-1" class="code px-1 py-3">
+        <span *ngFor="let line of openedDir?.code" class="tr first-row"><span class="th p-0"></span><code>{{line}}</code></span>
+    </pre>
+
+    <div *ngIf="dirStructure" class="alert alert-primary card" role="alert">
+        <span class="py-2">
+            Help people interested in this repository understand your project by adding a README.
+        </span>
+        
+        <span>
+            <button type="button" class="btn btn-primary btn-sm">+ READ ME</button>
+        </span>
+    </div>
 
 </div>

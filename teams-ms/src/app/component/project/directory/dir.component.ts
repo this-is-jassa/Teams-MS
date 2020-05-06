@@ -2,6 +2,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { database } from 'firebase';
 
 
 @Component({
@@ -22,9 +23,11 @@ export class DirectoryComponent implements OnInit {
     get projectData() {
         return this.$projectData.getValue();
     }
+    get openedDir() {
+        return this.dirStructure[this.dirStructure.length-1];
+    }
 
     public dirStructure: any[] = [];
-    public activeDirStructure: any[] = []
 
 
     constructor(private _http: HttpService) { }
@@ -44,7 +47,6 @@ export class DirectoryComponent implements OnInit {
                         this.getDir(responseArr[0].child)
                             .then(resArr => {
                                 this.dirStructure[0].child = resArr;
-                                // this.activeDirStructure.push(this.dirStructure);
 
                                 console.log(this.dirStructure)
                             })
@@ -70,13 +72,28 @@ export class DirectoryComponent implements OnInit {
         return Promise.all(tasks);
     }
 
+    async getFile(fileId: string) { // fileId is dir Id
+        return this._http.GET('/dir/get/file/'+ this.projectData.name +'/' + fileId).toPromise()
+    }
+
     dirClick(index): void {
-        this.getDir(this.dirStructure[this.dirStructure.length -1].child[index].child)
-        .then(dir => {
-            this.activeDirStructure.push({child: dir, name: this.dirStructure[this.dirStructure.length -1].child[index].name});
-            this.dirStructure.push({child: dir, name: this.dirStructure[this.dirStructure.length-1].child[index].name});
-            console.log(dir);
-        })
+        
+        const dirInstance = this.openedDir.child[index];
+        
+        if(dirInstance.fileType === 'dir') {
+            this.getDir(dirInstance.child)
+            .then(dir => {
+                this.dirStructure.push({child: dir, fileType: 'dir' ,name: dirInstance.name});
+                console.log(dir);
+            })
+        }else {
+            this.getFile(dirInstance.text)
+            .then(file => {
+                file.data.code = file.data.code.split(/\r?\n/);
+                this.dirStructure.push({...file.data,name: dirInstance.name ,fileType: dirInstance.fileType, child: []});
+            })
+            
+        }
     }
 
     backDir(): void {
