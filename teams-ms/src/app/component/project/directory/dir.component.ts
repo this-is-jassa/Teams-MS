@@ -15,6 +15,7 @@ export class DirectoryComponent implements OnInit {
 
     $projectSubscription: Subscription;
     $projectData = new BehaviorSubject<any>(null);
+    
 
     @Input() set projectData(data: any) {
         this.$projectData.next(data);
@@ -83,17 +84,21 @@ export class DirectoryComponent implements OnInit {
         if(dirInstance.fileType === 'dir') {
             this.getDir(dirInstance.child)
             .then(dir => {
-                this.dirStructure.push({child: dir, fileType: 'dir' ,name: dirInstance.name});
+                this.dirStructure.push({child: dir, _id: dirInstance._id, fileType: 'dir' ,name: dirInstance.name});
                 console.log(dir);
             })
         }else {
             this.getFile(dirInstance.text)
             .then(file => {
                 file.data.code = file.data.code.split(/\r?\n/);
-                this.dirStructure.push({...file.data,name: dirInstance.name ,fileType: dirInstance.fileType, child: []});
+                this.dirStructure.push({...file.data, name: dirInstance.name ,fileType: dirInstance.fileType, child: []});
             })
             
         }
+    }
+
+    createFile(data) {
+        console.log(data);
     }
 
     backDir(): void {

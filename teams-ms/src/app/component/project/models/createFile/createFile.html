@@ -1,0 +1,39 @@
+<!-- Modal -->
+<div class="modal fade" id="createFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">New File</h5>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+          
+            <label for="dirName">File Name</label>
+            <input [(ngModel)]="formData.fileName" name="dirNma" type="text" class="form-control" id="dirName" placeholder="Folder" required maxlength="16"
+              minlength="1" >
+          
+
+          
+            <label for="fileExt">Example select</label>
+            <select [(ngModel)]="formData.fileType" name="FileExtt" class="form-control" id="fileExt">
+              <option *ngFor="let ext of fileExt" [value]="ext" >{{ext}}</option>
+            </select>
+          
+
+
+          
+            <label for="fileContent">File Content</label>
+            <textarea [(ngModel)]="formData.codeText" name="codeText" class="form-control" id="fileContent" rows="3"></textarea>
+         
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="newFile()">Create File</button>
+      </div>
+    </div>
+  </div>
+</div>

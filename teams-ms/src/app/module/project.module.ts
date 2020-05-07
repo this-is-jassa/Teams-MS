@@ -4,10 +4,11 @@ import { ProjectComponent } from '../component/project/project.component';
 import {ProjectRoutingModule} from 'src/app/routes/project.route';
 import { SharedModule } from './shared.module';
 import { DirectoryComponent } from '../component/project/directory/dir.component';
+import { CreateFileModelComponent } from '../component/project/models/createFile/createFile.component';
 
 
 @NgModule({
-    declarations: [ProjectComponent, DirectoryComponent],
+    declarations: [ProjectComponent, DirectoryComponent, CreateFileModelComponent],
     imports: [ CommonModule, ProjectRoutingModule, SharedModule ],
     exports: [],
     providers: [],

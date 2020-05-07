@@ -23,6 +23,8 @@ module.exports = {
 
             if (['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp', '.py', 'dir'].includes(fileType)) {
                 
+                const addInstanceToParent = await directoryModel.findOneAndUpdate({projectId: _id, _id: parentDirId, fileType:'dir'}, {$push: {child: dirId}});
+
                 if(fileType !== 'dir') {
                     const fileId = mongo.Types.ObjectId();
                     payload.text = fileId;
@@ -34,10 +36,9 @@ module.exports = {
                     }
                     const createFile = await codeModel.create(codePayload);
                 }
-
                 const createDir = await directoryModel.create(payload);
-                
-                const addInstanceToParent = await directoryModel.findOneAndUpdate({projectId: _id, _id: parentDirId}, {$push: {child: dirId}});
+
+
 
                 res.status(200).json({success: true});
 
