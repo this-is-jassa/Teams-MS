@@ -73,4 +73,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
             this.searchData = [];
         }
     }
+
+    deleteNotify() {
+        
+        this._http.POST('/users/update/notifySeen', {})
+        .toPromise()
+        .then(res => {
+            if(res.success) {
+                this._data.setUser('notify', [])
+            }
+            
+        })
+    }
 }

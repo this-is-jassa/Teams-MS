@@ -48,31 +48,40 @@
                 </svg>
 
                 <div class="dropdown-menu" aria-labelledby="notification-dropdown" style="width: 400px;">
-
+                    <div *ngIf="userData.notify?.length > 0" style="text-align: right;" class="mr-1 p-1">
+                        <span (click)="deleteNotify()" class="badge badge-pill badge-primary" style="cursor: pointer;">
+                            <i style="font-size: 11px;" class="material-icons">
+                                check
+                            </i>
+                            <span style="font-size: 12px;" >
+                                Seen All
+                            </span>
+                        </span>
+                    </div>
                     <ol class="list-group list-group-activity">
                         <li *ngFor="let notif of userData?.notify" class="list-group-item">
-                          <div class="media align-items-center">
-                            <ul class="avatars">
-                              <li>
-                                <div class="avatar bg-primary">
-                                  <i class="material-icons">
-                                      {{(notif.type === 'Note')? 'create': (notif.type === 'Project')? 'info': 'person_add'}}
-                                    
-                                  </i>
+                            <div class="media align-items-center">
+                                <ul class="avatars">
+                                    <li>
+                                        <div class="avatar bg-primary">
+                                            <i class="material-icons">
+                                                {{(notif.type === 'Note')? 'create': (notif.type === 'Project')? 'info': 'person_add'}}
+
+                                            </i>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="media-body">
+                                    <div>
+                                        <span>{{notif.message}} </span>
+                                    </div>
+                                    <div class="text-small" style="text-align: right;">{{notif.timeStamp | date}}</div>
                                 </div>
-                              </li>
-                            </ul>
-                            <div class="media-body">
-                              <div>
-                                <span>{{notif.message}} </span>
-                              </div>
-                              <div class="text-small" style="text-align: right;">{{notif.timeStamp | date}}</div>
                             </div>
-                          </div>
                         </li>
-                      </ol>
+                    </ol>
                 </div>
-                <span *ngIf="userData?.newNotify" class="badge badge-warning">{{userData?.notify.length}}</span>
+                <span class="badge badge-primary">{{userData.notify?.length}}</span>
             </li>
 
 

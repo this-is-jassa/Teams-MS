@@ -7,7 +7,7 @@ module.exports = {
             const { userName } = req.user;
 
             const user = await userModel.findOne({ userName: userName })
-            .select("userName projects notify avatar ")
+            .select("userName projects notify avatar")
             .populate({
                 path: 'projects',
                 model: 'projects',
@@ -122,11 +122,18 @@ module.exports = {
     },
 
     NotifySeen: async (req, res, next) => {
-        const {userName, _id} = req.user;
 
-        const deleteNot = await userModel.findOneAndUpdate({userName: userName, _id: _id}, {newNotify: false});
+        try {
+            const {userName, _id} = req.user;
 
-        res.status(200).json({success: true});
+            console.log(userName + ' ' + _id);
+            const deleteNot = await userModel.findOneAndUpdate({userName: userName, _id: _id}, {notify: []});
+    
+            res.status(200).json({success: true});
+        } catch (err) {
+            res.status(400).json({success: false});
+            console.log(err);
+        }
 
     }
 

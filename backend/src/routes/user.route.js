@@ -63,7 +63,7 @@ route.post('/unfollow', verifyUser, userMiddleware.unfollow_user);
 route.get('/get/following/:userName', verifyUser, userMiddleware.getFollowers);
 
 
-route.get('/update/notifySeen', verifyUser, userMiddleware.NotifySeen);
+route.post('/update/notifySeen', verifyUser, userMiddleware.NotifySeen);
 
 
 module.exports = route;
