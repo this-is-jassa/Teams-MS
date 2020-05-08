@@ -47,12 +47,32 @@
                         clip-rule="evenodd" />
                 </svg>
 
-                <div class="dropdown-menu" aria-labelledby="notification-dropdown">
-                    <a class="dropdown-item" href="#">Notification </a>
-                    <a class="dropdown-item" href="#">Project B</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Project C</a>
+                <div class="dropdown-menu" aria-labelledby="notification-dropdown" style="width: 400px;">
+
+                    <ol class="list-group list-group-activity">
+                        <li *ngFor="let notif of userData?.notify" class="list-group-item">
+                          <div class="media align-items-center">
+                            <ul class="avatars">
+                              <li>
+                                <div class="avatar bg-primary">
+                                  <i class="material-icons">
+                                      {{(notif.type === 'Note')? 'create': (notif.type === 'Project')? 'info': 'person_add'}}
+                                    
+                                  </i>
+                                </div>
+                              </li>
+                            </ul>
+                            <div class="media-body">
+                              <div>
+                                <span>{{notif.message}} </span>
+                              </div>
+                              <div class="text-small" style="text-align: right;">{{notif.timeStamp | date}}</div>
+                            </div>
+                          </div>
+                        </li>
+                      </ol>
                 </div>
+                <span *ngIf="userData?.newNotify" class="badge badge-warning">{{userData?.notify.length}}</span>
             </li>
 
 
@@ -98,8 +118,6 @@
     </div>
 </nav>
 
-
-
 <!-- Model -->
 
 
@@ -111,7 +129,8 @@
 
 
             <div class="mt-2">
-                <button type="button" style="width: 90px; font-size: 11.5px; padding: 2px;" class="btn btn-outline-danger float-right" data-dismiss="modal">Close</button>
+                <button type="button" style="width: 90px; font-size: 11.5px; padding: 2px;"
+                    class="btn btn-outline-danger float-right" data-dismiss="modal">Close</button>
             </div>
 
             <div class="input-group input-group-round mt-1">
@@ -157,7 +176,7 @@
 
             </div>
 
-            
+
         </div>
     </div>
 </div>

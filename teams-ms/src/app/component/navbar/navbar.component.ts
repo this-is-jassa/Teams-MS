@@ -46,7 +46,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
                         })
                 }
             });
-            
 
     }
 
