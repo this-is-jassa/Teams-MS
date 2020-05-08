@@ -55,7 +55,8 @@ const userSchema = mongo.Schema({
             message: {type: types.String},
             timeStamp: {type: types.Date, default: Date.now()},
         }
-     ]
+     ],
+    newNotify: {type: types.Boolean, default: false}
 });
 
 userSchema.pre('save', function(next) {

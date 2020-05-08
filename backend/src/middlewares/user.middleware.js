@@ -121,6 +121,15 @@ module.exports = {
         }
     },
 
+    NotifySeen: async (req, res, next) => {
+        const {userName, _id} = req.user;
+
+        const deleteNot = await userModel.findOneAndUpdate({userName: userName, _id: _id}, {newNotify: false});
+
+        res.status(200).json({success: true});
+
+    }
+
 
 
 }

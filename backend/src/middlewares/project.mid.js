@@ -83,33 +83,6 @@ module.exports = {
             console.log(err); res.status(500).json({ success: false, msg: "Saving Error" });
         }
 
-
-        // projectModel.create(payload, (err, response) => {
-        //     if (err) { console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
-
-
-        //     new directoryModel({
-        //         projectId: response._id,
-
-        //         name: name,
-        //         filetype: 'dir',
-        //         text: '',
-        //         content: []
-        //     }).save((err, response2) => {
-        //         if (err) { console.log(err); res.status(500).json({ success: false, msg: "Saving Error" }); return };
-        //     });
-
-        //     const userPayload = {
-        //         $push: { projects: response._id },
-        //     };
-
-        //     userModel.findOneAndUpdate({ userName: userName }, userPayload, { useFindAndModify: false }, (err, response3) => {
-        //         if (err) { console.log(err); return; }
-
-        //         res.status(200).json({ success: true, data: response.name });
-        //     });
-
-        // });
     },
 
 
@@ -205,7 +178,8 @@ module.exports = {
             const payload = {
                 $push: {
                     projects: _id,
-                    notify: { type: 'Project', message: 'You are added to a project ' + name + 'by' + userName }
+                    notify: { type: 'Project', message: 'You are added to a project ' + name + 'by' + userName },
+                    newNotify: true
                 }
             };
 
@@ -245,7 +219,8 @@ module.exports = {
         if (member.name !== userName && member.permission !== 'Owner') {
             const payload = {
                 $pull: { projects: _id },
-                $push: { notify: { type: 'Project', message: 'You are removed from the project ' + name } }
+                $push: { notify: { type: 'Project', message: 'You are removed from the project ' + name } },
+                newNotify: true
             };
 
             userModel.findOneAndUpdate({ userName: memberName }, payload, (err, response) => {
@@ -288,7 +263,7 @@ module.exports = {
 
             });
 
-            userModel.findOneAndUpdate({ userName: member.name }, { $push: { notify: { type: 'Project', message: ('Your role of project ' + name + 'has been changed to ' + member.permission) } } },
+            userModel.findOneAndUpdate({ userName: member.name }, { $push: { notify: { type: 'Project', message: ('Your role of project ' + name + 'has been changed to ' + member.permission) } }, newNotify: true },
                 { useFindAndModify: false }, (err, response) => {
                     if (err) { console.error(err); res.status(500).json({ success: false, msg: err }); return; }
                     res.status(200).json({ success: true });

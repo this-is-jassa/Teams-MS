@@ -6,9 +6,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
     styleUrls: ['./createFile.scss']
 })
 export class CreateFileModelComponent implements OnInit {
-    
-    @Input() parentId ='';
-    @Input() projectName ='';
 
     @Output() createFile = new EventEmitter(); 
 
@@ -21,13 +18,12 @@ export class CreateFileModelComponent implements OnInit {
     constructor() { }
 
 
-    fileExt: string[] = ['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp', '.py']
+    fileExt: string[] = ['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp','.json' ,'.py']
 
     ngOnInit(): void { }
 
     newFile(){
-        this.createFile.emit(this.formData);
-        
+        this.createFile.emit(this.formData);   
     }
 
 }

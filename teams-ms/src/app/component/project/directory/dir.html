@@ -24,12 +24,12 @@
                     clip-rule="evenodd" />
             </svg>
         </button>
-        <span *ngIf="openedDir?.fileType === 'dir'" >
+        <span *ngIf="openedDir?.fileType === 'dir'">
 
             <button style="font-size: 13px; color: black;" type="button" class="btn btn-outline-light btn-sm "
                 data-toggle="modal" data-target="#createFile">
-                <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-file-code " width="1.3em" height="1.3em"
-                    viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-file-code " width="1.3em"
+                    height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                         d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z"
                         clip-rule="evenodd" />
@@ -39,9 +39,9 @@
                 </svg>
                 New File
             </button>
-            <button style="font-size: 13px; color: black;" type="button" class="btn btn-outline-light btn-sm mx-2 ">
-                <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-folder-plus" width="1.3em" height="1.3em"
-                    viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <button data-toggle="modal" data-target="#newDir" style="font-size: 13px; color: black;" type="button" class="btn btn-outline-light btn-sm mx-2 ">
+                <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-folder-plus" width="1.3em"
+                    height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                         d="M9.828 4H2.19a1 1 0 00-.996 1.09l.637 7a1 1 0 00.995.91H9v1H2.826a2 2 0 01-1.991-1.819l-.637-7a1.99 1.99 0 01.342-1.31L.5 3a2 2 0 012-2h3.672a2 2 0 011.414.586l.828.828A2 2 0 009.828 3h3.982a2 2 0 011.992 2.181L15.546 8H14.54l.265-2.91A1 1 0 0013.81 4H9.828zm-2.95-1.707L7.587 3H2.19c-.24 0-.47.042-.684.12L1.5 2.98a1 1 0 011-.98h3.672a1 1 0 01.707.293z"
                         clip-rule="evenodd" />
@@ -116,7 +116,7 @@
 
 
     <pre *ngIf="openedDir?.fileType !== 'dir'" class="p-1" class="code px-1 py-3">
-        <span *ngFor="let line of openedDir?.code" class="tr first-row"><span class="th p-0"></span><code>{{line}}</code></span>
+    <span *ngFor="let line of openedDir?.code" class="tr first-row"><span class="th p-0"></span><code>{{line}}</code></span>
     </pre>
 
     <div *ngIf="dirStructure.length === 1" class="alert alert-primary card" role="alert">
@@ -129,7 +129,26 @@
         </span>
     </div>
 
-    <app-create-file-model [parentId]="openedDir?._id" [projectName]="projectData?.name" (createFile)="createFile($event)">
+    <app-create-file-model (createFile)="createDir($event)">
     </app-create-file-model>
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="newDir" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      
+        <div class="modal-body">
+          <input [(ngModel)]="newDirName" name="dirName" type="text" maxlength="12" minlength="1" placeholder="Folder Name">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button (click)="createDir({fileName: newDirName, fileType: 'dir', codeText: ''})" type="button" class="btn btn-primary" data-dismiss="modal">Create Folder</button>
+        </div>
+      </div>
+    </div>  
+  </div>
 
 </div>

@@ -11,7 +11,7 @@
         <div class="form-group">
           
             <label for="dirName">File Name</label>
-            <input [(ngModel)]="formData.fileName" name="dirNma" type="text" class="form-control" id="dirName" placeholder="Folder" required maxlength="16"
+            <input [(ngModel)]="formData.fileName" name="dirNma" type="text" class="form-control" id="dirName" placeholder="File" required maxlength="16"
               minlength="1" >
           
 
@@ -32,7 +32,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="newFile()">Create File</button>
+        <button type="button" class="btn btn-primary" (click)="newFile()" data-dismiss="modal">Create File</button>
       </div>
     </div>
   </div>

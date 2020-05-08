@@ -21,7 +21,7 @@ module.exports = {
                 projectId: _id
             }
 
-            if (['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp', '.py', 'dir'].includes(fileType)) {
+            if (['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp', '.py','.json', 'dir'].includes(fileType)) {
                 
                 const addInstanceToParent = await directoryModel.findOneAndUpdate({projectId: _id, _id: parentDirId, fileType:'dir'}, {$push: {child: dirId}});
 
@@ -37,7 +37,6 @@ module.exports = {
                     const createFile = await codeModel.create(codePayload);
                 }
                 const createDir = await directoryModel.create(payload);
-
 
 
                 res.status(200).json({success: true});
