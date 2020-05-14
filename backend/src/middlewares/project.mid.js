@@ -275,9 +275,6 @@ module.exports = {
 
     },
 
-    update_stickey_req: (req, res, next) => {
-
-    },
 
 
     delete: (req, res, next) => {

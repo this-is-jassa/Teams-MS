@@ -1,6 +1,7 @@
 const route = require('express').Router()
 const projectMiddleware = require('../middlewares/project.mid');
-const sharedMiddleware = require('../middlewares/shared.mid')
+const sharedMiddleware = require('../middlewares/shared.mid');
+const stickeyMiddleware = require('../middlewares/projectStickey.mid');
 const $role = require('../../config/config').role;
 
 
@@ -54,7 +55,7 @@ route.post('/update/member/status', sharedMiddleware.checkTokenAndSetUser, proje
 * @Access Only developers can access it.
 
 */
-route.post('/update/stickey/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.DEVELOPER], true), projectMiddleware.update_stickey_req); // D
+// route.post('/update/stickey/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.DEVELOPER], true), projectMiddleware.update_stickey_req); // D
 
 
 /**
@@ -66,7 +67,7 @@ route.post('/update/stickey/request', sharedMiddleware.checkTokenAndSetUser, pro
 * @Access Only developers can access it.
 
 */
-route.post('/update/stickey', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.update_stickey_req); // D
+// route.post('/update/stickey', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.update_stickey_req); // D
 route.post('/update/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.updateMember); 
 
 
@@ -93,7 +94,7 @@ route.post('/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.p
 * @Access Owners & Admin can access it
 
 */
-route.post('/detele/stickey', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), projectMiddleware.update_stickey_req); // D
+// route.post('/detele/stickey', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), projectMiddleware.update_stickey_req); // D
 route.post('/delete/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.deleteMember); 
 
 
@@ -109,6 +110,20 @@ route.post('/delete/member', sharedMiddleware.checkTokenAndSetUser, projectMiddl
 */
 route.post('/quit', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.DEVELOPER], true), projectMiddleware.quit); // D
 
+
+/**
+
+* @ROUTE UPDATE /quit
+
+* @DESC Make changes to the project Stickes
+
+* @Access Owners & Admin can access it
+
+*/
+
+route.post('/stickey/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.post); // D
+route.post('/stickey/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.update); // D
+route.post('/stickey/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.delete); // D
 
 
 module.exports = route;

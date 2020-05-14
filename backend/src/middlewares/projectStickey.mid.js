@@ -71,7 +71,7 @@ module.exports = {
             res.status(500).json({ success: false, message: "Server Err" })
         }
     },
-    delete: (req, res, next) => {
+    delete: async (req, res, next) => {
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
@@ -90,7 +90,7 @@ module.exports = {
 
             await projectModel.findOneAndUpdate({_id: _id}, payload);
             res.status(200).json({success: true});
-            
+
         }
         catch(err) {
             console.log(err);
