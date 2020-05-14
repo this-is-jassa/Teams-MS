@@ -124,10 +124,10 @@ module.exports = {
     NotifySeen: async (req, res, next) => {
 
         try {
-            const {userName, _id} = req.user;
+            const {userName} = req.user;
 
-            console.log(userName + ' ' + _id);
-            const deleteNot = await userModel.findOneAndUpdate({userName: userName, _id: _id}, {notify: []});
+            console.log(userName );
+            const deleteNot = await userModel.findOneAndUpdate({userName: userName}, {notify: []});
     
             res.status(200).json({success: true});
         } catch (err) {

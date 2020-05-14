@@ -53,6 +53,7 @@ const projectSchema = mongo.Schema({
     
     stickey: [
         {
+            _id: {type: types.ObjectId},
             group: {
                 type: types.String,
                 minlength: 1,
@@ -73,14 +74,14 @@ const projectSchema = mongo.Schema({
                 default: Date.now()
             },
             request: {      // D
-                type: types.String
+                type : types.Boolean,
+                default: false
             },
             crossOff: {     // A, O
                 type: types.Boolean,
                 required: true,
                 default: false
-            },
-            users: [types.String]       // A, O
+            }     // A, O
         }
     ]
 });

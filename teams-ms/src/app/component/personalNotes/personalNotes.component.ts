@@ -106,6 +106,11 @@ export class PersonalNotes implements OnInit {
 
     }
 
+    popModel(): void {
+        console.log('clicked');
+        // document.getElementById("#editNote").modal({show: true});
+    }
+
 
 }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { ViewService } from 'src/app/services/view.service';
 import { DataService } from 'src/app/services/data.service';
-import { Subscription, from } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {environment} from '../../../environments/environment';
 import { personalNotes } from 'src/app/implements/personalNotes';
 
