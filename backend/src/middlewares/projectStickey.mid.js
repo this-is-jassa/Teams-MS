@@ -5,6 +5,27 @@ const mongo = require('mongoose');
 
 module.exports = {
     
+    get: async (req, res, next) => {
+        console.log('reached')
+        
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        try {
+            const {_id} = req.user.project;
+
+            const stickey = await projectModel.findOne({_id: _id}, ['stickey']);
+            res.status(200).json({success: true, data: stickey});
+            
+        }
+        catch(err) {
+            console.log(err);
+            res.status(400).json({ success: false, message: "Server Err" })
+        }
+    },
+
     post: async (req, res, next) => {
         
         if (!req.user.permission) {

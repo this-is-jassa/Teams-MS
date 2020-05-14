@@ -316,7 +316,7 @@ module.exports = {
     // ***** Always use After sharedMiddleware.checkTokenAndSetUser 
     permissions: function ($role, $overRidePrivate) {
         return (req, res, next) => {
-
+      
             if (req.user === null || req.user === 'undefined') {
                 res.status(500).json({ success: false });
             }

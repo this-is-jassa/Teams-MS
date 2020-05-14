@@ -125,5 +125,16 @@ route.post('/stickey/post', sharedMiddleware.checkTokenAndSetUser, projectMiddle
 route.post('/stickey/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.update); // D
 route.post('/stickey/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.delete); // D
 
+/**
+
+* @ROUTE GET 
+
+* @DESC get the project Stickes
+
+* @Access Owners & Admin & developers can access it
+
+*/
+route.get('/:name/stickey', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), stickeyMiddleware.get); // D
+
 
 module.exports = route;
