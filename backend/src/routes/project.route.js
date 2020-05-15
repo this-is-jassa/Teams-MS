@@ -123,6 +123,7 @@ route.post('/quit', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.per
 
 route.post('/stickey/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.post); // D
 route.post('/stickey/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.update); // D
+route.post('/stickey/update/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.DEVELOPER], true), stickeyMiddleware.crossOff_req); // D
 route.post('/stickey/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.delete); // D
 
 /**

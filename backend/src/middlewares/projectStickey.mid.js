@@ -71,15 +71,14 @@ module.exports = {
         try {
             
             const {_id} = req.user.project;
-            const {stickeyId, group, name, message, request, crossOff} = req.body;
+            const {stickeyId, group, name, message, crossOff} = req.body;
 
             const payload = {
                 $set: {
                     'stickey.$.group': group,
                     'stickey.$.name': name,
                     'stickey.$.message': message,
-                    'stickey.$.crossOff': crossOff,
-                    'stickey.$.request': request,
+                    'stickey.$.crossOff': crossOff
                 }
             }
             await projectModel.findOneAndUpdate({_id: _id, 'stickey._id': stickeyId}, payload);
@@ -92,6 +91,34 @@ module.exports = {
             res.status(500).json({ success: false, message: "Server Err" })
         }
     },
+
+    crossOff_req: async (req, res, next) => {
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        try {
+            
+            const {_id} = req.user.project;
+            const {request} = req.body;
+
+            const payload = {
+                $set: {
+                    'stickey.$.request': request
+                }
+            }
+            await projectModel.findOneAndUpdate({_id: _id, 'stickey._id': stickeyId}, payload);
+
+            res.status(200).json({success: true});
+
+        }
+        catch(err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: "Server Err" })
+        }
+    },
+
     delete: async (req, res, next) => {
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });

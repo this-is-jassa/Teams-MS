@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -15,22 +15,25 @@ export class TasksComponent implements OnInit, OnDestroy {
     $projectSubscription: Subscription;
 
     notes: any[][] = [[]];
-
     groups = new Set();
 
     @Input() set projectData(data: any) {
         this.$projectData.next(data);
     }
-    @Input() role ='Developer';
+    @Input() role = 'Developer';
 
     get projectData() {
         return this.$projectData.getValue();
     }
 
+    groupIndexOnFocus =0
+    noteIndexOnFocus =0
+
+
     ngOnInit(): void {
 
         this.$projectSubscription = this.$projectData.subscribe(data => {
-            if(data !== undefined) {
+            if (data !== undefined) {
                 this.fetchNotes();
             }
         });
@@ -42,22 +45,41 @@ export class TasksComponent implements OnInit, OnDestroy {
     }
 
     async fetchNotes() {
-        const response = await this._http.GET('/projects/'+ this.projectData.name + '/stickey').toPromise();
-        
+        const response = await this._http.GET('/projects/' + this.projectData.name + '/stickey').toPromise();
+
         const rawNotes = response.data.stickey;
-        
-        for(const note of rawNotes) {
+
+        for (const note of rawNotes) {
             this.groups.add(note.group);
             const index = [...this.groups].indexOf(note.group);
-            
-            if(this.notes[index] === undefined) {
+
+            if (this.notes[index] === undefined) {
                 this.notes.push([note]);
-            }else {
+            } else {
                 this.notes[index].push(note);
             }
         }
-
-        console.log(this.notes);
     }
+
+    preEdit(x, y) {
+
+        this.groupIndexOnFocus = x;
+        this.noteIndexOnFocus = y;
+        
+        // const payload = {
+        //     group: data.group,
+        //     name: data.name,
+        //     message: data.message,
+        //     crossOff: data.crossOff
+        // }
+
+        // this._http.POST('/projects/stickey/update', { name: payload.name })
+        //     .toPromise()
+        //     .then(response => {
+                
+        //     })
+    }
+
+
 
 }

@@ -6,11 +6,12 @@ import { SharedModule } from './shared.module';
 import { DirectoryComponent } from '../component/project/directory/dir.component';
 import { CreateFileModelComponent } from '../component/project/models/createFile/createFile.component';
 import { TasksComponent } from '../component/project/tasks/tasks.component';
+import { NotesActionModelComponent } from '../component/project/models/notesAction/notesAction.component';
 
 
 
 @NgModule({
-    declarations: [ProjectComponent, DirectoryComponent, CreateFileModelComponent, TasksComponent],
+    declarations: [ProjectComponent, DirectoryComponent, CreateFileModelComponent, TasksComponent, NotesActionModelComponent],
     imports: [ CommonModule, ProjectRoutingModule, SharedModule ],
     exports: [],
     providers: [],
