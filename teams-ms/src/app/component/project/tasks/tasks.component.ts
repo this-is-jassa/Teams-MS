@@ -14,11 +14,14 @@ export class TasksComponent implements OnInit, OnDestroy {
     $projectData = new BehaviorSubject<any>(null);
     $projectSubscription: Subscription;
 
-    notes = [];
+    notes: any[][] = [[]];
+
+    groups = new Set();
 
     @Input() set projectData(data: any) {
         this.$projectData.next(data);
     }
+    @Input() role ='Developer';
 
     get projectData() {
         return this.$projectData.getValue();
@@ -40,6 +43,21 @@ export class TasksComponent implements OnInit, OnDestroy {
 
     async fetchNotes() {
         const response = await this._http.GET('/projects/'+ this.projectData.name + '/stickey').toPromise();
-        this.notes = response.data.stickey;
+        
+        const rawNotes = response.data.stickey;
+        
+        for(const note of rawNotes) {
+            this.groups.add(note.group);
+            const index = [...this.groups].indexOf(note.group);
+            
+            if(this.notes[index] === undefined) {
+                this.notes.push([note]);
+            }else {
+                this.notes[index].push(note);
+            }
+        }
+
+        console.log(this.notes);
     }
+
 }

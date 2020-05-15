@@ -30,7 +30,7 @@ export class PersonalNotes implements OnInit {
     constructor(private _http: HttpService) { }
 
     ngOnInit(): void {
-        console.log(this.notesData)
+       
     }
 
     crossOff(note: personalNotes, index): void {

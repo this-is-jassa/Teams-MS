@@ -6,20 +6,35 @@ const mongo = require('mongoose');
 
 module.exports = {
 
-    get: (req, res, next) => {
+    get: async (req, res, next) => {
 
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
 
-        const { name } = req.params;
+        try {
+            const { name } = req.params;
 
-        projectModel.findOne({ name: name }, (err, response) => {
-            if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+            const project = await projectModel.findOne({ name: name })
+            .select('-stickey');
 
-            res.status(200).json({ success: true, data: response });
-        })
+            res.status(200).json({success: true, data: project, role: req.role});
+            // (err, response) => {
+            //     if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+                
+            //     console.log({...response});
+            //     res.status(200).json({ success: true, data: response });
+            // }
+        
+        
+        }
+        catch(err) {
+            console.log(err); 
+            res.status(400).json({ success: false, message: 'Server Err' }); 
+        }
+
+
 
     }, // O, A, D
 
@@ -332,20 +347,31 @@ module.exports = {
                         if (err || response === null) { res.status(400).json({ success: false, message: "Error Loading Projects" }); console.log(err); return; }
 
                         req.user.project = response;
+                       
+                        const member = response.members.find(function (item) {
+                            return item.name === userName;
+                        });
+
                         if (response.private || $overRidePrivate) { // FOR GET REQUEST
 
 
-                            const member = response.members.find(function (item) {
-                                return item.name === userName;
-                            });
+                            // member = response.members.find(function (item) {
+                            //     return item.name === userName;
+                            // });
 
                             if (!!member && ($role.includes('ALL') || $role.includes(member.permission))) {
                                 req.user.permission = true;
+
+                                req.role = member.permission;
+
                             } else {
                                 req.user.permission = false;
                             }
                         } else {
                             req.user.permission = true;
+
+                            req.role = member.permission;
+                            
                         }
 
                         next();

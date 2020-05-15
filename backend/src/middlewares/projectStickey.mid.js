@@ -36,7 +36,7 @@ module.exports = {
         try {
             
             const {_id} = req.user.project;
-            const {group, name, message} = req.body;
+            const {group, stickeyName, message} = req.body;
             const stickeyId = mongo.Types.ObjectId();
 
             const payload = {
@@ -44,7 +44,7 @@ module.exports = {
                     stickey: {
                         _id: stickeyId,
                         group: group,
-                        name: name,
+                        name: stickeyName,
                         message: message
                     }
                 }

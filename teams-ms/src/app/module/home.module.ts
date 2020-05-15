@@ -5,10 +5,10 @@ import { ProjectTableComponent } from '../component/home/projects-table/projectT
 import { HeaderComponent } from '../component/home/header/header.component';
 import { SharedModule } from './shared.module';
 import { ProjectTableRowComponent } from '../component/home/projects-table/project-table-row/tableRow.component';
-import { PersonalNotes } from '../component/personalNotes/personalNotes.component';
+// import { PersonalNotes } from '../component/personalNotes/personalNotes.component';
 
 @NgModule({
-    declarations: [HomeComponent, ProjectTableComponent, ProjectTableRowComponent, HeaderComponent, PersonalNotes],
+    declarations: [HomeComponent, ProjectTableComponent, ProjectTableRowComponent, HeaderComponent],
     imports: [ CommonModule, SharedModule ],
     exports: [HomeComponent, HeaderComponent],
     providers: [],

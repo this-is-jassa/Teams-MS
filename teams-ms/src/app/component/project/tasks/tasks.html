@@ -1,15 +1,58 @@
-<div class="card-list">
+<div *ngFor="let group of groups; let index = index" class="card-list">
     <div class="card-list-head">
-      <h6>Card List Title</h6>
-      <div class="dropdown">
-        <button class="btn-options" type="button" id="..." data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="material-icons">more_vert</i>
-        </button>
-        <div class="dropdown-menu dropdown-menu-right">
-          ...
+        <h6>{{group}}</h6>
+        <div class="dropdown">
+            <button class="btn-options" type="button" id="..." data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                <i class="material-icons">more_vert</i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                ...
+            </div>
         </div>
-      </div>
     </div>
-    <div class="card card-task">...</div>
-    <div class="card card-task">...</div>
-  </div>
+
+    <div class="row" >
+        <div  *ngFor="let note of notes[index]" class="col-lg-6"
+            [ngClass]="(note.crossOff)? 'crossOff': ''">
+            <div class="card card-note">
+                <div class="card-header">
+                    <div class="media align-items-center">
+                        <img alt=".." src="https://pipeline.mediumra.re/assets/img/avatar-male-1.jpg" class="avatar" />
+                        <div class="media-body">
+                            <h6 class="mb-0"> {{note.name}} </h6>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span>
+                            {{note.timeStamp | date}}
+                        </span>
+                        <div class="ml-1 dropdown card-options">
+                            <button class="btn-options" type="button" id="..." data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                
+                                <button *ngIf="role === 'Developer'" class="dropdown-item" >Request as done</button>
+
+                                <div *ngIf="['Owner', 'Admin'].includes(role)" >
+
+                                    <button class="dropdown-item" (click)="crossOff(note, index)">Mark as done</button>
+        
+                                    <button class="dropdown-item" (click)="preEdit(note, index)" data-toggle="modal"
+                                        data-target="#editNote">Edit</button>
+                                    <button class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteNote"
+                                        (click)="preEdit(note,index)">Delete</button>
+        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <pre class="card-body">{{note.message}}</pre>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -57,12 +57,13 @@ const projectSchema = mongo.Schema({
             group: {
                 type: types.String,
                 minlength: 1,
-                maxlength: [16, 'Maximum length of name should be 16']
+                maxlength: [30, 'Maximum length of name should be 30']
             },              // A, O
             name: {
                 type: types.String,
                 minlength: 1,
-                maxlength: 16, trim: true
+                maxlength: 30, 
+                trim: true
             },              // A, O
             message: {
                 type: types.String,

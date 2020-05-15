@@ -19,6 +19,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     userData: any;
     projectData: any;
+    role: string;
 
     $userData: Subscription;
 
@@ -36,12 +37,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 this.userData = me;
             });
 
-        this._http.GET('/projects/get/' + this.projectName)
-            .toPromise()
-            .then(project => {
-                this.projectData = project.data;
-                console.log(project);
-            });
+            this._http.GET('/projects/get/' + this.projectName)
+                .toPromise()
+                .then(project => {
+                    this.projectData = project.data;
+                    this.role = project.role
+                });
+
     }
 
     ngOnDestroy(): void {
