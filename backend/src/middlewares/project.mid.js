@@ -20,12 +20,7 @@ module.exports = {
             .select('-stickey');
 
             res.status(200).json({success: true, data: project, role: req.role});
-            // (err, response) => {
-            //     if (err) { res.status(500).json({ success: false }); console.log(err); return; }
-                
-            //     console.log({...response});
-            //     res.status(200).json({ success: true, data: response });
-            // }
+           
         
         
         }

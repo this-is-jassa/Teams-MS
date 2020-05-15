@@ -12,9 +12,8 @@
         </div>
     </div>
 
-    <div class="row" >
-        <div  *ngFor="let note of notes[index]" class="col-lg-6"
-            [ngClass]="(note.crossOff)? 'crossOff': ''">
+    <div class="row">
+        <div *ngFor="let note of notes[index]" class="col-lg-6" [ngClass]="(note.crossOff)? 'crossOff': ''">
             <div class="card card-note">
                 <div class="card-header">
                     <div class="media align-items-center">
@@ -28,23 +27,23 @@
                             {{note.timeStamp | date}}
                         </span>
                         <div class="ml-1 dropdown card-options">
-                            <button class="btn-options" type="button" id="..." data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
+                            <button class="btn-options" type="button" id="..." data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                
-                                <button *ngIf="role === 'Developer'" class="dropdown-item" >Request as done</button>
 
-                                <div *ngIf="['Owner', 'Admin'].includes(role)" >
+                                <button *ngIf="role === 'Developer'" class="dropdown-item">Request as done</button>
+
+                                <div *ngIf="['Owner', 'Admin'].includes(role)">
 
                                     <button class="dropdown-item" (click)="crossOff(note, index)">Mark as done</button>
-        
+
                                     <button class="dropdown-item" (click)="preEdit(note, index)" data-toggle="modal"
                                         data-target="#editNote">Edit</button>
-                                    <button class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteNote"
-                                        (click)="preEdit(note,index)">Delete</button>
-        
+                                    <button class="dropdown-item text-danger" data-toggle="modal"
+                                        data-target="#deleteNote" (click)="preEdit(note,index)">Delete</button>
+
                                 </div>
                             </div>
                         </div>

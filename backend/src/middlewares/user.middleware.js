@@ -8,11 +8,11 @@ module.exports = {
 
             const user = await userModel.findOne({ userName: userName })
             .select("userName projects notify avatar")
-            // .populate({
-            //     path: 'projects',
-            //     model: 'projects',
-            //     select: 'name freeze members startingDate endingDate'
-            // })
+            .populate({
+                path: 'projects',
+                model: 'projects',
+                select: 'name freeze members startingDate endingDate'
+            })
 
             res.status(200).json({ success: true, data: user });
             next();
