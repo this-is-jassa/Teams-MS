@@ -6,7 +6,6 @@ const mongo = require('mongoose');
 module.exports = {
     
     get: async (req, res, next) => {
-        console.log('reached')
         
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
@@ -36,7 +35,7 @@ module.exports = {
         try {
             
             const {_id} = req.user.project;
-            const {group, stickeyName, message} = req.body;
+            const {group, stickeyName, message, crossOff} = req.body;
             const stickeyId = mongo.Types.ObjectId();
 
             const payload = {
@@ -45,13 +44,15 @@ module.exports = {
                         _id: stickeyId,
                         group: group,
                         name: stickeyName,
-                        message: message
+                        message: message,
+                        crossOff: crossOff,
+                        request: []
                     }
                 }
             }
 
             await projectModel.findOneAndUpdate({_id: _id}, payload);
-            res.status(200).json({success: true, data: {_id: stickeyId}});
+            res.status(200).json({success: true, data: payload.$push.stickey});
 
         }
         catch (err) {
@@ -71,14 +72,16 @@ module.exports = {
         try {
             
             const {_id} = req.user.project;
-            const {stickeyId, group, name, message, crossOff} = req.body;
+            const {stickeyId, group, stickeyName, message, crossOff} = req.body;
 
             const payload = {
                 $set: {
                     'stickey.$.group': group,
-                    'stickey.$.name': name,
+                    'stickey.$.name': stickeyName,
                     'stickey.$.message': message,
-                    'stickey.$.crossOff': crossOff
+                    'stickey.$.crossOff': crossOff,
+                    'stickey.$.request': [],
+
                 }
             }
             await projectModel.findOneAndUpdate({_id: _id, 'stickey._id': stickeyId}, payload);
@@ -100,12 +103,57 @@ module.exports = {
 
         try {
             
+            const {userName} = req.user;
             const {_id} = req.user.project;
-            const {request} = req.body;
+            const {stickeyId} = req.body;
 
             const payload = {
-                $set: {
-                    'stickey.$.request': request
+                $addToSet: {
+                    'stickey.$.request': userName
+                }
+            }
+
+            // const project = await projectModel.findOne({_id: _id});
+            
+            // const index = project.stickey.findIndex((note) => {
+            //     return note._id === stickeyId
+            // })
+            // console.log(index);
+
+            // if(!project.stickey[index].request.includes(userName)){
+            //     project.request.push();
+            //     await project.save();
+
+            //     res.status(200).json({success: true});
+            // } else {
+            //     throw 'Request already Made'
+            // }
+
+            await projectModel.findOneAndUpdate({_id: _id, 'stickey._id': stickeyId}, payload);
+            res.status(200).json({success: true});
+
+        }
+        catch(err) {
+            console.log(err);
+            res.status(500).json({ success: false, message: "Server Err" })
+        }
+    },
+
+    // Anyone can manipulate and delete his coluge's name as well
+    crossOff_req_cancel: async (req, res, next) => {
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        try {
+            
+            const {_id} = req.user.project;
+            const {stickeyId, userName} = req.body;
+
+            const payload = {
+                $pull: {
+                    'stickey.$.request': userName
                 }
             }
             await projectModel.findOneAndUpdate({_id: _id, 'stickey._id': stickeyId}, payload);
@@ -132,7 +180,9 @@ module.exports = {
 
             const payload = {
                 $pull: {
-                    _id: stickeyId
+                    stickey: {
+                        _id: stickeyId
+                    }
                 }
             }
 

@@ -74,10 +74,9 @@ const projectSchema = mongo.Schema({
                 type: types.Date,
                 default: Date.now()
             },
-            request: {      // D
-                type : types.Boolean,
-                default: false
-            },
+            request: [      // D
+                types.String
+            ],
             crossOff: {     // A, O
                 type: types.Boolean,
                 required: true,

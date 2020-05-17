@@ -18,7 +18,6 @@ const $role = require('../../config/config').role;
 route.get('/get/:name', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) ,projectMiddleware.get);
 
 
-
 /**
 
 * @ROUTE POST /post
@@ -124,6 +123,9 @@ route.post('/quit', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.per
 route.post('/stickey/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.post); // D
 route.post('/stickey/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.update); // D
 route.post('/stickey/update/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.DEVELOPER], true), stickeyMiddleware.crossOff_req); // D
+
+route.post('/stickey/delete/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), stickeyMiddleware.crossOff_req_cancel); // D
+
 route.post('/stickey/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.delete); // D
 
 /**

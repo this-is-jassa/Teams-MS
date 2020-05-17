@@ -114,7 +114,8 @@ module.exports = {
             discription: discription,
             private: private,
             freeze: {
-                isFreeze: isFreeze
+                isFreeze: isFreeze,
+                timeStamp: new Date.now()
             }
         };
 
@@ -137,6 +138,8 @@ module.exports = {
             const { userName } = req.user;
             const { name } = req.user.project;
             const { value } = req.body;
+
+            if(req.user.project.freeze.isFreeze){throw 'Account is Freeze'}
 
             const payload = {
                 $set: {
@@ -163,6 +166,9 @@ module.exports = {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
+
+        if(req.user.project.freeze.isFreeze){ throw 'Account is Freeze'}
+
 
         const { userName } = req.user;
         const { _id } = req.user.project;
@@ -220,6 +226,8 @@ module.exports = {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
+        if(req.user.project.freeze.isFreeze){ throw 'Account is Freeze'}
+
 
         const { userName } = req.user;
         const { _id } = req.user.project;
@@ -229,8 +237,7 @@ module.exports = {
         if (member.name !== userName && member.permission !== 'Owner') {
             const payload = {
                 $pull: { projects: _id },
-                $push: { notify: { type: 'Project', message: 'You are removed from the project ' + name } },
-                newNotify: true
+                $push: { notify: { type: 'Project', message: 'You are removed from the project ' + name } }
             };
 
             userModel.findOneAndUpdate({ userName: memberName }, payload, (err, response) => {
@@ -256,6 +263,9 @@ module.exports = {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
+
+        if(req.user.project.freeze.isFreeze){ throw 'Account is Freeze'}
+
 
         const { userName } = req.user;
         const { member, name } = req.body;
@@ -295,6 +305,9 @@ module.exports = {
             return;
         }
 
+        if(req.user.project.freeze.isFreeze){ throw 'Account is Freeze'}
+
+
         const { UserName } = req.user;
         const { name } = req.user.project;
 
@@ -316,8 +329,38 @@ module.exports = {
 
 
 
-    quit: (req, res, next) => {
-        res.send("de");
+    quit: async (req, res, next) => {
+        
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+        
+        try {
+            const {_id} = req.user.project;
+            const {userName} = req.user;
+
+            const update1 = {
+                $pull: { projects: _id },
+            }
+            const update2 = { 
+                $pull: { members: { name: userName } } 
+            }
+
+            const updateUser = userModel.findOneAndUpdate({userName: userName}, update1);
+            const updateProject = projectModel.findOneAndUpdate({_id: _id}, update2);
+
+            const result = await Promise.all([updateUser, updateProject]);
+
+            res.status(200).json({success: true});
+        }
+        catch (err) {
+            console.log(err);
+            res.status(400).json({success: false, message: 'Server Error'});
+
+        }
+
+
     },
 
 

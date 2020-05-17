@@ -1,3 +1,13 @@
+
+    <div class="my-2">
+        <h3 style="display: inline;" >New Note</h3>
+        <button *ngIf="['Owner', 'Admin'].includes(role)" class="btn btn-round mb-1" style="display: inline;" (click)="addClick()" data-toggle="modal" data-target="#editNoteModel">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+
+
+
 <div *ngFor="let group of groups; let index = index" class="card-list">
     <div class="card-list-head">
         <h6>{{group}}</h6>
@@ -13,20 +23,19 @@
     </div>
 
     <div class="row">
-        <div *ngFor="let note of notes[index]; let index2 = index" class="col-lg-6"
-            [ngClass]="(note.crossOff)? 'crossOff': ''">
-            <div class="card card-note">
+        <div *ngFor="let note of notes[index]; let index2 = index" class="col-lg-6 my-2 ">
+            <div class="card card-note bg-light">
                 <div class="card-header">
+
                     <div class="media align-items-center">
                         <img alt=".." src="https://pipeline.mediumra.re/assets/img/avatar-male-1.jpg" class="avatar" />
-                        <div class="media-body">
+                        <div class="media-body" [ngClass]="note.crossOff && 'crossOff'">
                             <h6 class="mb-0"> {{note.name}} </h6>
                         </div>
                     </div>
+
                     <div class="d-flex align-items-center">
-                        <span>
-                            {{note.timeStamp | date}}
-                        </span>
+
                         <div class="ml-1 dropdown card-options">
                             <button class="btn-options" type="button" id="..." data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
@@ -34,33 +43,64 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
 
-                                <button *ngIf="role === 'Developer'" class="dropdown-item">Request as done</button>
+                                <button *ngIf="role === 'Developer'" class="dropdown-item"
+                                    (click)="requestDonetask(index, index2)">
+                                    {{ (note.request.indexOf(userName) >= 0)? 'Remove Job done': 'Job Done' }} </button>
 
                                 <div *ngIf="['Owner', 'Admin'].includes(role)">
 
-                                    <button class="dropdown-item" (click)="crossOff(note, index)">Mark as done</button>
+                                    <button class="dropdown-item"
+                                        (click)="crossOff(index, index2)">{{ (note.crossOff)?'Recover': 'Mark as done'}}</button>
 
-                                    <button class="dropdown-item" (click)="preEdit(index, index2)" data-toggle="modal"
+                                    <button class="dropdown-item" (click)="setFocus(index, index2)" data-toggle="modal"
                                         data-target="#editNoteModel">Edit</button>
                                     <button class="dropdown-item text-danger" data-toggle="modal"
-                                        data-target="#deleteNote" (click)="preEdit(note,index)">Delete</button>
+                                        data-target="#deleteNote" (click)="setFocus(index,index2)">Delete</button>
 
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <pre class="card-body">{{note.message}}</pre>
+                <pre class="card-body mb-0 pb-1" [ngClass]="note.crossOff && 'crossOff'">{{note.message}}</pre>
+
+
+                <span class="mx-2 mb-2" style="text-align: right; font-size: 14px;">
+                    {{note.timeStamp | date}}
+                </span>
+
             </div>
+
+            <div class="card py-2 px-1 " style="background-color: black;" *ngIf="note.request.length > 0">
+                <div class="container " style="overflow: scroll; ">
+                    <span style="font-size: 12.7px; font-weight: bold; color: white;">Job done - </span>
+                    <a *ngFor="let user of note.request; let index3 = index" class="badge badge-pill ml-1 px-2"
+                        style="font-size: 14px; color: white; background-color: red;">
+                        <p>
+                            <span (click)="setFocus(index, index2, index3)" *ngIf="['Owner','Admin'].includes(role)" class="mr-1" style="font-size: 12px; cursor: pointer;" data-toggle="modal"
+                            data-target="#deleteMemberJobDone">&#10005;</span>
+
+                            {{user}}
+                        </p>
+                    </a>
+
+                </div>
+            </div>
+
         </div>
     </div>
-
 </div>
 
+
+
 <app-notes-action-model 
-    [name]='notes[groupIndexOnFocus][noteIndexOnFocus]?.name'
-    [message]='notes[groupIndexOnFocus][noteIndexOnFocus]?.message'
-    [group]='notes[groupIndexOnFocus][noteIndexOnFocus]?.group'
-    [crossOff]='notes[groupIndexOnFocus][noteIndexOnFocus]?.crossOff' 
-    [groups]='groups'
-></app-notes-action-model>
+    [name]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.name: "" '
+    [message]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.message: ""'
+    [group]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.group: ""'
+    [crossOff]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.crossOff: false' 
+    [groups]='groups' 
+    (onEdit)="onEdit($event)"
+    (onDelete)="onDelete($event)"
+    (onDeleteJob)="onDeleteJob($event)"
+    >
+</app-notes-action-model>

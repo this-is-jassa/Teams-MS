@@ -10,19 +10,19 @@
             </div>
         </div>
 
-        <div (dblclick)="popModel()" *ngFor="let note of notesData; let index = index" class="col-lg-6" [ngClass]="(note.crossOff)? 'crossOff': ''" >
+        <div (dblclick)="popModel()" *ngFor="let note of notesData; let index = index" class="col-lg-6"  >
             <div class="card card-note">
                 <div class="card-header">
                     <div class="media align-items-center">
                         <img alt=".." src="https://pipeline.mediumra.re/assets/img/avatar-male-1.jpg" class="avatar" />
                         <div class="media-body">
-                            <h6 class="mb-0"> {{note.name}} </h6>
+                            <h6 class="mb-0" [ngClass]="note.crossOff && 'crossOff' "> {{note.name}} </h6>
                         </div>
                     </div>
                     <div class="d-flex align-items-center">
-                        <span>
+                        <!-- <span>
                             {{note.timeStamp | date}}
-                        </span>
+                        </span> -->
                         <div class="ml-1 dropdown card-options">
                             <button class="btn-options" type="button" id="..." data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
@@ -30,7 +30,7 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
 
-                                <button class="dropdown-item" (click)="crossOff(note, index)" >Cross off</button>
+                                <button class="dropdown-item" (click)="crossOff(note, index)" >{{ note.crossOff? 'Restore': 'Mark as done' }}  </button>
                                     
                                 <button class="dropdown-item" (click)="preEdit(note, index)" data-toggle="modal"
                                     data-target="#editNote">Edit</button>
@@ -41,7 +41,10 @@
                         </div>
                     </div>
                 </div>
-                <pre class="card-body">{{note.message}}</pre>
+                <pre class="card-body mb-0 pb-1" [ngClass]="note.crossOff && 'crossOff' ">{{note.message}}</pre>
+                <span class="mx-2 mb-2" style="text-align: right; font-size: 14px;" >
+                    {{note.timeStamp | date}}
+                </span>
             </div>
         </div>
 
