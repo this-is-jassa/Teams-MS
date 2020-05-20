@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class DataService {
     
     private userData: any = {};
+
     private $userdata = new BehaviorSubject(this.userData);
 
     constructor(private _http: HttpService) {
@@ -28,6 +29,7 @@ export class DataService {
             alert('Error Occured while loading user data')
         })
     }
+
     reset() {
         this.userData = {};
         this.$userdata.next(this.userData);
@@ -37,7 +39,6 @@ export class DataService {
         // this.refreshData()
         return this.$userdata
     }
-
 
     setUser(key: string, value: any): void{
         this.userData[key] = value;

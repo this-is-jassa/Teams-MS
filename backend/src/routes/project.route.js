@@ -7,7 +7,7 @@ const $role = require('../../config/config').role;
 
 /**
 
-* @ROUTE UPDATE /get
+* @ROUTE GET /get
 
 * @DESC Get your project
 
@@ -16,6 +16,19 @@ const $role = require('../../config/config').role;
 */
 
 route.get('/get/:name', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) ,projectMiddleware.get);
+
+/**
+
+* @ROUTE GET 
+
+* @DESC Get your project logs
+
+* @Access Only members can access it
+
+*/
+route.get('/:name/logs', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true) ,projectMiddleware.getLogs);
+
+
 
 
 /**

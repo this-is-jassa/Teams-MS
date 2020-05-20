@@ -16,7 +16,10 @@ export class NewProjectComponent implements OnChanges {
     public avatars = environment.userImages;
 
     public searchData = [];
-    public membersAdded = new Set();
+
+    public membersSet = new Set();
+
+    public membersAdded = [];
     public following: any[] = [];
 
     public formData: any = {
@@ -54,6 +57,7 @@ export class NewProjectComponent implements OnChanges {
             .toPromise()
             .then(data => {
                 this.searchData = data;
+                console.log(data)
             })
 
         }else {
@@ -62,10 +66,15 @@ export class NewProjectComponent implements OnChanges {
     }
 
     userAdded(member): void {
-        this.membersAdded.add(member);
+        if(!this.membersSet.has(member.userName)){
+            this.membersSet.add(member.userName)
+            this.membersAdded.push(member);
+        }
     }
     userRemoved(member): void {
-        this.membersAdded.delete(member)
+        const index = this.membersAdded.findIndex(item => item.userName === member.name)
+        this.membersAdded.splice(this.membersAdded[index], 1);
+        this.membersSet.delete(member.userName);
     }
 
     createProject(): void {
@@ -85,7 +94,7 @@ export class NewProjectComponent implements OnChanges {
             let promisArr =[];
             this.membersAdded.forEach((item: any) => {
                 promisArr.push(
-                    this._http.POST('/projects/post/member', {name: data.data, member: {name: item.userName, permission: 'Developer'} })
+                    this._http.POST('/projects/post/member', {name: data.data, member: {name: item, permission: 'Developer'} })
                     .toPromise()
                 )
             });

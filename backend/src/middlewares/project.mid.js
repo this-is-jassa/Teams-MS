@@ -34,24 +34,24 @@ module.exports = {
     }, // O, A, D
 
     search: async (req, res, next) => {
-        try{
-            
-            const  where = {
+        try {
+
+            const where = {
                 userName: {
                     $regex: '^' + req.params.userName
                 }
-            } 
-            
+            }
+
             const users = await userModel.find(where).select("userName avatar _id").limit(10);
 
             res.status(200).json(users);
 
         }
-        catch(err) {
+        catch (err) {
             res.status(500).json({ success: false, message: 'Cannot fetch user' }); console.error(err);
         }
     },
-    
+
     post: async (req, res, next) => {
 
         if (req.user === null) { console.log("Not Authorised"); res.status(500).json({ success: false, msg: "Not Authorised" }); return }
@@ -452,15 +452,36 @@ module.exports = {
 
     },
 
+    getLogs: async (req, res, next) => {
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        try {
+
+            const { _id } = req.user.project;
+            const limit = 50;
+            const logs = await projectLog.find({ projectId: _id }).sort('descending').limit(limit);
+
+            res.status(200).json({ success: true, data: logs });
+
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({ success: false, message: 'Server Error' });
+        }
+
+    },
+
     deleteLogs: async (req, res, next) => {
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
 
-        const {_id} = req.user.project;
+        const { _id } = req.user.project;
 
-        await projectLog.deleteMany({projectId: _id});
+        await projectLog.deleteMany({ projectId: _id });
         res.status(200).json({ success: true });
 
     },

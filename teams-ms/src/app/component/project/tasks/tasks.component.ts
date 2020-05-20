@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 

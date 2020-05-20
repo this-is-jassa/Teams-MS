@@ -10,7 +10,7 @@ const schema = mongo.Schema({
     },
     type: {
         type: types.String,
-        enum: ['NewDir', 'NewFile', 'NewMember', 'NewNote', 'DeleteDir', 'DeleteFile', 'DeleteNote', 'DeleteMember', 'EditDir', 'EditFile', 'EditNote', 'Job', 'Project' ],
+        enum: ['NewDir', 'NewFile', 'NewMember', 'NewNote',  'DeleteMember', 'EditDir', 'EditFile', 'EditNote', 'Job', 'Project' ],
         required: true
 
     },

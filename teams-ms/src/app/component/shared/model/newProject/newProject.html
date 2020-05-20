@@ -105,10 +105,10 @@
                                     <img alt="Claire Connors" [src]="avatars[item.avatar]" class="avatar mr-2" />
                                     <span class="h6 mb-0"> {{item.userName}} </span>
                                     
-                                    <button *ngIf="!membersAdded.has(item)" (click)="userAdded(item)"
+                                    <button *ngIf="!membersSet.has(item.userName)" (click)="userAdded(item)"
                                         style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
                                         class="btn btn-outline-primary float-right">Add</button>
-                                    <button *ngIf="membersAdded.has(item)" (click)="userRemoved(item)"
+                                    <button *ngIf="membersSet.has(item.userName)" (click)="userRemoved(item)"
                                         style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
                                         class="btn btn-outline-danger float-right">Remove</button>
                                 </div>
@@ -124,10 +124,10 @@
                                     <img alt="Claire Connors" [src]="avatars[item.avatar]" class="avatar mr-2" />
                                     <span class="h6 mb-0"> {{item.userName}} </span>
                                     
-                                    <button *ngIf="!membersAdded.has(item)" (click)="userAdded(item)"
+                                    <button *ngIf="!membersSet.has(item.userName)" (click)="userAdded(item)"
                                         style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
                                         class="btn btn-outline-primary float-right">Add</button>
-                                    <button *ngIf="membersAdded.has(item)" (click)="userRemoved(item)"
+                                    <button *ngIf="membersSet.has(item.userName)" (click)="userRemoved(item)"
                                         style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
                                         class="btn btn-outline-danger float-right">Remove</button>
                                 </div>
