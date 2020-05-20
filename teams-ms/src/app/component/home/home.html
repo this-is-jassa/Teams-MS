@@ -2,7 +2,7 @@
 
 
 
-<div style="margin-top: 80px;" class="main-container">
+<div class="main-container">
 
 
     <div class="container">
@@ -10,11 +10,28 @@
             <div class="col-lg-12 col-xl-12">
 
                 <div class="page-header">
-                    <h1>Dashboard &#x2615;</h1>
-                    <p class="lead">{{'Welcome! ' + userData.userName + ' lets make this day a bit more productive.'}}</p>
-                    <div class="d-flex align-items-center">
-                        <app-avatar-list [images]='userImages'></app-avatar-list>
+                    <h2 style="font-family: 'Bai Jamjuree', sans-serif;" >DASHBOARD</h2>
+                    <p class="lead">{{'Welcome! ' + userData.userName + ' lets make this day a bit more productive.'}}
+                    </p>
+
+                    <div class="container">
+                        <div class="row" style="background-color: black; border-radius: 5px;" >
+                            <div class="col-4 infoCard">
+                                <p>PROJECTS</p>
+                                <h1>13</h1>
+                            </div>
+                            <div class="col-4 infoCard">
+                                <p>PERSONAL NOTES</p>
+                                <h1>10</h1>
+                            </div>
+                            <div class="col-4 infoCard">
+                                <p>PENDING NOTES</p>
+                                <h1>07</h1>
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
 
                 <hr>
@@ -36,8 +53,8 @@
 
 
                         <div class="content-list">
-                            <app-project-table *ngIf="!!userData" [tableData]='userData.projects'
-                                [userName]="userData.userName">
+                            <app-project-table  [tableData]='userData?.projects'
+                                [userName]="userData?.userName">
                             </app-project-table>
                         </div>
 
@@ -66,4 +83,4 @@
 
 </div>
 
-<app-personal-notes [notesData]="personalNotesData" ></app-personal-notes>
+<app-personal-notes [notesData]="personalNotesData"></app-personal-notes>

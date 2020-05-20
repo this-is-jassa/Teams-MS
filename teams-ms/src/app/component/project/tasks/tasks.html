@@ -8,18 +8,10 @@
 
 
 
-<div *ngFor="let group of groups; let index = index" class="card-list">
+<div *ngFor="let group of groups; let index = index" class="card-list" style="background-color: rgb(198, 164, 247);" >
     <div class="card-list-head">
-        <h6>{{group}}</h6>
-        <div class="dropdown">
-            <button class="btn-options" type="button" id="..." data-toggle="dropdown" aria-haspopup="true"
-                aria-expanded="false">
-                <i class="material-icons">more_vert</i>
-            </button>
-            <div *ngIf="['Owner', 'Admin'].includes(role)" class="dropdown-menu dropdown-menu-right">
-                ...
-            </div>
-        </div>
+        <h6 style="color: white;" >{{group}}</h6>
+        
     </div>
 
     <div class="row">
@@ -28,7 +20,7 @@
                 <div class="card-header">
 
                     <div class="media align-items-center">
-                        <img alt=".." src="https://pipeline.mediumra.re/assets/img/avatar-male-1.jpg" class="avatar" />
+                        <img alt=".." src="https://pipeline.mediumra.re/assets/img/avatar-female-2.jpg" class="avatar" />
                         <div class="media-body" [ngClass]="note.crossOff && 'crossOff'">
                             <h6 class="mb-0"> {{note.name}} </h6>
                         </div>

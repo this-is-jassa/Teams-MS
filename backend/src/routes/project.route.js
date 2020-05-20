@@ -82,6 +82,8 @@ route.post('/update/member', sharedMiddleware.checkTokenAndSetUser, projectMiddl
 */
 route.post('/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.delete);
 
+route.post('/delete/notifications', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.deleteLogs);
+
 
 
 /**

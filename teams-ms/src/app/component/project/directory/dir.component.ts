@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Input } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, empty } from 'rxjs';
 import { ViewService } from 'src/app/services/view.service';
 
 
@@ -30,9 +30,11 @@ export class DirectoryComponent implements OnInit {
     }
 
     public dirStructure: any[] = [];
+    public searchDirStructure: any[] = [];
 
     // NG MODULE
     newDirName: string = '';
+    searchText: string = '';
 
 
     constructor(private _http: HttpService, private _view: ViewService) { }
@@ -84,10 +86,13 @@ export class DirectoryComponent implements OnInit {
         return this._http.GET('/dir/get/file/' + this.projectData.name + '/' + fileId).toPromise()
     }
 
-    dirClick(index): void {
+    dirClick(index, searched = false): void {
         this._view.setObs('loader', 'isVisible', true);
 
-        const dirInstance = this.openedDir.child[index];
+        let dirInstance = this.openedDir.child[index];
+        if(searched) {
+            dirInstance = this.searchDirStructure[index];
+        }
 
         if (dirInstance.fileType === 'dir') {
             this.getDir(dirInstance.child)
@@ -134,4 +139,14 @@ export class DirectoryComponent implements OnInit {
     dirJump(to: number): void {
         this.dirStructure = this.dirStructure.slice(0, to + 1);
     }
+
+    // /get/find/:name/:searchText
+    async searchUsers(text) {
+        if(!!text){
+            const dir = await this._http.GET('/dir/get/find/' + this.projectData.name+'/'+ text).toPromise();
+            this.searchDirStructure = dir.data;
+        }
+
+    }
+
 }

@@ -6,6 +6,12 @@ const mongo = require('mongoose');
 module.exports = {
 
     post: async (req, res, next) => {
+        
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
         try {
             const { _id } = req.user.project;
             const { fileName, fileType, codeText, parentDirId } = req.body;
@@ -56,6 +62,11 @@ module.exports = {
 
     get_dir: async (req, res, next) => {
 
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
         try {
             
             const { _id } = req.user.project;
@@ -75,6 +86,11 @@ module.exports = {
 
     update_dir: async (req, res, next) => {
 
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
         try {
             const { _id } = req.user.project;
             const { dirId, newName } = req.body;
@@ -90,6 +106,11 @@ module.exports = {
     },
 
     get_file: async (req, res, next) => {
+
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
         try {
             const { _id } = req.user.project;
             const { fileId } = req.params;
@@ -106,6 +127,10 @@ module.exports = {
 
 
     update_file: async (req, res, next) => {
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
         try {
             const { _id } = req.user.project;
             const { fileId, codeText } = req.body;
@@ -119,6 +144,25 @@ module.exports = {
             res.status(400).json({ success: false, message: 'Server Error' })
         }
     },
+
+    findFile: async(req, res, next) => {
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+        try{
+            const {searchText} = req.params;
+            const {_id} = req.user.project;
+
+            const result = await directoryModel.find({projectId: _id, name: {$regex: '^' + searchText}} ).limit(30);
+
+            res.status(200).json({success: true, data: result});
+        }
+        catch(err) {
+
+        }
+
+    }
 
     // delete_file: async (req, res, next) => {
 

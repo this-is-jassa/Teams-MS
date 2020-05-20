@@ -1,19 +1,34 @@
-<div class="container mt-5">
+<div class="container ">
     <div class="row justify-content-center">
         <div class="col-lg-12 col-xl-12">
 
             <div class="page-header">
-                <h2>
-                    
+                <h2 style="font-family: 'Bai Jamjuree', sans-serif;">
+
                     {{projectName}}
                     <button class="btn btn-round float-right">
                         <i class="material-icons">settings</i>
                     </button>
                 </h2>
                 <p class="lead">{{projectData?.discription}}</p>
-                <div class="d-flex align-items-center">
-                    <app-avatar-list [images]='userImages'></app-avatar-list>
+
+            </div>
+            <div class="container">
+                <div class="row" style="background-color: black; border-radius: 5px; ">
+                    <div class="col-4 infoCard">
+                        <p>PROJECTS</p>
+                        <h1>13</h1>
+                    </div>
+                    <div class="col-4 infoCard">
+                        <p>PERSONAL NOTES</p>
+                        <h1>10</h1>
+                    </div>
+                    <div class="col-4 infoCard">
+                        <p>PENDING NOTES</p>
+                        <h1>07</h1>
+                    </div>
                 </div>
+
             </div>
 
             <hr>
@@ -26,6 +41,10 @@
                 <li class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#directory" role="tab" aria-controls="members"
                         aria-selected="false">Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#Logs" role="tab" aria-controls="members"
+                        aria-selected="false">Logs</a>
                 </li>
 
             </ul>
@@ -40,10 +59,16 @@
                 <!--end of tab-->
 
 
-                <div class="tab-pane fade" id="directory" role="tabpanel" >
-                   
-                    <app-tasks [projectData]="projectData" [userName]="userData.userName" [role] = "role"></app-tasks>
-                
+                <div class="tab-pane fade" id="directory" role="tabpanel">
+
+                    <app-tasks [projectData]="projectData" [userName]="userData.userName" [role]="role"></app-tasks>
+
+                </div>
+
+                <div class="tab-pane fade" id="Logs" role="tabpanel">
+
+                    <app-logs></app-logs>
+
                 </div>
             </div>
 

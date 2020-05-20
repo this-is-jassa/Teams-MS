@@ -26,8 +26,7 @@ export class NewProjectComponent implements OnChanges {
         members: [],
         sugessions: [],
         isFreeze: false,
-        startingDate: '',
-        endingdate: ''
+        endingdate: Date.now()
     }
     public searchText ='';
     
@@ -70,6 +69,7 @@ export class NewProjectComponent implements OnChanges {
     }
 
     createProject(): void {
+        
         let payload = {
             name: this.formData.name,
             discription: this.formData.description,
@@ -78,6 +78,7 @@ export class NewProjectComponent implements OnChanges {
             startingDate: this.formData.startingDate,
             endingDate: this.formData.endingDate
         }
+
         this._http.POST('/projects/post', payload)
         .toPromise()
         .then(data => {
@@ -88,10 +89,12 @@ export class NewProjectComponent implements OnChanges {
                     .toPromise()
                 )
             });
-            Promise.resolve(promisArr)
-            .then(data2 => {
+            console.log("y")
+
+            Promise.all(promisArr).then(data => {
+            console.log("x")
+
                 this._data.refreshData();
-               
             })
             
         });

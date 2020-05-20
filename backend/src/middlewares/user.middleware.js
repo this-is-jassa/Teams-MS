@@ -1,4 +1,5 @@
 const userModel = require('../model/user.model');
+const projectModel = require('../model/project.model');
 
 module.exports = {
     get: async (req, res, next) => {
@@ -21,7 +22,7 @@ module.exports = {
             res.status(500).json({ success: false, message: 'Cannot fetch user' }); console.error(err);
         }
     },
-
+    
     search: async (req, res, next) => {
         try{
             

@@ -56,7 +56,9 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     logOut(): void {
-        this._auth.LogOut();
+        if(confirm('Are you sure you want to log out?')){
+            this._auth.LogOut();
+        }
 
     }
 
@@ -85,4 +87,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
             
         })
     }
+
+
 }

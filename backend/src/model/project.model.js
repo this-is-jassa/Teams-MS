@@ -13,7 +13,7 @@ const projectSchema = mongo.Schema({
     discription: {
         type: types.String,
         required: true,
-        maxlength: [300, 'Maximum length of the discription is 300']
+        maxlength: [400, 'Maximum length of the discription is 400']
     },              // A, O
     private: {
         type: types.Boolean,
@@ -24,11 +24,9 @@ const projectSchema = mongo.Schema({
         timeStamp: {type: types.Date, default: Date.now()} 
     },
 
-    startingDate: {
-        type: types.String
-    },
     endingDate: {
-        type: types.String
+        type: types.String,
+        default: Date.now().toString()
     },
 
     members: [{ 

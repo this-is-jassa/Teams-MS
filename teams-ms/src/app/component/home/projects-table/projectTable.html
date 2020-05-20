@@ -1,5 +1,3 @@
-
-
 <div class="row content-list-head">
     <div class="col-auto">
         <h3>Projects</h3>
@@ -23,21 +21,16 @@
 </div>
 
 <div class=" content-list-body row">
-    <div class="col-lg-6" *ngFor="let item of tableData; let i = index;"  >
-        <app-project-table-row 
-        [index]="i"
-        [members]="item.members" 
-        [projectData]="item" 
-        [userName]="userName"
-        (OnshowMembers) = "setMembersModelData($event)"
-        >
-    </app-project-table-row>
+    <div class="col-lg-6" *ngFor="let item of tableData; let i = index;">
+        <app-project-table-row [index]="i" [members]="item.members" [projectData]="item" [userName]="userName"
+            (OnshowMembers)="setMembersModelData($event)">
+        </app-project-table-row>
     </div>
-    
+
 
 </div>
 
-<div class="modal fade "  id="projectMembers" tabindex="-1" aria-hidden="true">
+<div class="modal fade " id="projectMembers" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
 

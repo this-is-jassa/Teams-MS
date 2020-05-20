@@ -1,4 +1,15 @@
-<app-navbar></app-navbar>
+<div style="display:flex; background-color: black;" >
+
+    <app-navbar></app-navbar>
+ 
+    <div style="width:100%; flex-grow: 2; margin: 30px 2px; background-color: #F8F9FA; border-top-left-radius: 2%; border-bottom-left-radius: 2% ;padding: 20px;" >
+        <router-outlet></router-outlet>
+    </div>
+
+</div>
+
 <app-loading></app-loading>
-<router-outlet></router-outlet>
-<app-footer></app-footer>
+
+<div>
+    <app-footer></app-footer>
+</div>

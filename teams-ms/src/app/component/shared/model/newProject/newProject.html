@@ -27,7 +27,7 @@
                         <div class="form-group row align-items-center">
                             <label class="col-3">Name</label>
                             <input [(ngModel)]="formData.name" class="form-control col" type="text"
-                                placeholder="Project name" name="project-name" />
+                                placeholder="Project name" name="project-name" required />
                         </div>
                         <div class="form-group row">
                             <label class="col-3">Description</label>
@@ -37,27 +37,21 @@
 
                         <hr>
                         <h6>Timeline</h6>
-                        <div class="form-group row align-items-center">
-                            <label class="col-3">Start Date</label>
-                            <input [(ngModel)]="formData.startingDate" class="form-control col" type="text"
-                                name="project-start" placeholder="Select a date" data-flatpickr
-                                data-default-date="2021-04-21" data-alt-input="true" />
-                        </div>
+                        
                         <div class="form-group row align-items-center">
                             <label class="col-3">Due Date</label>
                             <input [(ngModel)]="formData.endingDate" class="form-control col" type="date"
-                                name="project-due" placeholder="Select a date" data-flatpickr
-                                data-default-date="2021-09-15" data-alt-input="true" />
+                            name="project-start" placeholder="Select a date" required />
                         </div>
                         <div class="alert alert-warning text-small" role="alert">
                             <span>You can change due dates at any time.</span>
                         </div>
                         <hr>
                         <h5>Public
-                            <input [(ngModel)]="!formData.isPrivate" type="checkbox" name="isPrivate" />
+                            <input [(ngModel)]="!formData.isPrivate" type="checkbox" name="isPrivate" required/>
                         </h5>
                         <h5>Freeze
-                            <input [(ngModel)]="formData.isFreee" type="checkbox" name="isPrivate" />
+                            <input [(ngModel)]="formData.isFreee" type="checkbox" name="isPrivate" required/>
                         </h5>
 
                     </div>
