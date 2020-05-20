@@ -96,3 +96,7 @@
     (onDeleteJob)="onDeleteJob($event)"
     >
 </app-notes-action-model>
+
+<div *ngIf="groups.length === 0" style="text-align: center;" >
+    <img style="width: 80%; height: 80%;" src="../../../../assets/images/stickey.svg" alt="">
+</div>

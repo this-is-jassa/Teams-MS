@@ -20,7 +20,6 @@ export class LogsComponent implements OnInit, OnDestroy {
     logs: any[] =[];
     materialIcons = {
         
-        NewDir: 'create_new_folder',
         NewFile: 'insert_drive_file',
         NewMember: 'person_add',
         NewNote: 'post_add',
@@ -28,11 +27,12 @@ export class LogsComponent implements OnInit, OnDestroy {
         Delete: 'delete',
         DeleteMember: 'person_add_disabled',
 
-        EditDir: '',
-        EditFile: '',
-        EditNote: '',
-        Job: '',
-        Project: ''
+        EditFile: 'code',
+        EditNote: 'notes',
+
+        Dir: 'folder',
+        Job: 'check',
+        Project: 'domain'
     }
 
     constructor(private _http: HttpService) { }

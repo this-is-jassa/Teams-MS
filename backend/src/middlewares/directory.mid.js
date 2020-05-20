@@ -2,6 +2,7 @@ const projectModel = require('../model/project.model');
 const directoryModel = require('../model/directory.model');
 const codeModel = require('../model/code.model');
 const mongo = require('mongoose');
+const projectLog = require('../model/projectLogs.model');
 
 module.exports = {
 
@@ -159,8 +160,31 @@ module.exports = {
             res.status(200).json({success: true, data: result});
         }
         catch(err) {
+            console.log(err)
+            res.status(400).json({success: false, message: 'Server Err'})
+        }
+    },
+
+    delete_file: async(req, res, next) => {
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        try{
+            const {userName} = req.user;
+            const {_id} = req.user.project;
+            const {fileId} = req.body;
+
+            
+            
 
         }
+        catch(err) {
+            console.log(err)
+            res.status(400).json({success: false, message: 'Server Err'})
+        }
+
 
     }
 

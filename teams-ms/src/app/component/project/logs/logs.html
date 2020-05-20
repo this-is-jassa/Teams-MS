@@ -1,10 +1,12 @@
-<ol *ngFor="let log of logs" class="list-group list-group-activity">
+<ol style="max-height: 60vh; overflow: scroll;" *ngFor="let log of logs" class="list-group list-group-activity">
     <li class="list-group-item">
         <div class="media align-items-center">
             <ul class="avatars">
                 <li>
                     <div class="avatar bg-primary">
-                        <i class="material-icons">...</i>
+                        <i class="material-icons">
+                            {{ materialIcons[log.type] }}
+                        </i>
                     </div>
                 </li>
                 <!-- <li>
@@ -20,3 +22,6 @@
         </div>
     </li>
 </ol>
+<div style="text-align: center;" *ngIf="logs.length !== 0" >
+    <img style="width: 80%; height: 80%;" src="../../../../assets/images/noNotification.svg" alt="">
+</div>
