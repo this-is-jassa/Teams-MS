@@ -33,24 +33,6 @@ module.exports = {
 
     }, // O, A, D
 
-    search: async (req, res, next) => {
-        try {
-
-            const where = {
-                userName: {
-                    $regex: '^' + req.params.userName
-                }
-            }
-
-            const users = await userModel.find(where).select("userName avatar _id").limit(10);
-
-            res.status(200).json(users);
-
-        }
-        catch (err) {
-            res.status(500).json({ success: false, message: 'Cannot fetch user' }); console.error(err);
-        }
-    },
 
     post: async (req, res, next) => {
 
@@ -94,23 +76,32 @@ module.exports = {
                 child: []
             };
 
-            const logPayload = {
-                projectId: projectId,
-                type: 'Project',
-                message: 'Congrats! New project has been created',
-                timeStamp: Date.now()
-            }
+            // const logPayload = {
+            //     projectId: projectId,
+            //     type: 'Project',
+            //     message: 'Congrats! New project has been created',
+            //     timeStamp: Date.now()
+            // }
 
             await directoryModel.create(dirPayload);
-            const newProject = projectModel.create(payload);
-            const log = projectLog.create(logPayload)
+            await projectModel.create(payload);
+            await userModel.findOneAndUpdate({ userName: userName }, userPayload);
+            
+            req.projectLog = {
+                type: 'Project',
+                message: 'Congrats! New project has been created',
+            }
+
+            req.user.project = {_id: projectId};
+            req.data = name;
+
+            next();
+            // const log = projectLog.create(logPayload)
 
 
-            userModel.findOneAndUpdate({ userName: userName }, userPayload, { useFindAndModify: false }, (err, response3) => { });
+            // await Promise.all([newProject, log])
 
-            await Promise.all([newProject, log])
-
-            res.status(200).json({ success: true, data: name, log: logPayload });
+            // res.status(200).json({ success: true, data: name, log: logPayload });
 
         }
         catch (err) {
@@ -129,7 +120,6 @@ module.exports = {
         }
 
 
-        const { _id } = req.user.project;
         const { userName } = req.user;
         const { name, discription, private, isFreeze } = req.body;
 
@@ -149,17 +139,19 @@ module.exports = {
 
             if (err) { res.status(500).json({ success: false, msg: "Saving Error" }); return };
 
-            const logPayload = {
-                projectId: _id,
+
+
+            req.projectLog = {
                 type: 'Project',
-                message: `Project settings has been changed by ${userName}`
+                message: `Project settings has been changed by ${userName}`,
             }
 
-            projectLog.create(logPayload, (err, notification) => {
-                res.status(200).json({ success: true, log: notification });
-                next();
+            next();
 
-            });
+            // projectLog.create(logPayload, (err, notification) => {
+            //     res.status(200).json({ success: true, log: notification });
+
+            // });
 
         })
     },
@@ -183,18 +175,27 @@ module.exports = {
                 }
             }
 
-            const logPayload = {
-                projectId: _id,
+            // const logPayload = {
+            //     projectId: _id,
+            //     type: 'Project',
+            //     message: ` ${userName} has changed its status to ${value} `,
+            //     timeStamp: Date.now()
+            // }
+
+           
+
+            await projectModel.findOneAndUpdate({ name: _id, 'members.name': userName }, payload);
+
+            req.projectLog = {
                 type: 'Project',
                 message: ` ${userName} has changed its status to ${value} `,
-                timeStamp: Date.now()
             }
+            next();
 
-            const updateProj = projectModel.findOneAndUpdate({ name: _id, 'members.name': userName }, payload);
-            const log = projectLog.create(logPayload)
+            // const log = projectLog.create(logPayload)
 
-            await Promise.all([updateProj, log])
-            res.status(200).json({ success: true, log: logPayload });
+            // await Promise.all([updateProj, log])
+            // res.status(200).json({ success: true, log: logPayload });
 
         }
         catch (e) {
@@ -219,13 +220,12 @@ module.exports = {
         const { _id } = req.user.project;
         const { member, name } = req.body;
 
-        console.log(userName + ' ' + _id + ' ' + member + ' ' + name);
 
         let IsMemberAlreadyExist = false
 
 
         const projectmembers = req.user.project.members;
-        console.log(projectmembers);
+
 
         for (const item of projectmembers) {
             console.log(item.name + ' ' + member.name)
@@ -233,24 +233,27 @@ module.exports = {
         }
 
 
-        console.log(IsMemberAlreadyExist);
+        if(IsMemberAlreadyExist) {
+            res.status(400).json({success: false, message: 'User already exist'})
+            return;
+        }
 
 
-        if (!!member.name && (member.name !== userName) && (member.permission !== 'Owner') && !(IsMemberAlreadyExist)) {
+        if (!!member.name && (member.name !== userName) && (member.permission !== 'Owner') ) {
 
             const payload = {
                 $push: {
                     projects: _id,
-                    notify: { type: 'Project', message: 'You are added to a project ' + name + 'by' + userName },
+                    notify: { type: 'Project', message: 'You are added to a project ' + name + 'by ' + userName },
                     newNotify: true
                 }
             };
 
-            const logPayload = {
-                projectId: _id,
-                type: 'NewMember',
-                message: ` ${userName} has added ${member} to the team`
-            }
+            // const logPayload = {
+            //     projectId: _id,
+            //     type: 'NewMember',
+            //     message: ` ${userName} has added ${member} to the team`
+            // }
 
             userModel.findOneAndUpdate({ userName: member.name }, payload, (err, response) => {
                 if (err) { res.status(500).json({ success: false }); console.log(err); return; }
@@ -261,10 +264,16 @@ module.exports = {
 
             });
 
-            projectLog.create(logPayload, (err, log) => {
-                if (err) { res.status(500).json({ success: false }); console.log(err); return; }
-                res.status(200).json({ success: true, log: log });
-            })
+            req.projectLog = {
+                type: 'NewMember',
+                message: ` ${userName} has added ${member} to the team`,
+            }
+            next();
+
+            // projectLog.create(logPayload, (err, log) => {
+            //     if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+            //     res.status(200).json({ success: true, log: log });
+            // })
 
 
         } else {
@@ -295,11 +304,11 @@ module.exports = {
                 $pull: { projects: _id },
                 $push: { notify: { type: 'Project', message: 'You are removed from the project ' + name } }
             };
-            const logPayload = {
-                projectId: _id,
-                type: 'DeleteMember',
-                message: ` ${userName} has deleted ${member} from the team`
-            };
+            // const logPayload = {
+            //     projectId: _id,
+            //     type: 'DeleteMember',
+            //     message: ` ${userName} has deleted ${member} from the team`
+            // };
 
 
 
@@ -309,10 +318,16 @@ module.exports = {
                 userModel.findOneAndUpdate({ userName: memberName }, payload, (err, response2) => {
                     if (err) { res.status(500).json({ success: false }); console.log(err); return; }
 
-                    projectLog.create(logPayload, (err, log) => {
-                        if (err) { res.status(500).json({ success: false }); console.log(err); return; }
-                        res.status(200).json({ success: true, log: log });
-                    });
+                    req.projectLog = {
+                        type: 'DeleteMember',
+                        message: ` ${userName} has deleted ${member} from the team`,
+                    }
+                    next();
+
+                    // projectLog.create(logPayload, (err, log) => {
+                    //     if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+                    //     res.status(200).json({ success: true, log: log });
+                    // });
                 });
             });
 
@@ -334,7 +349,6 @@ module.exports = {
 
         if (req.user.project.freeze.isFreeze) { throw 'Account is Freeze' }
 
-        const { _id } = req.user.project;
         const { userName } = req.user;
         const { member, name } = req.body;
 
@@ -346,23 +360,30 @@ module.exports = {
                 }
             };
 
-            const logPayload = {
-                projectId: _id,
-                type: 'EditMember',
-                message: ` ${userName} changed the permission of ${member} to ${member.permission}`
-            };
+            // const logPayload = {
+            //     projectId: _id,
+            //     type: 'EditMember',
+            //     message: ` ${userName} changed the permission of ${member} to ${member.permission}`
+            // };
 
+            
             projectModel.findOneAndUpdate({ name: name, 'members.name': member.name }, payload, (err, response) => {
                 if (err) { console.log(err); res.status(500).json({ success: false, msg: err }); return; }
 
                 userModel.findOneAndUpdate({ userName: member.name }, { $push: { notify: { type: 'Project', message: ('Your role for project ' + name + 'has been changed to ' + member.permission) } }, newNotify: true },
                     { useFindAndModify: false }, (err, response) => {
                         if (err) { console.error(err); res.status(500).json({ success: false, msg: err }); return; }
+                        
+                        req.projectLog = {
+                            type: 'EditMember',
+                            message: ` ${userName} changed the permission of ${member} to ${member.permission}`,
+                        };
 
-                        projectLog.create(logPayload, (err, log) => {
-                            if (err) { res.status(500).json({ success: false }); console.log(err); return; }
-                            res.status(200).json({ success: true, log: log });
-                        });
+                        next();
+                        // projectLog.create(logPayload, (err, log) => {
+                        //     if (err) { res.status(500).json({ success: false }); console.log(err); return; }
+                        //     res.status(200).json({ success: true, log: log });
+                        // });
                     });
 
 
@@ -430,19 +451,27 @@ module.exports = {
                 $pull: { members: { name: userName } }
             }
 
-            const logPayload = {
-                projectId: _id,
-                type: 'DeleteMember',
-                message: `${member} quit the team`,
-                timeStamp: Date.now()
-            };
+            // const logPayload = {
+            //     projectId: _id,
+            //     type: 'DeleteMember',
+            //     message: `${member} quit the team`,
+            //     timeStamp: Date.now()
+            // };
+
+
 
             const updateUser = userModel.findOneAndUpdate({ userName: userName }, update1);
             const updateProject = projectModel.findOneAndUpdate({ _id: _id }, update2);
 
             const result = await Promise.all([updateUser, updateProject]);
 
-            res.status(200).json({ success: true });
+            req.projectLog = {
+                type: 'DeleteMember',
+                message: `${userName} quit the team`,
+            }
+            next();
+
+            // res.status(200).json({ success: true });
         }
         catch (err) {
             console.log(err);
@@ -478,11 +507,22 @@ module.exports = {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
+        
+        try {
+            const { _id } = req.user.project;
+            const {userName} = req.user;
 
-        const { _id } = req.user.project;
+            await projectLog.deleteMany({ projectId: _id });
 
-        await projectLog.deleteMany({ projectId: _id });
-        res.status(200).json({ success: true });
+            req.projectLog = {
+                type: 'Delete',
+                message: `${userName} removed all logs.`,
+            }
+            next();
+
+        }catch(err) {
+            res.status(400).json({success: false, message: "Server Error"})
+        }
 
     },
 
@@ -499,10 +539,10 @@ module.exports = {
             else {
                 const { userName } = req.user;
                 const name = (req.method === 'GET') ? req.params.name : req.body.name;
-
+                console.log(name + ' ' + req.params.name + ' ' + req.body.name);
 
                 projectModel.findOne({ name: name })
-                    .select("_id private name members")
+                    .select("_id private name members stickey")
                     .exec((err, response) => {
                         if (err || response === null) { res.status(400).json({ success: false, message: "Error Loading Projects" }); console.log(err); return; }
 
@@ -520,6 +560,9 @@ module.exports = {
                             // });
 
                             if (!!member && ($role.includes('ALL') || $role.includes(member.permission))) {
+                                
+                                // Will be using req.locals soon .. OOps
+                                
                                 req.user.permission = true;
 
                                 req.role = member.permission;
@@ -537,6 +580,37 @@ module.exports = {
                         next();
                     });
             }
+        }
+    },
+    projectLogs: async (req, res, next) => {
+
+        try {
+            // if (!req.user.permission) {
+            //     res.status(400).json({ success: false, msg: "Permission Not granted" });
+            //     return;
+            // }
+
+
+            const {_id} = req.user.project;
+            const {type, message} = req.projectLog;
+            const data = req.data;
+
+
+            const logPayload = {
+                projectId: _id,
+                type: type,
+                message: message,
+                timeStamp: Date.now()
+            }
+
+            const log = await projectLog.create(logPayload);
+            res.status(200).json({log: log, data: data, success: true});
+
+        }
+        catch (err) {
+            console.log(err);
+            res.status(200).json({success: false, message: 'Server Err'});
+
         }
     }
 

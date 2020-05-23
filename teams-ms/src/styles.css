@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap");
+/* You can add global styles to this file, and also import other style files */
+body {
+  background-color: #F8F9FA;
+}
+
+.cbg-warning {
+  background-color: #F4A100;
+}
+
+.cbg-primary {
+  background-color: #2092ED;
+}
+
+.cbg-success {
+  background-color: #28A745;
+}
+
+pre {
+  white-space: pre-wrap;
+  /* css-3 */
+  white-space: -moz-pre-wrap;
+  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  word-wrap: break-word;
+  /* Internet Explorer 5.5+ */
+}
+
+.infoCard {
+  padding: 20px;
+  font-family: 'Bai Jamjuree', sans-serif;
+}
+
+.infoCard p {
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.infoCard h1 {
+  text-align: center;
+  color: white;
+}
+/*# sourceMappingURL=styles.css.map */

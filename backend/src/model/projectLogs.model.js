@@ -2,6 +2,9 @@ const mongo = require('mongoose');
 
 const types = mongo.Schema.Types;
 
+mongo.set('runValidators', true);
+
+
 const schema = mongo.Schema({
     projectId: {
         type: types.ObjectId,

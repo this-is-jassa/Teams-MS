@@ -15,7 +15,7 @@ module.exports = {
                     name: name,
                     message: message,
                     crossOff: false,
-                    timeStamp: new Date()
+                    timeStamp: Date.now()
                 }
             }
         };
@@ -23,8 +23,9 @@ module.exports = {
         userModel.findOneAndUpdate(
             {userName: userName },
             payload,
+            
             (err, user) => {
-                if(err) {res.status(500).json({success: false, msg:"Server side error"}); console.error(err) ;return}
+                if(err) {res.status(400).json({success: false, msg:"Server side error"}); console.error(err) ;return}
                 
                 res.status(200).json({success: true, data: payload.$push.personalNotes});
                 next();
@@ -64,7 +65,8 @@ module.exports = {
                     'personalNotes.$.message': message,
                     'personalNotes.$.crossOff': crossOff
                 }
-            }
+            },
+            
         )
         
         res.status(200).json({success: true});
@@ -95,3 +97,5 @@ module.exports = {
     }
 
 }
+
+// { runValidators: true },

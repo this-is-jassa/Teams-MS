@@ -1,11 +1,14 @@
 {
 	"folders": [
 		{
+			"path": "/Users/admin/Documents/untitled folder"
+		},
+		{
 			"path": "/Users/admin/Documents/Teams-MS"
 		}
 	],
 	"settings": {
 		"git.enabled": false,
-		"liveServer.settings.multiRootWorkspaceName": "sidebar-03"
+		"liveServer.settings.multiRootWorkspaceName": "untitled folder"
 	}
 }

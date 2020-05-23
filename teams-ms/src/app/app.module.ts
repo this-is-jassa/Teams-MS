@@ -19,10 +19,11 @@ import * as firebase from 'firebase';
 import { DataService } from './services/data.service';
 import { ProjectFeatureModule } from './module/project.module';
 
+
+
 @NgModule({
   declarations: [
-    AppComponent,
-    
+    AppComponent
   ],
   imports: [
     BrowserModule,

@@ -16,6 +16,7 @@ export class TasksComponent implements OnInit, OnDestroy {
 
     notes: any[][] = [[]];
     groups = new Set();
+    
 
 
     @Input() userName;

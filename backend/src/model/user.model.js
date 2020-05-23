@@ -2,12 +2,22 @@ const mongo = require('mongoose');
 const types = mongo.Schema.Types;
 const bcrypt = require('bcrypt');
 
+mongo.set('runValidators', true);
+
+const personalNotesSchema = new mongo.Schema({
+    _id: {type: types.ObjectId, required: true},
+    name: {type: types.String, required: true, trim: true, minlength: 1, maxlength: 50} ,
+    message: {type: types.String, required: true, trim: true, minlength: 1, maxlength: 400},
+    crossOff: { type: types.Boolean, default: false, required: false },
+    timeStamp: {type: types.Date, default: Date.now()},
+}) 
+
 const userSchema = mongo.Schema({
     userName: {
         type: types.String,
         index: { unique: true, dropDups: true },       
         minlength: 1,
-        maxlength: [16, 'Length of user must less than 17'],
+        maxlength: [20, 'Length of user must less than 17'],
         trim: true,
         required: [true, 'User name is required']
     },
@@ -15,7 +25,7 @@ const userSchema = mongo.Schema({
         type: types.String,
         required: [true, "Password is requuired"],
         minlength: [8, 'Minimum length of password should be 8'],
-        maxlength: [16, 'Password should not be longer than 16 characters'],
+        maxlength: [40, 'Password should not be longer than 40 characters'],
     },
     email: {
         type: types.String,
@@ -26,7 +36,7 @@ const userSchema = mongo.Schema({
         type: types.String,
         default: '',
         required: false,
-        maxlength: [300, 'Length of the bio should be more than 300']
+        maxlength: [400, 'Length of the bio should be more than 300']
     },
     lastActive: {
         type: types.Date,
@@ -39,19 +49,11 @@ const userSchema = mongo.Schema({
     avatar: {type: types.Number, default: 0 },
     following: [{type: types.ObjectId, ref: 'users'}],
     followers: [{type: types.ObjectId, ref: 'users'}],
-    personalNotes: [
-        {
-            _id: {type: types.ObjectId},
-            name: {type: types.String, minlength: 1, maxlength: 16, required: true} ,
-            message: {type: types.String, minlength:1, maxlength: [100, 'Max length of cannot be greater than 100']},
-            crossOff: { type: types.Boolean, default: false, required: false },
-            timeStamp: {type: types.Date, default: Date.now()},
-        }
-    ],
+    personalNotes: [personalNotesSchema],
     projects: [{type: types.ObjectId, ref: 'projects'}],
     notify: [ 
         {
-            type: {type: types.String, enum: ['Note', 'Project', 'Follow']},
+            type: {type: types.String, enum: ['Project', 'Follow', 'Job']},
             message: {type: types.String},
             timeStamp: {type: types.Date, default: Date.now()},
         }
@@ -75,6 +77,15 @@ userSchema.pre('save', function(next) {
         });
     });
 });
+
+function checkLength(text, len) {
+    try{
+        const leng = text.trim().length;
+        return  leng <= len && leng !== 0
+    }catch (err) {
+        return false
+    }
+}
 
 userSchema.path('email').validate(function (email) {
     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;

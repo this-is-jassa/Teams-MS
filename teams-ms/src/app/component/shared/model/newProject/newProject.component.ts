@@ -44,7 +44,6 @@ export class NewProjectComponent implements OnChanges {
             .then(data => {
                 this.following = data.data.following;
             })
-
         }
         
     }
@@ -57,7 +56,6 @@ export class NewProjectComponent implements OnChanges {
             .toPromise()
             .then(data => {
                 this.searchData = data;
-                console.log(data)
             })
 
         }else {
@@ -66,7 +64,7 @@ export class NewProjectComponent implements OnChanges {
     }
 
     userAdded(member): void {
-        if(!this.membersSet.has(member.userName)){
+        if(!this.membersSet.has(member.userName) && this.userInformation.userName !== member.userName){
             this.membersSet.add(member.userName)
             this.membersAdded.push(member);
         }
@@ -93,10 +91,13 @@ export class NewProjectComponent implements OnChanges {
         .then(data => {
             let promisArr =[];
             this.membersAdded.forEach((item: any) => {
+                
+                console.log(data.data);
+
                 promisArr.push(
-                    this._http.POST('/projects/post/member', {name: data.data, member: {name: item, permission: 'Developer'} })
+                    this._http.POST('/projects/post/member', {name: data.data, member: {name: item.userName, permission: 'Developer'} })
                     .toPromise()
-                )
+                ) 
             });
             console.log("y")
 

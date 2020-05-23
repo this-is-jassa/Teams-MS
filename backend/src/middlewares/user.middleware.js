@@ -12,7 +12,7 @@ module.exports = {
             .populate({
                 path: 'projects',
                 model: 'projects',
-                select: 'name freeze members startingDate endingDate'
+                select: 'name freeze members endingDate'
             })
 
             res.status(200).json({ success: true, data: user });

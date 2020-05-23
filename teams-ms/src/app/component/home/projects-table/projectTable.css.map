@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AACA,AAAA,oBAAoB,CAAC;EACjB,QAAQ,EAAE,QAAQ;EAElB,UAAU,EAAE,KAAK;EACjB,QAAQ,EAAE,IAAI;CACjB",
+    "sources": [
+        "projectTable.scss"
+    ],
+    "names": [],
+    "file": "projectTable.css"
+}

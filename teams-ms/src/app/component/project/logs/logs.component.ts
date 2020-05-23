@@ -31,7 +31,7 @@ export class LogsComponent implements OnInit, OnDestroy {
         EditNote: 'notes',
 
         Dir: 'folder',
-        Job: 'check',
+        Job: 'work_outline',
         Project: 'domain'
     }
 

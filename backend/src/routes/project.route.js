@@ -40,8 +40,8 @@ route.get('/:name/logs', sharedMiddleware.checkTokenAndSetUser, projectMiddlewar
 * @Access ALL users can access it.
 
 */
-route.post('/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.post);
-route.post('/post/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.addMember); 
+route.post('/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.post, projectMiddleware.projectLogs);
+route.post('/post/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.addMember, projectMiddleware.projectLogs); 
 
 
 
@@ -54,8 +54,8 @@ route.post('/post/member', sharedMiddleware.checkTokenAndSetUser, projectMiddlew
 * @Access Owners can access it
 
 */
-route.post('/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.update);
-route.post('/update/member/status', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), projectMiddleware.updateMemberStatus )
+route.post('/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.update, projectMiddleware.projectLogs);
+route.post('/update/member/status', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), projectMiddleware.updateMemberStatus, projectMiddleware.projectLogs )
 
 
 /**
@@ -80,7 +80,7 @@ route.post('/update/member/status', sharedMiddleware.checkTokenAndSetUser, proje
 
 */
 // route.post('/update/stickey', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.update_stickey_req); // D
-route.post('/update/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.updateMember); 
+route.post('/update/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.updateMember, projectMiddleware.projectLogs); 
 
 
 
@@ -95,7 +95,7 @@ route.post('/update/member', sharedMiddleware.checkTokenAndSetUser, projectMiddl
 */
 route.post('/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.delete);
 
-route.post('/delete/notifications', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.deleteLogs);
+route.post('/delete/notifications', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.deleteLogs, projectMiddleware.projectLogs);
 
 
 
@@ -109,7 +109,7 @@ route.post('/delete/notifications', sharedMiddleware.checkTokenAndSetUser, proje
 
 */
 // route.post('/detele/stickey', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), projectMiddleware.update_stickey_req); // D
-route.post('/delete/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.deleteMember); 
+route.post('/delete/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.deleteMember, projectMiddleware.projectLogs); 
 
 
 
@@ -122,7 +122,7 @@ route.post('/delete/member', sharedMiddleware.checkTokenAndSetUser, projectMiddl
 * @Access Owners & Admin can access it
 
 */
-route.post('/quit', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.DEVELOPER], true), projectMiddleware.quit); // D
+route.post('/quit', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.DEVELOPER], true), projectMiddleware.quit, projectMiddleware.projectLogs); // D
 
 
 /**
@@ -135,13 +135,13 @@ route.post('/quit', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.per
 
 */
 
-route.post('/stickey/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.post); // D
-route.post('/stickey/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.update); // D
-route.post('/stickey/update/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.DEVELOPER], true), stickeyMiddleware.crossOff_req); // D
+route.post('/stickey/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.post, projectMiddleware.projectLogs); // D
+route.post('/stickey/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.update, projectMiddleware.projectLogs); // D
+route.post('/stickey/update/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.DEVELOPER], true), stickeyMiddleware.crossOff_req, projectMiddleware.projectLogs); // D
 
-route.post('/stickey/delete/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), stickeyMiddleware.crossOff_req_cancel); // D
+route.post('/stickey/delete/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), stickeyMiddleware.crossOff_req_cancel, projectMiddleware.projectLogs); // D
 
-route.post('/stickey/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.delete); // D
+route.post('/stickey/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER, $role.ADMIN], true), stickeyMiddleware.delete, projectMiddleware.projectLogs); // D
 
 /**
 

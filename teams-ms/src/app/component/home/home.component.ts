@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
     
     public personalNotesData: personalNotes[];
     public userData;
-    public userImages: any[] = environment.userImages; 
+    public userImage: string = ''
 
     // Observables *** Make Sure to Unsubscribe in ngOnDestroy function to prevent data leak ***
     private $userObs: Subscription;
@@ -41,7 +41,8 @@ export class HomeComponent implements OnInit {
         this.$userObs = this._data.getUser()
             .subscribe(user => {
                 this.userData = user;
-                console.log(user);
+                this.userImage = environment.userImages[user.avatar]
+                console.log(this.userImage);
 
             })
 

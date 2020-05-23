@@ -35,6 +35,7 @@ module.exports = {
         try {
             
             const {_id} = req.user.project;
+            const {userName} = req.user;
             const {group, stickeyName, message, crossOff} = req.body;
             const stickeyId = mongo.Types.ObjectId();
 
@@ -52,7 +53,16 @@ module.exports = {
             }
 
             await projectModel.findOneAndUpdate({_id: _id}, payload);
-            res.status(200).json({success: true, data: payload.$push.stickey});
+
+            req.projectLog = {
+                type: 'NewNote',
+                message: `${userName} added a new task to group ${group}`,
+            }
+
+            req.data = payload.$push.stickey;
+            next();
+
+            // res.status(200).json({success: true, data: payload.$push.stickey});
 
         }
         catch (err) {
@@ -72,6 +82,7 @@ module.exports = {
         try {
             
             const {_id} = req.user.project;
+            const {userName} = req.user;
             const {stickeyId, group, stickeyName, message, crossOff} = req.body;
 
             const payload = {
@@ -86,7 +97,13 @@ module.exports = {
             }
             await projectModel.findOneAndUpdate({_id: _id, 'stickey._id': stickeyId}, payload);
 
-            res.status(200).json({success: true});
+            req.projectLog = {
+                type: 'EditNote',
+                message: `${userName} updated a task in group: ${group}`,
+            }
+            next();
+
+            // res.status(200).json({success: true});
 
         }
         catch(err) {
@@ -113,24 +130,26 @@ module.exports = {
                 }
             }
 
-            // const project = await projectModel.findOne({_id: _id});
-            
-            // const index = project.stickey.findIndex((note) => {
-            //     return note._id === stickeyId
-            // })
-            // console.log(index);
-
-            // if(!project.stickey[index].request.includes(userName)){
-            //     project.request.push();
-            //     await project.save();
-
-            //     res.status(200).json({success: true});
-            // } else {
-            //     throw 'Request already Made'
-            // }
-
             await projectModel.findOneAndUpdate({_id: _id, 'stickey._id': stickeyId}, payload);
-            res.status(200).json({success: true});
+            
+            
+
+            
+
+            var group = req.user.project.stickey.find(item => {
+                return item._id === stickeyId;
+            });
+
+            console.log(group);
+
+
+            req.projectLog = {
+                type: 'Job',
+                message: `${userName} claimed job done in a task of group ${group}`,
+            }
+            next();
+
+
 
         }
         catch(err) {
@@ -148,7 +167,7 @@ module.exports = {
 
         try {
             
-            const {_id} = req.user.project;
+            const {_id, name} = req.user.project;
             const {stickeyId, userName} = req.body;
 
             const payload = {
@@ -156,9 +175,24 @@ module.exports = {
                     'stickey.$.request': userName
                 }
             }
+            
             await projectModel.findOneAndUpdate({_id: _id, 'stickey._id': stickeyId}, payload);
+   
+            const {group} = req.user.project.stickey.find(item => {
+                
+                return item._id == stickeyId;
+            });
 
-            res.status(200).json({success: true});
+            await userModel.findOneAndUpdate({userName: userName}, {$push: {notify: {type: 'Job', message: `Your Job claim for project ${name} has been denied by ${req.user.userName} from a task group ${group}` }}});
+
+
+            req.projectLog = {
+                type: 'Job',
+                message: `${req.user.userName} denied ${userName}'s job claim in group ${group}`,
+            }
+
+            next();
+            // res.status(200).json({success: true});
 
         }
         catch(err) {
@@ -187,7 +221,18 @@ module.exports = {
             }
 
             await projectModel.findOneAndUpdate({_id: _id}, payload);
-            res.status(200).json({success: true});
+            
+            const {group} = req.user.project.stickey.find(item => {
+                return item._id === stickeyId;
+            });
+
+            req.projectLog = {
+                type: 'Delete',
+                message: `${req.user.userName} deleted a task from group ${group}`,
+            }
+            next();
+
+            // res.status(200).json({success: true});
 
         }
         catch(err) {

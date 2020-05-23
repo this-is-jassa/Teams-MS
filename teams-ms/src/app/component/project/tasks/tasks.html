@@ -1,17 +1,16 @@
+<div class="my-2">
+    <h3 style="display: inline;">New Task</h3>
+    <button *ngIf="['Owner', 'Admin'].includes(role)" class="btn btn-round mb-1" style="display: inline;"
+        (click)="addClick()" data-toggle="modal" data-target="#editNoteModel">
+        <i class="material-icons">add</i>
+    </button>
+</div>
 
-    <div class="my-2">
-        <h3 style="display: inline;" >New Note</h3>
-        <button *ngIf="['Owner', 'Admin'].includes(role)" class="btn btn-round mb-1" style="display: inline;" (click)="addClick()" data-toggle="modal" data-target="#editNoteModel">
-            <i class="material-icons">add</i>
-        </button>
-    </div>
 
 
-
-<div *ngFor="let group of groups; let index = index" class="card-list" style="background-color: rgb(198, 164, 247);" >
+<div *ngFor="let group of groups; let index = index" class="card-list" style="background-color: rgb(198, 164, 247);">
     <div class="card-list-head">
-        <h6 style="color: white;" >{{group}}</h6>
-        
+        <h6 style="color: white;">{{group}}</h6>
     </div>
 
     <div class="row">
@@ -20,7 +19,8 @@
                 <div class="card-header">
 
                     <div class="media align-items-center">
-                        <img alt=".." src="https://pipeline.mediumra.re/assets/img/avatar-female-2.jpg" class="avatar" />
+                        <img alt=".." src="https://pipeline.mediumra.re/assets/img/avatar-female-2.jpg"
+                            class="avatar" />
                         <div class="media-body" [ngClass]="note.crossOff && 'crossOff'">
                             <h6 class="mb-0"> {{note.name}} </h6>
                         </div>
@@ -58,7 +58,7 @@
 
 
                 <span class="mx-2 mb-2" style="text-align: right; font-size: 14px;">
-                    {{note.timeStamp | date}}
+                    {{note.timeStamp | timeAgo}}
                 </span>
 
             </div>
@@ -69,8 +69,9 @@
                     <a *ngFor="let user of note.request; let index3 = index" class="badge badge-pill ml-1 px-2"
                         style="font-size: 14px; color: white; background-color: red;">
                         <p>
-                            <span (click)="setFocus(index, index2, index3)" *ngIf="['Owner','Admin'].includes(role)" class="mr-1" style="font-size: 12px; cursor: pointer;" data-toggle="modal"
-                            data-target="#deleteMemberJobDone">&#10005;</span>
+                            <span (click)="setFocus(index, index2, index3)" *ngIf="['Owner','Admin'].includes(role)"
+                                class="mr-1" style="font-size: 12px; cursor: pointer;" data-toggle="modal"
+                                data-target="#deleteMemberJobDone">&#10005;</span>
 
                             {{user}}
                         </p>
@@ -85,18 +86,17 @@
 
 
 
-<app-notes-action-model 
-    [name]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.name: "" '
+<app-notes-action-model [name]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.name: "" '
     [message]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.message: ""'
     [group]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.group: ""'
-    [crossOff]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.crossOff: false' 
-    [groups]='groups' 
-    (onEdit)="onEdit($event)"
-    (onDelete)="onDelete($event)"
-    (onDeleteJob)="onDeleteJob($event)"
-    >
+    [crossOff]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.crossOff: false' [groups]='groups'
+    (onEdit)="onEdit($event)" (onDelete)="onDelete($event)" (onDeleteJob)="onDeleteJob($event)">
 </app-notes-action-model>
 
-<div *ngIf="groups.length === 0" style="text-align: center;" >
-    <img style="width: 80%; height: 80%;" src="../../../../assets/images/stickey.svg" alt="">
+<div *ngIf="groups.size === 0" style="text-align: center;">
+    <img style="width: 40%; height: 40%;" src="../../../../assets/images/stickey.svg" alt="">
+    <div class="mt-4">
+        <button class="btn btn-primary" style="width: 50%;" data-toggle="modal" data-target="#editNoteModel"> + Create
+            Task</button>
+    </div>
 </div>

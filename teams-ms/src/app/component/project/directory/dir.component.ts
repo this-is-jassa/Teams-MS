@@ -5,7 +5,6 @@ import { BehaviorSubject, Subscription, empty } from 'rxjs';
 import { ViewService } from 'src/app/services/view.service';
 
 
-
 @Component({
     selector: 'app-project-dir',
     templateUrl: './dir.html',
@@ -35,6 +34,8 @@ export class DirectoryComponent implements OnInit {
     // NG MODULE
     newDirName: string = '';
     searchText: string = '';
+
+    clipboard: string = '';
 
 
     constructor(private _http: HttpService, private _view: ViewService) { }
@@ -90,7 +91,7 @@ export class DirectoryComponent implements OnInit {
         this._view.setObs('loader', 'isVisible', true);
 
         let dirInstance = this.openedDir.child[index];
-        if(searched) {
+        if (searched) {
             dirInstance = this.searchDirStructure[index];
         }
 
@@ -100,13 +101,14 @@ export class DirectoryComponent implements OnInit {
                     this.dirStructure.push({ child: dir, _id: dirInstance._id, fileType: 'dir', name: dirInstance.name });
                     this._view.setObs('loader', 'isVisible', false);
 
-
-                    console.log(dir);
                 })
         } else {
             this.getFile(dirInstance.text)
                 .then(file => {
+                    this.clipboard = file.data.code;
+
                     file.data.code = file.data.code.split(/\r?\n/);
+
                     this.dirStructure.push({ ...file.data, name: dirInstance.name, fileType: dirInstance.fileType, child: [] });
                     this._view.setObs('loader', 'isVisible', false);
 
@@ -140,13 +142,34 @@ export class DirectoryComponent implements OnInit {
         this.dirStructure = this.dirStructure.slice(0, to + 1);
     }
 
+    copyCode(event): void {
+
+        console.log(event.target.innerHTML)
+        const element =  document.createElement('textarea');
+        element.value = this.clipboard;
+        document.body.appendChild(element);
+
+        element.select();
+        document.execCommand('copy');
+        document.body.removeChild(element);
+        event.target.innerHTML = "Copied"
+
+        let time = setInterval(function() {
+            event.target.innerHTML = "Copy Code";
+            clearInterval(time)
+        }, 1300)
+
+    }
+
     // /get/find/:name/:searchText
     async searchUsers(text) {
-        if(!!text){
-            const dir = await this._http.GET('/dir/get/find/' + this.projectData.name+'/'+ text).toPromise();
+        if (!!text) {
+            const dir = await this._http.GET('/dir/get/find/' + this.projectData.name + '/' + text).toPromise();
             this.searchDirStructure = dir.data;
         }
 
     }
 
 }
+
+

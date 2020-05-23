@@ -6,14 +6,16 @@ import { NavBarComponent } from '../component/navbar/navbar.component';
 import { FooterComponent } from '../component/footer/footer.component';
 import { LoadingComponent } from '../component/shared/loading/loading.component';
 import { SharedModule } from './shared.module';
+import { PipesModule } from './pipes.module';
+
 
 @NgModule({
     declarations: [
         NavBarComponent,
         FooterComponent,
-        LoadingComponent
+        LoadingComponent,
     ],
-    imports: [ CommonModule, SharedModule ],
+    imports: [ CommonModule, SharedModule, PipesModule ],
     exports: [NavBarComponent, FooterComponent, LoadingComponent],
     providers: [],
 })

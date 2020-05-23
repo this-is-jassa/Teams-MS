@@ -2,6 +2,9 @@
 const mongo = require('mongoose');
 const types = mongo.Schema.Types;
 
+mongo.set('runValidators', true);
+
+
 const logSchema = mongo.Schema({
         user: {type: types.ObjectId, ref: 'user'},
         ipAddress: {type: types.String},

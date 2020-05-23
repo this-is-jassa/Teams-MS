@@ -18,13 +18,19 @@ export class NavBarComponent implements OnInit, OnDestroy {
     isVisile = false;
     userData: any;
     searchText: string = '';
-    searchData: any;
+    searchData: any[] =[];
 
     following: any;
     searchUser: any;
 
     $isVisibe: Subscription;
     $userData: Subscription;
+
+    materialIcons = {
+        Project: 'domain',
+        Follow: 'person_add',
+        Job: 'work_outline'
+    }
 
     constructor(private _view: ViewService, private _auth: AuthService, private _data: DataService, private _http: HttpService) { }
 

@@ -10,7 +10,8 @@ import {environment} from '../../../../../environments/environment'
 })
 export class ProjectTableRowComponent implements OnInit {
 
-    @Input() projectData;
+    @Input() projectData: any = [];
+
     @Input() index: number;
     @Input() members;
     @Input() userName: String;

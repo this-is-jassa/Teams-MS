@@ -9,24 +9,25 @@
       <div class="modal-body">
 
         <div class="form-group">
-          
-            <label for="dirName">File Name</label>
-            <input [(ngModel)]="formData.fileName" name="dirNma" type="text" class="form-control" id="dirName" placeholder="File" required maxlength="16"
-              minlength="1" >
-          
 
-          
-            <label for="fileExt">Example select</label>
-            <select [(ngModel)]="formData.fileType" name="FileExtt" class="form-control" id="fileExt">
-              <option *ngFor="let ext of fileExt" [value]="ext" >{{ext}}</option>
-            </select>
-          
+          <label for="dirName">File Name</label>
+          <input [(ngModel)]="formData.fileName" name="dirNma" type="text" class="form-control" id="dirName"
+            placeholder="File" required maxlength="20" minlength="1">
 
 
-          
-            <label for="fileContent">File Content</label>
-            <textarea [(ngModel)]="formData.codeText" name="codeText" class="form-control" id="fileContent" rows="3"></textarea>
-         
+
+          <label for="fileExt">Example select</label>
+          <select [(ngModel)]="formData.fileType" name="FileExtt" class="form-control" id="fileExt">
+            <option *ngFor="let ext of fileExt" [value]="ext">{{ext}}</option>
+          </select>
+
+
+
+
+          <label for="fileContent">File Content</label>
+          <textarea [(ngModel)]="formData.codeText" name="codeText" class="form-control" id="fileContent"
+            rows="5" maxlength="200000"></textarea>
+
         </div>
 
       </div>

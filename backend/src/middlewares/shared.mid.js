@@ -35,35 +35,6 @@ module.exports = {
         res.status(200).send(!!req.user);
     },
 
-    projectLogs: async (req, res, next) => {
-
-        try {
-
-            if (!req.user.permission) {
-                res.status(400).json({ success: false, msg: "Permission Not granted" });
-                return;
-            }
-
-            const {_id} = req.user.project;
-            const {type, message} = req.user.project.log;
-            const {data} = req.res | '';
-
-            const logPayload = {
-                projectId: _id,
-                type: type,
-                message: message,
-                timeStamp: Date.now()
-            }
-
-            const log = await logs_project.create(logPayload);
-            res.status(200).json({log: log, data: data, success: true});
-
-        }
-        catch (err) {
-            console.log(err);
-            res.status(200).json({success: false, message: 'Server Err'});
-
-        }
-    }
+    
 
 }

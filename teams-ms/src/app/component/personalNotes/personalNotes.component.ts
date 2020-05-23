@@ -10,6 +10,7 @@ import { personalNotes } from 'src/app/implements/personalNotes';
 export class PersonalNotes implements OnInit {
 
     @Input() notesData: personalNotes[];
+    @Input() userImage: string = '';
 
     indexFocus = 0;
 
@@ -49,7 +50,6 @@ export class PersonalNotes implements OnInit {
 
 
     edit(): void {
-        console.log("ss")
 
         this._http
             .POST('/personalnotes/update', this.formModuleData.editNoteForm)
@@ -75,7 +75,6 @@ export class PersonalNotes implements OnInit {
             .then(res => {
 
                 if(res.success) {
-                    console.log(res.data)
 
                     this.notesData.push(res.data);
                     // Reset Form
@@ -84,7 +83,7 @@ export class PersonalNotes implements OnInit {
                         message: '',
                     }
                 }else {
-                    alert("oops")
+                    throw 'Server err'
                 }
 
             })

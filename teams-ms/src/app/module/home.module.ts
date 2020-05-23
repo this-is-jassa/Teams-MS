@@ -7,6 +7,7 @@ import { SharedModule } from './shared.module';
 import { ProjectTableRowComponent } from '../component/home/projects-table/project-table-row/tableRow.component';
 // import { PersonalNotes } from '../component/personalNotes/personalNotes.component';
 
+
 @NgModule({
     declarations: [HomeComponent, ProjectTableComponent, ProjectTableRowComponent, HeaderComponent],
     imports: [ CommonModule, SharedModule ],

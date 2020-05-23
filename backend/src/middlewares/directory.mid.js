@@ -2,7 +2,7 @@ const projectModel = require('../model/project.model');
 const directoryModel = require('../model/directory.model');
 const codeModel = require('../model/code.model');
 const mongo = require('mongoose');
-const projectLog = require('../model/projectLogs.model');
+
 
 module.exports = {
 
@@ -28,9 +28,14 @@ module.exports = {
                 projectId: _id
             }
 
+            let log = {
+                type: 'Dir',
+                message: `${req.user.userName} added a new folder called ${fileName}`
+            }
+
+
             if (['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp', '.py','.json', 'dir'].includes(fileType)) {
                 
-                const addInstanceToParent = await directoryModel.findOneAndUpdate({projectId: _id, _id: parentDirId, fileType:'dir'}, {$push: {child: dirId}});
 
                 if(fileType !== 'dir') {
                     const fileId = mongo.Types.ObjectId();
@@ -41,12 +46,24 @@ module.exports = {
                         projectId: _id,
                         code: codeText
                     }
-                    const createFile = await codeModel.create(codePayload);
+
+                    log.type = 'NewFile';
+                    log.message = `${req.user.userName} added a new File called ${fileName}.${fileType}`;
+
+                    await codeModel.create(codePayload);
                 }
-                const createDir = await directoryModel.create(payload);
+
+               await directoryModel.create(payload);
+
+               await directoryModel.findOneAndUpdate({projectId: _id, _id: parentDirId, fileType:'dir'}, {$push: {child: dirId}});
 
 
-                res.status(200).json({success: true});
+                
+                req.projectLog = log
+
+                next();
+
+                // res.status(200).json({success: true});
 
             } else {
                 console.log("Not a valid File type")
@@ -96,8 +113,21 @@ module.exports = {
             const { _id } = req.user.project;
             const { dirId, newName } = req.body;
 
-            await directoryModel.findOneAndUpdate({ projectId: _id, _id: dirId }, { name: newName })
-            res.status(200).json({ success: true });
+            const directory = await directoryModel.findOne({ projectId: _id, _id: dirId });
+            
+            req.projectLog = {
+                type: 'Dir',
+                message: `${req.user.userName} renamed a folder from ${directory.name} to ${newName}`
+            }
+
+            directory.name = newName;
+            
+            await directory.save();
+            // await directoryModel.findOneAndUpdate({ projectId: _id, _id: dirId }, { name: newName });
+
+            next();
+
+            // res.status(200).json({ success: true });
 
         } catch (err) {
             console.log(err);
@@ -134,9 +164,18 @@ module.exports = {
         }
         try {
             const { _id } = req.user.project;
-            const { fileId, codeText } = req.body;
+            const { fileId, codeText, dirId } = req.body;
+
+            const directory = await directoryModel.findOne({ projectId: _id, _id: dirId });
+
+            req.projectLog = {
+                type: 'EditFile',
+                message: `${req.user.userName} updated ${directory.name}.${directory.fileType}`
+            }
 
             await codeModel.findOneAndUpdate({ projectId: _id, _id: fileId }, { code: codeText });
+            
+            next();
 
             res.status(200).json({ success: true });
 

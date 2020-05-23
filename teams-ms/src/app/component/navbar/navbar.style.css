@@ -1,0 +1,109 @@
+nav {
+  height: 100%;
+  background-color: black;
+  width: 230px;
+}
+
+#wrapper {
+  color: wheat;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  padding-top: 30px;
+  overflow: scroll;
+}
+
+#wrapper h6 {
+  color: white;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  background: #f2709c;
+  /* fallback for old browsers */
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-gradient(linear, left top, right top, from(#ff9472), to(#f2709c));
+  background: linear-gradient(to right, #ff9472, #f2709c);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  padding: 5px 20px 5px 5px;
+  margin: 0 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#wrapper #userInfo {
+  font-family: 'Nunito', sans-serif;
+  text-align: center;
+  margin-top: 40px;
+}
+
+#wrapper #userInfo img {
+  cursor: pointer;
+}
+
+#wrapper #userInfo div {
+  font-size: 15px;
+  margin-top: 7px;
+  letter-spacing: 2px;
+  color: white;
+  text-transform: capitalize;
+}
+
+#wrapper ul {
+  padding: 30px 10px;
+}
+
+#wrapper ul li {
+  list-style: none;
+  padding: 8px 25px;
+  margin: 15px 5px;
+  position: relative;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+  letter-spacing: 1px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+#wrapper ul li i {
+  padding: 5px 10px 2px 2px;
+  font-size: 20px;
+}
+
+#wrapper ul li span {
+  padding: 5px 0;
+}
+
+#wrapper ul li:hover {
+  color: black;
+  background-color: white;
+}
+
+#wrapper ul #contactInfo p {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  color: white;
+}
+
+#wrapper ul #contactInfo p a {
+  text-decoration: none;
+  color: #a0a0a0;
+  font-size: 11px;
+  padding-top: 5px;
+}
+
+#wrapper ul #logOut {
+  text-align: center;
+  color: white;
+  font-family: 'Nunito', sans-serif;
+  margin-top: 30px;
+  cursor: pointer;
+}
+
+#wrapper ul .active {
+  color: black;
+  background-color: white;
+}
+/*# sourceMappingURL=navbar.style.css.map */
