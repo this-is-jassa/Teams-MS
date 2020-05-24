@@ -228,7 +228,7 @@ module.exports = {
 
 
         for (const item of projectmembers) {
-            console.log(item.name + ' ' + member.name)
+            
             if (item.name === member.name) { IsMemberAlreadyExist = true; break; }
         }
 
@@ -539,7 +539,7 @@ module.exports = {
             else {
                 const { userName } = req.user;
                 const name = (req.method === 'GET') ? req.params.name : req.body.name;
-                console.log(name + ' ' + req.params.name + ' ' + req.body.name);
+                
 
                 projectModel.findOne({ name: name })
                     .select("_id private name members stickey")

@@ -296,9 +296,9 @@
                         <ul class="avatars">
                             <li>
                                 <div class="avatar bg-primary">
-                                    <!-- <i class="material-icons">
-                                        {{ materialIcons[log.type] }}
-                                    </i> -->
+                                    <i class="material-icons">
+                                        {{ materialIcons[notif?.type] }}
+                                    </i>
                                 </div>
                             </li>
                         </ul>
@@ -315,6 +315,10 @@
             <div *ngIf="userData.notify?.length === 0" style="text-align: center;padding: 30px;">
                 <h3>No Notifications</h3>
                 <img style="width: 200px; height: 200px;" src="../../../assets/images/noNotification.svg" alt="...">
+                <!-- <div data-dismiss="modal" style="color: white; background-color: red; padding: 5px; border-radius: 7px; cursor: pointer; font-family: 'Nunito', sans-serif;" >Close</div> -->
+            </div>
+
+            <div style="text-align: center;padding: 30px;">
                 <div data-dismiss="modal" style="color: white; background-color: red; padding: 5px; border-radius: 7px; cursor: pointer; font-family: 'Nunito', sans-serif;" >Close</div>
             </div>
 
