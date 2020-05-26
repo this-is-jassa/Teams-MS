@@ -4,11 +4,11 @@
 			"path": "/Users/admin/Documents/Teams-MS"
 		},
 		{
-			"path": "/Users/admin/Documents/projects/myportfolio"
+			"path": "/Users/admin/Documents/projects/portfolio"
 		}
 	],
 	"settings": {
 		"git.enabled": false,
-		"liveServer.settings.multiRootWorkspaceName": "untitled folder"
+		"liveServer.settings.multiRootWorkspaceName": "portfolio"
 	}
 }
