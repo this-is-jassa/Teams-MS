@@ -1,14 +1,11 @@
 {
 	"folders": [
 		{
-			"path": "/Users/admin/Documents/Teams-MS"
-		},
-		{
 			"path": "/Users/admin/Documents/projects/portfolio"
 		}
 	],
 	"settings": {
 		"git.enabled": false,
-		"liveServer.settings.multiRootWorkspaceName": "portfolio"
+		"liveServer.settings.multiRootWorkspaceName": "E-Com-design-in-html-css"
 	}
 }
