@@ -35,7 +35,7 @@ route.get('/follow', verifyUser, userMiddleware.follow_user);
 * @Access All can access it.
 
 */
-route.get('/search/:userName', userMiddleware.search);
+route.get('/search/:text', userMiddleware.search);
 
 
 
@@ -60,7 +60,7 @@ route.post('/unfollow', verifyUser, userMiddleware.unfollow_user);
 * @Access All Authorised users can access any's
 
 */
-route.get('/get/following/:userName', verifyUser, userMiddleware.getFollowers);
+route.get('/get/following', verifyUser, userMiddleware.getFollowers);
 
 
 route.post('/update/notifySeen', verifyUser, userMiddleware.NotifySeen);

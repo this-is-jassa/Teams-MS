@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ViewService } from 'src/app/services/view.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/services/data.service';
 import { HttpService } from 'src/app/services/http.service';
-import { environment } from 'src/environments/environment'
 
 @Component({
     selector: 'app-navbar',
@@ -13,12 +12,11 @@ import { environment } from 'src/environments/environment'
 })
 export class NavBarComponent implements OnInit, OnDestroy {
 
-    avatars = environment.userImages;
 
     isVisile = false;
     userData: any;
     searchText: string = '';
-    searchData: any[] =[];
+    searchData: any[] = [];
 
     following: any;
     searchUser: any;
@@ -41,16 +39,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
                 this.isVisile = data.navbar.isVisible;
             });
 
+
         this.$userData = this._data.getUser()
             .subscribe(data => {
                 this.userData = data;
-                if (data.userName) {
-                    this._http.GET('/users/get/following/' + this.userData.userName)
-                        .toPromise()
-                        .then(data => {
-                            this.following = data.data.following;
-                        })
-                }
             });
 
     }
@@ -62,11 +54,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     logOut(): void {
-        if(confirm('Are you sure you want to log out?')){
+        if (confirm('Are you sure you want to log out?')) {
             this._auth.LogOut();
         }
-
     }
+
+
 
     searchUsers(text): void {
         if (text !== "") {
@@ -83,15 +76,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     deleteNotify() {
-        
+
         this._http.POST('/users/update/notifySeen', {})
-        .toPromise()
-        .then(res => {
-            if(res.success) {
-                this._data.setUser('notify', [])
-            }
-            
-        })
+            .toPromise()
+            .then(res => {
+                if (res.success) {
+                    this._data.setUser('notify', [])
+                }
+
+            })
     }
 
 

@@ -1,9 +1,5 @@
 {
-	"folders": [
-		{
-			"path": "/Users/admin/Documents/projects/portfolio"
-		}
-	],
+	"folders": [],
 	"settings": {
 		"git.enabled": false,
 		"liveServer.settings.multiRootWorkspaceName": "E-Com-design-in-html-css"

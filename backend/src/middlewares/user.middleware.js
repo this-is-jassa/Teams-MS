@@ -28,7 +28,7 @@ module.exports = {
             
             const  where = {
                 userName: {
-                    $regex: '^' + req.params.userName
+                    $regex: '^' + req.params.text
                 }
             } 
             
@@ -100,7 +100,7 @@ module.exports = {
 
     getFollowers: async (req, res, next) => {
         try{
-            const {userName} = req.params;
+            const { userName } = req.user;
             const skip = 0;
             const limit = 20;
 

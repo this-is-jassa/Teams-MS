@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this._data.refreshData();
+        this._data.refresh();
         this._view.setObs('navbar', 'isVisible', true);
 
         this.fetchData();
@@ -42,8 +42,6 @@ export class HomeComponent implements OnInit {
             .subscribe(user => {
                 this.userData = user;
                 this.userImage = environment.userImages[user.avatar]
-                console.log(this.userImage);
-
             })
 
         this._http.GET('/personalnotes/get')

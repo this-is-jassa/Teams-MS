@@ -8,11 +8,12 @@ import { CreateFileModelComponent } from '../component/project/models/createFile
 import { TasksComponent } from '../component/project/tasks/tasks.component';
 import { NotesActionModelComponent } from '../component/project/models/notesAction/notesAction.component';
 import { LogsComponent } from '../component/project/logs/logs.component';
+import { SettingsComponent } from '../component/project/settings/settings.component';
 import { PipesModule } from './pipes.module';
 
 
 @NgModule({
-    declarations: [ProjectComponent, DirectoryComponent, CreateFileModelComponent, TasksComponent, NotesActionModelComponent, LogsComponent ],
+    declarations: [ProjectComponent, DirectoryComponent, CreateFileModelComponent, TasksComponent, NotesActionModelComponent, LogsComponent, SettingsComponent ],
     imports: [ CommonModule, ProjectRoutingModule, SharedModule, PipesModule],
     exports: [],
     providers: [],

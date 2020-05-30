@@ -491,7 +491,7 @@ module.exports = {
 
             const { _id } = req.user.project;
             const limit = 50;
-            const logs = await projectLog.find({ projectId: _id }).sort('descending').limit(limit);
+            const logs = await projectLog.find({ projectId: _id }).sort({ 'timeStamp': -1 }).limit(limit);
 
             res.status(200).json({ success: true, data: logs });
 

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NavBarComponent } from '../component/navbar/navbar.component';
 import { FooterComponent } from '../component/footer/footer.component';
 import { LoadingComponent } from '../component/shared/loading/loading.component';
+import { SearchUsersComponent } from '../component/shared/searchUsers/searchUsers.component';
 import { SharedModule } from './shared.module';
 import { PipesModule } from './pipes.module';
 
@@ -14,6 +15,7 @@ import { PipesModule } from './pipes.module';
         NavBarComponent,
         FooterComponent,
         LoadingComponent,
+        SearchUsersComponent
     ],
     imports: [ CommonModule, SharedModule, PipesModule ],
     exports: [NavBarComponent, FooterComponent, LoadingComponent],

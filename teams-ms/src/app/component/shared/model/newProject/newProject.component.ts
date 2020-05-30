@@ -1,28 +1,31 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnDestroy } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { environment } from 'src/environments/environment';
 import { DataService } from 'src/app/services/data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-new-project-model',
     templateUrl: './newProject.html',
     styleUrls: ['./newProject.scss']
 })
-export class NewProjectComponent implements OnChanges {
+export class NewProjectComponent implements OnInit, OnDestroy {
     
 
     @Input() userInformation: any;
 
-    public avatars = environment.userImages;
+    avatars = environment.userImages;
 
-    public searchData = [];
+    membersSet = new Set();
+    $following: Subscription;
+    
+    searchData = [];
+    membersAdded = [];
+    following = [];
 
-    public membersSet = new Set();
+    searchText ='';
 
-    public membersAdded = [];
-    public following: any[] = [];
-
-    public formData: any = {
+    formData: any = {
         name: '',
         description: '',
         isPrivate: true,
@@ -31,23 +34,16 @@ export class NewProjectComponent implements OnChanges {
         isFreeze: false,
         endingdate: Date.now()
     }
-    public searchText ='';
     
-
 
     constructor(private _http: HttpService, private _data: DataService) { }
 
-    ngOnChanges(changes: SimpleChanges){
-        if(this.userInformation.userName) {
-            this._http.GET('/users/get/following/'+ this.userInformation.userName)
-            .toPromise()
-            .then(data => {
-                this.following = data.data.following;
-            })
-        }
-        
-    }
 
+    ngOnInit() {
+        this.$following = this._data.getFollowing().subscribe(following => {
+            this.following = [...following];
+        })
+    }
 
     searchUsers(text): void {
         if(text !== "") {
@@ -99,17 +95,16 @@ export class NewProjectComponent implements OnChanges {
                     .toPromise()
                 ) 
             });
-            console.log("y")
 
             Promise.all(promisArr).then(data => {
-            console.log("x")
 
-                this._data.refreshData();
+                this._data.fetchUser();
             })
             
         });
+    }
 
-        
-
+    ngOnDestroy(): void {
+        this.$following.unsubscribe();
     }
 }

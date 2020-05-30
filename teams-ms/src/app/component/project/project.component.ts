@@ -29,7 +29,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.projectName = this.activatedRoute.snapshot.paramMap.get("name");
 
-        this._data.refreshData();
+        this._data.refresh();
         this._view.setObs('navbar', 'isVisible', true);
 
         this.$userData = this._data.getUser()
@@ -44,6 +44,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
                     this.role = project.role
                 });
 
+    }
+
+    settings(): void {
+        this._http.REDIRECT(window.location.pathname+'/settings')
     }
 
     ngOnDestroy(): void {

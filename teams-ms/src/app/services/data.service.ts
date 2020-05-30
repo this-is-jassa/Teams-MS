@@ -4,46 +4,69 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class DataService {
-    
+
     private userData: any = {};
+    private following: any[] =[];
 
     private $userdata = new BehaviorSubject(this.userData);
+    private $followingData = new BehaviorSubject(this.following);
 
-    constructor(private _http: HttpService) {
+    constructor(private _http: HttpService) {}
 
-    }
-
-    refreshData() {
-        this._http.GET('/users/get')
-        .toPromise()
-        .then(res => {
-            console.log("CAlled");
-            if(res.success) {
-                this.userData = res.data;
-                this.$userdata.next(res.data);
-            }else {
-                alert("Error Loading user data");
-            }
-        })
-        .catch((err)=> {
-            alert('Error Occured while loading user data')
-        })
+    async refresh() {
+        this.fetchUser();
+        this.fetchfollowing();
     }
 
     reset() {
         this.userData = {};
+        this.following = [];
         this.$userdata.next(this.userData);
+        this.$followingData.next(this.following);
     }
 
     getUser(): Observable<any> {
-        // this.refreshData()
         return this.$userdata
     }
 
-    setUser(key: string, value: any): void{
+    setUser(key: string, value: any): void {
         this.userData[key] = value;
         this.$userdata.next(this.userData);
     }
 
+    getFollowing(): Observable<any> {
+        return this.$followingData;
+    }
+
+    setFollowing(following) {
+        this.following = [...following];
+        this.$followingData.next(following);
+    }
+
+    async fetchUser() {
+        try {
+            const userReq = await this._http.GET('/users/get').toPromise();
+            this.userData = userReq.data;
+            this.$userdata.next(this.userData);
+            
+        }
+        catch (err) {
+            console.log("Error loading User")
+        }
+    }
+
+    async fetchfollowing() {
+        
+        try {
+
+            const followingReq = await this._http.GET('/users/get/following').toPromise();
+            
+            this.following = [...followingReq.data.following];
+            this.$followingData.next(this.following);
+
+        } catch(err) {
+            console.log("error loading following")
+        }
+    }
 
 }
