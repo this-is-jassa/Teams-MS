@@ -41,22 +41,23 @@ export class ProjectTableRowComponent implements OnInit {
                 break;
             }
         }
-        
     }
 
     loadMembersmodel(): void {
-        
         this.OnshowMembers.emit(this.members);
     }
 
-    OnstatusChanged(): void {
-        console.log(this.userInProjectData.status.value)
-        this._http.POST('/projects/update/member/status', {
+    async OnstatusChanged() {
+        console.log(this.userInProjectData.status.value);
+        
+        const response = await this._http.POST('/projects/update/member/status', {
             value: this.userInProjectData.status.value,
             name: this.projectData.name
         })
-        .toPromise()
-        .then(data => {})
+        .toPromise();
+
+        console.log(response)
+
     }
 
 }

@@ -7,8 +7,9 @@ mongo.set('runValidators', true);
 const members = new mongo.Schema({ 
     name: {type: types.String, required: true, maxlength: 20, minlength: 1},
     permission: {type: types.String, default: "Developer", enum: ['Owner', 'Admin', 'Developer']},
+    avatar: {type: types.Number, default: 0},
     status: {
-        value: {type: types.String,default: 'Do Not Disturb' ,enum: ['Working', 'Break', 'Do Not Disturb'] }, 
+        value: {type: types.String, default: 'Do Not Disturb' ,enum: ['Working', 'Break', 'Do Not Disturb'] }, 
         timeStamp: {type: types.Date, default: Date.now()} 
     }
 });

@@ -61,78 +61,8 @@
                     <div class="tab-pane fade" id="project-add-members" role="tabpanel">
                         <div class="users-manage">
 
+                            <app-select-users (onMemberAdded)="onMemberAdded($event)" ></app-select-users>
 
-                            <div class="mb-3 dropright">
-                                <!-- Avatar List -->
-                                <ul class="avatars text-center dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <li>
-                                        <img *ngFor="let member of membersAdded" alt="Claire Connors"
-                                            [src]="avatars[member.avatar]" class="avatar" data-toggle="tooltip"
-                                            data-title="Claire Connors" />
-                                    </li>
-                                </ul>
-                                <div style="width: 250px" class="dropdown-menu">
-                                    <div class="my-2" *ngFor="let item of membersAdded">
-                                        <img alt="Claire Connors" [src]="avatars[item.avatar]" class="avatar mr-2" />
-                                        <span class="h6 mb-0"> {{item.userName}} </span>
-
-                                        <button (click)="userRemoved(item)"
-                                            style="width: 90px; font-size: 11.5px; padding: 2px; margin-top: 5px;"
-                                            role="button" class="btn btn-outline-danger float-right">Remove</button>
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-                            <div class="input-group input-group-round">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="material-icons">filter_list</i>
-                                    </span>
-                                </div>
-                                <input (ngModelChange)="searchUsers($event)" [(ngModel)]="searchText" name="search"
-                                    type="text" class="form-control" autocomplete="off" placeholder="Search ">
-                            </div>
-
-
-                            <div style="margin: 15px 0 0 5px; font-size: 13px;">Search</div>
-                            <div class="form-group-users">
-
-                                <div class="my-2" *ngFor="let item of searchData" >
-                                    <img alt="Claire Connors" [src]="avatars[item.avatar]" class="avatar mr-2" />
-                                    <span class="h6 mb-0"> {{item.userName}} </span>
-                                    
-                                    <button *ngIf="!membersSet.has(item.userName)" (click)="userAdded(item)"
-                                        style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
-                                        class="btn btn-outline-primary float-right">Add</button>
-                                    <button *ngIf="membersSet.has(item.userName)" (click)="userRemoved(item)"
-                                        style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
-                                        class="btn btn-outline-danger float-right">Remove</button>
-                                </div>
-
-                            </div>
-
-                            <hr>
-
-                            <div style="margin: 15px 0 0 5px; font-size: 13px;">People you might know</div>
-                            <div class="form-group-users">
-
-                                <div  class="my-2" *ngFor="let item of following">
-                                    <img alt="Claire Connors" [src]="avatars[item.avatar]" class="avatar mr-2" />
-                                    <span class="h6 mb-0"> {{item.userName}} </span>
-                                    
-                                    <button *ngIf="!membersSet.has(item.userName)" (click)="userAdded(item)"
-                                        style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
-                                        class="btn btn-outline-primary float-right">Add</button>
-                                    <button *ngIf="membersSet.has(item.userName)" (click)="userRemoved(item)"
-                                        style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
-                                        class="btn btn-outline-danger float-right">Remove</button>
-                                </div>
-
-                            </div>
                         </div>
                     </div>
                 </div>

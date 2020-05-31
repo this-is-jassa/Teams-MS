@@ -7,13 +7,14 @@ import { UsersBigListComponent } from '../component/shared/usersBigList/usersBig
 import { NewProjectComponent } from '../component/shared/model/newProject/newProject.component';
 import { ChatComponent } from '../component/shared/chat/chat.component';
 import { PersonalNotes } from '../component/personalNotes/personalNotes.component';
+import { SelectUsersComponent } from '../component/shared/selectUsers/selectUsers.component';
 
 
 
 @NgModule({
-    declarations: [ChecklistComponent, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes ],
+    declarations: [ChecklistComponent, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes, SelectUsersComponent ],
     imports: [ CommonModule, FormsModule ],
-    exports: [ChecklistComponent, FormsModule, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes], 
+    exports: [ChecklistComponent, FormsModule, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes, SelectUsersComponent], 
     providers: [],
 })
 export class SharedModule {}
