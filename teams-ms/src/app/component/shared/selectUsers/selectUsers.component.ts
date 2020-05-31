@@ -43,13 +43,14 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
             this.membersAdded.push(user);
             this.membersName.add(userName);
         }
+        
         this.onMemberAdded.emit(this.membersAdded);
+        
     }
 
     fetchFollowing(){
         this.$following = this._data.getFollowing().subscribe(following => {
             this.following = following;
-            console.log(following)
         })
     }
 

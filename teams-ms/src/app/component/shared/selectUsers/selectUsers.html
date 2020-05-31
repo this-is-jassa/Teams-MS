@@ -42,8 +42,8 @@
 
             <button (click)="toggleUser(item)"
                 [ngClass]=" (membersName.has(item.userName))? 'btn btn-outline-danger float-right': 'btn btn-outline-primary float-right '  "
-                [disabled]='blockedMembers?.has(item.userName)' disabled
-                style="width: 90px; font-size: 11.5px; padding: 2px;" role="button">
+                [disabled]='blockedMembers?.has(item.userName)' style="width: 90px; font-size: 11.5px; padding: 2px;"
+                role="button">
                 {{ membersName.has(item.userName)? 'Remove': 'Add' }}
             </button>
 
@@ -63,11 +63,13 @@
 
             <button (click)="toggleUser(item)"
                 [ngClass]=" (membersName.has(item.userName))? 'btn btn-outline-danger float-right': 'btn btn-outline-primary float-right'  "
-                [disabled]='blockedMembers?.has(item.userName)' style="width: 90px; font-size: 11.5px; padding: 2px;"
-                role="button">
+                style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
+                [disabled]='blockedMembers?.has(item.userName)'>
                 {{ membersName.has(item.userName)? 'Remove': 'Add' }}
             </button>
         </div>
 
     </div>
 </div>
+
+

@@ -1,106 +1,147 @@
-<div class="container" style="margin-top: 60px;">
+<div class="container" style="margin-top: 30px;">
     <h1 style="padding: 40px 0;">{{projectName}} Settings</h1>
-    <form>
 
-        <div class="form-group row">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Project Name</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputEmail3" placeholder="{{projectName}}" disabled>
-            </div>
+    <div class="form-group row">
+        <label for="inputEmail3" class="col-sm-2 col-form-label">Project Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="inputEmail3" placeholder="{{projectName}}" disabled>
         </div>
+    </div>
 
-        <div class="form-group row">
-            <label for="inputEmail33" class="col-sm-2 col-form-label">Discription</label>
-            <div class="col-sm-10">
-                <textarea [(ngModel)]="formsData.discription" type="text" class="form-control" name="disc"
-                    id="inputEmail33" placeholder="Discription" rows="3"> </textarea>
-            </div>
+    <div class="form-group row">
+        <label for="inputEmail33" class="col-sm-2 col-form-label">Discription</label>
+        <div class="col-sm-10">
+            <textarea [(ngModel)]="formsData.discription" type="text" class="form-control" name="disc" id="inputEmail33"
+                placeholder="Discription" rows="3"> </textarea>
+
         </div>
+    </div>
 
-        <div class="form-group row">
-            <label for="duedate" class="col-sm-2 col-form-label">Due Date</label>
-            <div class="col-sm-10">
-                <input class="form-control" [(ngModel)]="formsData.dueDate" id="duedate" type="date" name="dueDate">
-            </div>
+    <div class="form-group row">
+        <label for="duedate" class="col-sm-2 col-form-label">Due Date</label>
+        <div class="col-sm-10">
+            <span>
+                {{project?.endingDate | date}}
+            </span>
+            <input [(ngModel)]="formsData.endingDate" class="form-control" id="duedate" type="date" name="dueDate">
         </div>
+    </div>
 
-        <div class="form-group row">
-            <label for="inputPassword3" class="col-sm-2 col-form-label">Members</label>
-            <div class="col-sm-10">
 
-                <div class="form-group-users" style="overflow: visible;">
-                    <div class="my-2" *ngFor="let item of projectData?.members; let index = index">
-                        <img alt="Claire Connors" [src]="userImages[item.avatar]" class="avatar avatar-lg mr-2" />
-                        <span class="h6 mb-0 mx-1"> {{item.name}} </span>
-
-                        <span class="badge badge-pill badge-dark">{{item.permission}}</span>
-
-                        <div class="btn-group mx-5">
-                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false" [disabled]="item.permission=== 'Owner'">
-                                Developer
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Admin</a>
-                                <a class="dropdown-item" href="#">Developer</a>
-                            </div>
-                        </div>
-
-                        <button (click)="deleteUser(item, index)" type="button" class="btn btn-danger btn-sm my-auto" [disabled]="item.permission=== 'Owner'">
-                            Delete
-                        </button>
-
-                    </div>
-                </div>
-
-                <app-select-users [blockedMembers]="membersName" (onMemberAdded)="onMemberAdded()"></app-select-users>
-            </div>
-        </div>
-
-        <fieldset class="form-group">
-            <div class="row">
-                <legend class="col-form-label col-sm-2 pt-0">Status</legend>
-                <div class="col-sm-10">
-                    <div class="form-check">
-                        <input [(ngModel)]="formsData.public" class="form-check-input" type="radio" name="gridRadios"
-                            id="gridRadios1" value="option1" checked>
-                        <label class="form-check-label" for="gridRadios1">
-                            Public
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                        <label class="form-check-label" for="gridRadios2">
-                            Private
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-        <div class="form-group row">
-            <div class="col-sm-2">Freeze</div>
+    <fieldset class="form-group">
+        <div class="row">
+            <legend class="col-form-label col-sm-2 pt-0">Status</legend>
             <div class="col-sm-10">
                 <div class="form-check">
-                    <input [(ngModel)]="formsData.freeze" name="isFreeze" class="form-check-input" type="checkbox"
-                        id="gridCheck1">
-                    <label class="form-check-label" for="gridCheck1">
-                        This option will freeze this project.
+                    <input [(ngModel)]="formsData.private" class="form-check-input" type="checkbox" name="gridRadios"
+                        id="gridRadios1">
+                    <label class="form-check-label" for="gridRadios1">
+                        Private
                     </label>
                 </div>
             </div>
         </div>
+    </fieldset>
 
-        <div class="form-group row">
-            <div class="col-sm-10">
-                <button type="submit" class="btn btn-sm btn-danger mt-2">Quit this project</button>
+    <div class="form-group row">
+        <div class="col-sm-2">Freeze</div>
+        <div class="col-sm-10">
+            <div class="form-check">
+                <input [(ngModel)]="formsData.freeze" name="isFreeze" class="form-check-input" type="checkbox"
+                    id="gridCheck1">
+                <label class="form-check-label" for="gridCheck1">
+                    This option will freeze this project.
+                </label>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="form-group row">
+        <div class="col-sm-10" style="text-align: right;">
+            <button class="btn btn-sm btn-danger">Reset</button>
+            <button class="btn btn-primary m-3">Save</button>
+        </div>
+    </div>
+
+</div>
+
+<hr>
+
+
+
+
+<div class="form-group row">
+    <label for="inputPassword3" class="col-sm-2 col-form-label">Members</label>
+    <div class="col-sm-10 card">
+
+        <div class="form-group-users" style="overflow: visible; max-height: 300px; overflow: scroll;">
+
+            <button type="button" class="btn btn-primary btn-sm mb-3" data-toggle="modal" data-target="#addmembers">
+                + Add Member
+            </button>
+
+            
+
+            <div class="my-2" *ngFor="let item of project?.members; let index = index">
+                
+                <span class="p-2 mr-3">{{index+1}}</span>
+                <img alt="Claire Connors" [src]="userImages[item.avatar]" class="avatar mr-2 ml-1"
+                    style="transform: scale(1.2); " />
+                <span class="h6 mb-0 mx-1"> {{item.name}} </span>
+
+                <span class="badge badge-pill badge-dark">{{item.permission}}</span>
+
+                <div class="btn-group mx-5">
+                    <button type="button" class="btn btn-primary btn-sm btn-sm dropdown-toggle px-3"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        [disabled]="item.permission=== 'Owner'">
+                        {{item.permission}}
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" (click)="changePermission('Admin', index)">Admin</a>
+                        <a class="dropdown-item" href="#" (click)="changePermission('Developer' ,index)">Developer</a>
+                    </div>
+                </div>
+
+                <button (click)="deleteUser(item, index)" type="button" class="btn btn-danger btn-sm my-auto"
+                    [disabled]="item.permission=== 'Owner'">
+                    Delete
+                </button>
+
             </div>
         </div>
 
-        <div class="form-group row">
-            <div class="col-sm-10" style="text-align: right;">
-                <button type="submit" class="btn btn-sm btn-danger">Reset</button>
-                <button type="submit" class="btn btn-primary m-3">Save</button>
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-sm-10">
+        <button type="submit" class="btn btn-sm btn-danger mt-2">Quit this project</button>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="addmembers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Members</h5>
+            </div>
+            <div class="modal-body">
+                <app-select-users [blockedMembers]="membersName" (onMemberAdded)="onMemberAdded($event)">
+                </app-select-users>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                <button (click)="addNewMembers()" type="button" class="btn  btn-primary" data-dismiss="modal">Save
+                    changes</button>
             </div>
         </div>
-    </form>
+    </div>
 </div>

@@ -12,7 +12,26 @@ import { environment } from 'src/environments/environment';
 export class SettingsComponent implements OnInit {
 
     projectName = '';
-    projectData: any;
+    private projectData: any;
+
+    set project(projectData) {
+
+        const { members } = projectData;
+        for (const member of members) {
+            this.membersName.add(member.name)
+        }
+
+        this.projectData = projectData;
+        this.formsData = {
+            private: projectData.private,
+            discription: projectData.discription,
+            endingDate: projectData.endingDate,
+            freeze: projectData.freeze.isFreeze,
+        }
+       
+    }
+
+    get project() { return this.projectData }
 
     membersAdded = [];
     membersName = new Set();
@@ -20,10 +39,10 @@ export class SettingsComponent implements OnInit {
 
     formsData = {
         private: true,
-        public: false,
-        freeze: false,
         discription: '',
-        dueDate: ''
+        endingDate: Date.now(),
+        freeze: true,
+
     }
 
     constructor(private _http: HttpService, private _view: ViewService, private activatedRoute: ActivatedRoute) { }
@@ -37,26 +56,51 @@ export class SettingsComponent implements OnInit {
 
     async fetchProject() {
         const response = await this._http.GET('/projects/get/' + this.projectName).toPromise();
-        this.projectData = response.data;
+        this.project = response.data;
+    }
 
-        const {members} = this.projectData;
-        for(const member of members) {
-            this.membersName.add(member.userName)
+
+    onMemberAdded(membersAdded): void {
+        this.membersAdded = [...membersAdded];
+        console.log(this.membersAdded)
+    }
+
+    async addNewMembers() {
+        try {
+            let promisArr = [];
+    
+            for(const member of this.membersAdded) {
+                promisArr.push(this._http.POST('/projects/post/member', {member: {name: member.userName, permission: 'Developer'}, name: this.projectName}).toPromise())
+            }
+
+            await Promise.all(promisArr);
+
+            for(const member of this.membersAdded) {
+                this.membersName.add(member.userName);
+                member.name = member.userName;
+                member.permission = "Developer";
+                this.projectData.members.push(member);
+            }
+
+        } catch(err) {
+            console.log(err)
+            alert("error occured")
         }
     }
 
-    onMemberAdded(membersAdded): void {
-        this.membersAdded = membersAdded;
-    }
-
     async deleteUser(member, index) {
-        if(!confirm('Are you sure you want to remove this user?')) return;
-        
-        await this._http.POST('/projects/delete/member', {memberName: member.name, name: this.projectName}).toPromise()
-        
+        if (!confirm('Are you sure you want to remove this user?')) return;
+
+        await this._http.POST('/projects/delete/member', { memberName: member.name, name: this.projectName }).toPromise()
+
+        this.fetchProject()
         this.membersName.delete(member.name);
-        this.projectData.members.slice(index,1);
+        
     }
 
+    async changePermission() {
+        if (!confirm('Are you sure you want to remove this user?')) return;
+
+    }
 
 }
