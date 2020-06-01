@@ -17,6 +17,10 @@ module.exports = {
             const { _id } = req.user.project;
             const { fileName, fileType, codeText, parentDirId } = req.body;
 
+            console.log(fileName +' '+ fileType + ' ' + codeText + ' ' + parentDirId)
+
+            if([fileType, parentDirId].includes(undefined)) throw('Error occured')
+
             const dirId = mongo.Types.ObjectId();
 
             let payload = {
@@ -56,10 +60,10 @@ module.exports = {
                await directoryModel.create(payload);
 
                await directoryModel.findOneAndUpdate({projectId: _id, _id: parentDirId, fileType:'dir'}, {$push: {child: dirId}});
-
-
                 
-                req.projectLog = log
+
+                req.projectLog = log;
+                req.data = {_id: dirId};
 
                 next();
 
@@ -215,9 +219,6 @@ module.exports = {
             const {_id} = req.user.project;
             const {fileId} = req.body;
 
-            
-            
-
         }
         catch(err) {
             console.log(err)
@@ -226,28 +227,5 @@ module.exports = {
 
 
     }
-
-    // delete_file: async (req, res, next) => {
-
-    //     try {
-
-    //         const { _id } = req.user.project;
-    //         const { dirId, fileId } = req.body;
-
-    //         const deleteInstance = directoryModel.findOneAndUpdate({ projectId: _id, _id: dirId }, { $pull: { clild: fileId } });
-    //         const deleteFile = codeModel.deleteOne({ projectId: _id, _id: fileId });
-
-    //         Promise.resolve([deleteInstance, deleteFile])
-    //             .then(response => {
-    //                 res.status(200).josn({ success: true })
-    //             })
-
-    //     } catch (err) {
-    //         console.log(err);
-    //         res.status(400).json({ success: false, message: 'Server Error' })
-
-    //     }
-    // }
-
 
 }

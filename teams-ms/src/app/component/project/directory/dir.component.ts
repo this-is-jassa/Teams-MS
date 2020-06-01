@@ -126,7 +126,7 @@ export class DirectoryComponent implements OnInit {
                 if (!response.success) {
                     alert("Error Occured")
                 } else {
-                    this.dirStructure.push({ code: data.codeText.split(/\r?\n/), name: data.fileName, fileType: data.fileType, child: [] });
+                    this.dirStructure.push({ code: data.codeText.split(/\r?\n/), name: data.fileName, fileType: data.fileType, child: [], _id: response.data._id });
                 }
                 this._view.setObs('loader', 'isVisible', false);
 
@@ -145,7 +145,7 @@ export class DirectoryComponent implements OnInit {
     copyCode(event): void {
 
         console.log(event.target.innerHTML)
-        const element =  document.createElement('textarea');
+        const element = document.createElement('textarea');
         element.value = this.clipboard;
         document.body.appendChild(element);
 
@@ -154,7 +154,7 @@ export class DirectoryComponent implements OnInit {
         document.body.removeChild(element);
         event.target.innerHTML = "Copied"
 
-        let time = setInterval(function() {
+        let time = setInterval(function () {
             event.target.innerHTML = "Copy Code";
             clearInterval(time)
         }, 1300)
