@@ -1,7 +1,7 @@
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
-import { BehaviorSubject, Subscription, empty } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { ViewService } from 'src/app/services/view.service';
 
 
@@ -11,7 +11,7 @@ import { ViewService } from 'src/app/services/view.service';
     styleUrls: ['./dir.scss']
 })
 
-export class DirectoryComponent implements OnInit {
+export class DirectoryComponent implements OnInit, OnDestroy {
 
     $projectSubscription: Subscription;
     $projectData = new BehaviorSubject<any>(null);
@@ -63,6 +63,10 @@ export class DirectoryComponent implements OnInit {
             }
         });
 
+    }
+
+    ngOnDestroy(): void {
+        this.$projectSubscription.unsubscribe()
     }
 
     async getDir(dirArr: any[]): Promise<any> {
@@ -171,5 +175,3 @@ export class DirectoryComponent implements OnInit {
     }
 
 }
-
-
