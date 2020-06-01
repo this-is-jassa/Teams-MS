@@ -55,19 +55,21 @@ route.post('/post/member', sharedMiddleware.checkTokenAndSetUser, projectMiddlew
 
 */
 route.post('/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.update, projectMiddleware.projectLogs);
-route.post('/update/member/status', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), projectMiddleware.updateMemberStatus, projectMiddleware.projectLogs )
+route.post('/update/member/status', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), projectMiddleware.updateMemberStatus, projectMiddleware.projectLogs );
 
 
 /**
 
-* @ROUTE UPDATE /update/stickey/request
+* @ROUTE DELETE /delete
 
-* @DESC Make a task complete request
+* @DESC delete project
 
-* @Access Only developers can access it.
+* @Access Only Owner can access it.
 
 */
-// route.post('/update/stickey/request', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.DEVELOPER], true), projectMiddleware.update_stickey_req); // D
+
+route.post('/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.delete );
+
 
 
 /**
@@ -84,16 +86,6 @@ route.post('/update/member', sharedMiddleware.checkTokenAndSetUser, projectMiddl
 
 
 
-/**
-
-* @ROUTE DELETE /delete
-
-* @DESC Delete your project
-
-* @Access Owners can access it
-
-*/
-route.post('/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.delete);
 
 route.post('/delete/notifications', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.deleteLogs, projectMiddleware.projectLogs);
 

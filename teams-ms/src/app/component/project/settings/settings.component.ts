@@ -13,10 +13,14 @@ export class SettingsComponent implements OnInit {
 
     projectName = '';
     private projectData: any;
+    role: string ='Developer';
+
+    resetState: any;
 
     set project(projectData) {
 
         const { members } = projectData;
+
         for (const member of members) {
             this.membersName.add(member.name)
         }
@@ -26,9 +30,11 @@ export class SettingsComponent implements OnInit {
             private: projectData.private,
             discription: projectData.discription,
             endingDate: projectData.endingDate,
-            freeze: projectData.freeze.isFreeze,
+            isFreeze: projectData.freeze.isFreeze,
         }
-       
+
+        this.resetState = { ...projectData }
+
     }
 
     get project() { return this.projectData }
@@ -41,8 +47,7 @@ export class SettingsComponent implements OnInit {
         private: true,
         discription: '',
         endingDate: Date.now(),
-        freeze: true,
-
+        isFreeze: true,
     }
 
     constructor(private _http: HttpService, private _view: ViewService, private activatedRoute: ActivatedRoute) { }
@@ -54,48 +59,83 @@ export class SettingsComponent implements OnInit {
         this.fetchProject();
     }
 
-    async fetchProject() {
-        const response = await this._http.GET('/projects/get/' + this.projectName).toPromise();
-        this.project = response.data;
-    }
-
-
     onMemberAdded(membersAdded): void {
         this.membersAdded = [...membersAdded];
         console.log(this.membersAdded)
     }
+    reset(): void {
+        this.project = this.resetState;
+    }
+
+
+    async save() {
+        try {
+            const payload = {
+                name: this.projectName,
+                ...this.formsData
+            }
+            await this._http.POST('/projects/update', payload).toPromise()
+
+        } catch (err) {
+            console.log(err);
+            alert("Error Occured Saving")
+        }
+
+    }
+
+    // Will be using behaviour Subject in it.
+    async fetchProject() {
+        this._view.setObs('loader', 'isVisible', true);
+
+        const response = await this._http.GET('/projects/get/' + this.projectName).toPromise();
+        this.project = response.data;
+        this.role = response.role;
+
+        this._view.setObs('loader', 'isVisible', false);
+    }
 
     async addNewMembers() {
         try {
+            this._view.setObs('loader', 'isVisible', true);
+
             let promisArr = [];
-    
-            for(const member of this.membersAdded) {
-                promisArr.push(this._http.POST('/projects/post/member', {member: {name: member.userName, permission: 'Developer'}, name: this.projectName}).toPromise())
+
+            for (const member of this.membersAdded) {
+                promisArr.push(this._http.POST('/projects/post/member', { member: { name: member.userName, permission: 'Developer' }, name: this.projectName }).toPromise())
             }
 
             await Promise.all(promisArr);
 
-            for(const member of this.membersAdded) {
+            for (const member of this.membersAdded) {
                 this.membersName.add(member.userName);
                 member.name = member.userName;
                 member.permission = "Developer";
                 this.projectData.members.push(member);
             }
+            this._view.setObs('loader', 'isVisible', false);
 
-        } catch(err) {
+
+        } catch (err) {
             console.log(err)
-            alert("error occured")
+            alert("error occured");
+            this._view.setObs('loader', 'isVisible', false);
         }
     }
 
-    async deleteUser(member, index) {
+    async deleteUser(member) {
         if (!confirm('Are you sure you want to remove this user?')) return;
 
         await this._http.POST('/projects/delete/member', { memberName: member.name, name: this.projectName }).toPromise()
 
         this.fetchProject()
         this.membersName.delete(member.name);
-        
+    }
+
+    async delete() {
+        if(!confirm("Are you sure you want to delete this project")) return;
+
+        await this._http.POST('/projects/delete',{name: this.projectName}).toPromise();
+        this._http.REDIRECT('/home')
     }
 
     async changePermission() {

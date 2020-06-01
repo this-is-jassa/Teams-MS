@@ -41,8 +41,16 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
 
         this.$userData = this._data.getUser()
+            
             .subscribe(data => {
-                this.userData = data;
+                try{
+                    data.notify.reverse();
+                } catch(err) {
+                    
+                }
+                finally{
+                    this.userData = data;
+                }
             });
 
     }
@@ -86,6 +94,5 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
             })
     }
-
 
 }

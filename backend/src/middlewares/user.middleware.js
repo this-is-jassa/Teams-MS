@@ -9,6 +9,7 @@ module.exports = {
 
             const user = await userModel.findOne({ userName: userName })
             .select("userName projects notify avatar")
+            .slice('notify', -40)
             .populate({
                 path: 'projects',
                 model: 'projects',

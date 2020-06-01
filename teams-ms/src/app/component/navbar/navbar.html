@@ -1,134 +1,3 @@
-<!-- <nav *ngIf="isVisile" class="navbar fixed-top navbar-expand-lg navbar-light  bg-white">
-    <a class="navbar-brand d-none d-sm-block " href="#">Teams MS </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-        <div id="dropdownn" class="nav-item btn btn-icon dropdown mr-3">
-
-            <svg class="bi bi-list" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                id="navbarDropdown" width="1em" height="1em" viewBox="0 0 16 16" fill="#8F96A0"
-                xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd"
-                    d="M2.5 11.5A.5.5 0 013 11h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4A.5.5 0 013 7h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm0-4A.5.5 0 013 3h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5z"
-                    clip-rule="evenodd" />
-            </svg>
-
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">New Project</a>
-                <a class="dropdown-item" href="#">Find User</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">More</a>
-            </div>
-        </div>
-
-        <form class="form-inline my-2 my-lg-0">
-            <input id="search-form" class="form-control  border-0  form-control-solid mr-sm-2" type="search"
-                placeholder="Search" data-toggle="modal" data-target="#findUsers">
-        </form>
-
-        <ul class="navbar-nav  ml-auto mr-4">
-
-            <li style="font-size: 13px; letter-spacing: 0.6px; font-weight: 410;" class="mr-2 nav-item">
-                <a class="nav-link" href="#">Documentation -</a>
-            </li>
-
-            <li id="dropdownn" class=" mr-2 btn btn-icon nav-item dropdown">
-
-                <svg id="notification-dropdown" class="bi bi-bell" width="1em" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false" height="1em" viewBox="0 0 16 16" fill="#8F96A0"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 16a2 2 0 002-2H6a2 2 0 002 2z" />
-                    <path fill-rule="evenodd"
-                        d="M8 1.918l-.797.161A4.002 4.002 0 004 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 00-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 111.99 0A5.002 5.002 0 0113 6c0 .88.32 4.2 1.22 6z"
-                        clip-rule="evenodd" />
-                </svg>
-
-                <div class="dropdown-menu" aria-labelledby="notification-dropdown" style="width: 400px;">
-                    <div *ngIf="userData.notify?.length > 0" style="text-align: right;" class="mr-1 p-1">
-                        <span (click)="deleteNotify()" class="badge badge-pill badge-primary" style="cursor: pointer;">
-                            <i style="font-size: 11px;" class="material-icons">
-                                check
-                            </i>
-                            <span style="font-size: 12px;" >
-                                Seen All
-                            </span>
-                        </span>
-                    </div>
-                    <ol class="list-group list-group-activity">
-                        <li *ngFor="let notif of userData?.notify" class="list-group-item">
-                            <div class="media align-items-center">
-                                <ul class="avatars">
-                                    <li>
-                                        <div class="avatar bg-primary">
-                                            <i class="material-icons">
-                                                {{(notif.type === 'Note')? 'create': (notif.type === 'Project')? 'info': 'person_add'}}
-
-                                            </i>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <div class="media-body">
-                                    <div>
-                                        <span>{{notif.message}} </span>
-                                    </div>
-                                    <div class="text-small" style="text-align: right;">{{notif.timeStamp | date}}</div>
-                                </div>
-                            </div>
-                        </li>
-                    </ol>
-                </div>
-                <span class="badge badge-primary">{{userData.notify?.length}}</span>
-            </li>
-
-
-
-            <li id="dropdownn" class=" mr-3 btn btn-icon nav-item dropdown">
-
-                <svg id="message-dropdown" class="bi bi-envelope" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false" width="1em" height="1em" viewBox="0 0 16 16"
-                    fill="#8F96A0" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M14 3H2a1 1 0 00-1 1v8a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1zM2 2a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H2z"
-                        clip-rule="evenodd" />
-                    <path fill-rule="evenodd"
-                        d="M.071 4.243a.5.5 0 01.686-.172L8 8.417l7.243-4.346a.5.5 0 01.514.858L8 9.583.243 4.93a.5.5 0 01-.172-.686z"
-                        clip-rule="evenodd" />
-                    <path
-                        d="M6.752 8.932l.432-.252-.504-.864-.432.252.504.864zm-6 3.5l6-3.5-.504-.864-6 3.5.504.864zm8.496-3.5l-.432-.252.504-.864.432.252-.504.864zm6 3.5l-6-3.5.504-.864 6 3.5-.504.864z" />
-                </svg>
-
-                <div class="dropdown-menu" aria-labelledby="message-dropdown">
-                    <a class="dropdown-item" href="#">Project </a>
-                    <a class="dropdown-item" href="#">Project B</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Project C</a>
-                </div>
-            </li>
-
-            <li id="profilePic" class=" nav-item mr-0 rounded-circle dropdown">
-
-                <div id="profile-dropdown" style="width: 35px; height: 35px;" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                </div>
-
-                <div class="dropdown-menu " aria-labelledby="profile-dropdown">
-                    <a class="dropdown-item" href="#">View Profile </a>
-
-                    <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" (click)="logOut()">Log Out </button>
-                </div>
-            </li>
-        </ul>
-
-    </div>
-</nav> -->
-
-
-
 <nav *ngIf="isVisile">
     <div id="wrapper">
         <!-- <img alt="..." height="400px" width="400px" class="" src="../../../assets/images/logo2.png" /> -->
@@ -141,12 +10,12 @@
         <div id="userInfo">
             <img alt="..." class="avatar avatar-lg mr-1" src="../../../assets/images/profile.jpg" />
 
-            <div style="color: white;" >
+            <div style="color: white;">
                 {{userData?.userName}}
             </div>
 
         </div>
-        <hr style="width: 40%; margin-bottom: 10px;" >
+        <hr style="width: 40%; margin-bottom: 10px;">
 
         <ul>
             <li class="active">
@@ -223,10 +92,12 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content container m-2 pt-3">
 
-            <app-search-users [buttonText]="'View Profile'"  ></app-search-users>
+            <app-search-users [buttonText]="'View Profile'"></app-search-users>
             <div class="mt-3 mb-2 mx-2">
-                <div data-dismiss="modal" style="color: white; background-color: red; padding: 4px; border-radius: 7px; cursor: pointer; text-align: center;font-family: 'Nunito', sans-serif;" >Close</div>
-                
+                <div data-dismiss="modal"
+                    style="color: white; background-color: red; padding: 4px; border-radius: 7px; cursor: pointer; text-align: center;font-family: 'Nunito', sans-serif;">
+                    Close</div>
+
             </div>
         </div>
     </div>
@@ -244,13 +115,13 @@
                     <i style="font-size: 11px;" class="material-icons">
                         check
                     </i>
-                    <span style="font-size: 12px;" >
+                    <span style="font-size: 12px;">
                         Seen All
                     </span>
                 </span>
             </div>
             <ol class="list-group list-group-activity">
-                <li *ngFor="let notif of userData?.notify" class="list-group-item">
+                <li *ngFor="let notif of userData?.notify " class="list-group-item">
                     <div class="media align-items-center">
                         <ul class="avatars">
                             <li>
@@ -278,7 +149,9 @@
             </div>
 
             <div style="text-align: center;padding: 30px;">
-                <div data-dismiss="modal" style="color: white; background-color: red; padding: 5px; border-radius: 7px; cursor: pointer; font-family: 'Nunito', sans-serif;" >Close</div>
+                <div data-dismiss="modal"
+                    style="color: white; background-color: red; padding: 5px; border-radius: 7px; cursor: pointer; font-family: 'Nunito', sans-serif;">
+                    Close</div>
             </div>
 
         </div>

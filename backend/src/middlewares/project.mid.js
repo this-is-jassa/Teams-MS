@@ -3,6 +3,7 @@ const projectModel = require('../model/project.model');
 const userModel = require('../model/user.model');
 const directoryModel = require('../model/directory.model');
 const projectLog = require('../model/projectLogs.model');
+const fileModel = require('../model/code.model');
 
 const mongo = require('mongoose');
 // standard request - GET- params.name & - POST- body.name
@@ -76,18 +77,16 @@ module.exports = {
                 child: []
             };
 
-        
-
             await directoryModel.create(dirPayload);
             await projectModel.create(payload);
             await userModel.findOneAndUpdate({ userName: userName }, userPayload);
-            
+
             req.projectLog = {
                 type: 'Project',
                 message: 'Congrats! New project has been created',
             }
 
-            req.user.project = {_id: projectId};
+            req.user.project = { _id: projectId };
             req.data = name;
 
             next();
@@ -100,8 +99,57 @@ module.exports = {
     },
 
 
+    delete: async (req, res, next) => {
+
+        if (!req.user.permission) {
+            res.status(400).json({ success: false, msg: "Permission Not granted" });
+            return;
+        }
+
+        try {
+            const { _id, members, name } = req.user.project;
+            const { userName } = req.user;
+
+            console.log(typeof _id)
+
+            const deleteLogs = projectLog.deleteMany({ projectId: _id });
+            const deleteDir = directoryModel.deleteMany({ projectId: _id });
+            const deleteFiles = fileModel.deleteMany({ projectId: _id });
+
+            await Promise.all([deleteLogs, deleteDir, deleteFiles]);
+
+            let deleteMembers = [];
+
+            for (const member of members) {
+                let payload1 = {
+                    $pull: {
+                        projects: _id
+                    },
+                    $push: {
+                        notify: {
+                            type: 'Project',
+                            message: `${userName} deleted project ${name}`
+                        }
+                    }
+                }
+                deleteMembers.push(userModel.findOneAndUpdate({ userName: member.name}, payload1 ));
+            }
+            await Promise.all(deleteMembers);
+
+            await projectModel.deleteOne({ _id: _id });
+
+
+            res.status(200).json({ success: true });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: 'Error Occured deleting project'});
+        }
+
+    },
+
 
     update: (req, res, next) => {
+
 
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
@@ -109,9 +157,9 @@ module.exports = {
         }
 
 
-        const { userName } = req.user;
-        const { name, discription, private, isFreeze } = req.body;
 
+        const { userName } = req.user;
+        const { name, discription, private, isFreeze, endingDate } = req.body;
 
         const payload = {
 
@@ -120,7 +168,8 @@ module.exports = {
             freeze: {
                 isFreeze: isFreeze,
                 timeStamp: Date.now()
-            }
+            },
+            endingDate: endingDate
         };
 
 
@@ -137,10 +186,7 @@ module.exports = {
 
             next();
 
-            // projectLog.create(logPayload, (err, notification) => {
-            //     res.status(200).json({ success: true, log: notification });
 
-            // });
 
         })
     },
@@ -163,7 +209,7 @@ module.exports = {
                     'members.$.status.value': value
                 }
             }
-           
+
 
             await projectModel.findOneAndUpdate({ _id: _id, 'members.name': userName }, payload);
 
@@ -173,10 +219,6 @@ module.exports = {
             }
             next();
 
-            // const log = projectLog.create(logPayload)
-
-            // await Promise.all([updateProj, log])
-            // res.status(200).json({ success: true, log: logPayload });
 
         }
         catch (e) {
@@ -209,32 +251,28 @@ module.exports = {
 
 
         for (const item of projectmembers) {
-            
+
             if (item.name === member.name) { IsMemberAlreadyExist = true; break; }
         }
 
 
-        if(IsMemberAlreadyExist) {
-            res.status(400).json({success: false, message: 'User already exist'})
+        if (IsMemberAlreadyExist) {
+            res.status(400).json({ success: false, message: 'User already exist' })
             return;
         }
 
 
-        if (!!member.name && (member.name !== userName) && (member.permission !== 'Owner') ) {
+        if (!!member.name && (member.name !== userName) && (member.permission !== 'Owner')) {
 
             const payload = {
                 $push: {
                     projects: _id,
-                    notify: { type: 'Project', message: 'You are added to a project ' + name + 'by ' + userName },
+                    notify: { type: 'Project', message: 'You are added to a project ' + name + ' by ' + userName },
                     newNotify: true
                 }
             };
 
-            // const logPayload = {
-            //     projectId: _id,
-            //     type: 'NewMember',
-            //     message: ` ${userName} has added ${member} to the team`
-            // }
+
 
             userModel.findOneAndUpdate({ userName: member.name }, payload, (err, response) => {
                 if (err) { res.status(500).json({ success: false }); console.log(err); return; }
@@ -247,14 +285,9 @@ module.exports = {
 
             req.projectLog = {
                 type: 'NewMember',
-                message: ` ${userName} has added ${member} to the team`,
+                message: ` ${userName} has added ${member.name} to the team`,
             }
             next();
-
-            // projectLog.create(logPayload, (err, log) => {
-            //     if (err) { res.status(500).json({ success: false }); console.log(err); return; }
-            //     res.status(200).json({ success: true, log: log });
-            // })
 
 
         } else {
@@ -268,13 +301,13 @@ module.exports = {
     deleteMember: (req, res, next) => {
 
         // if (req.user.project.freeze.isFreeze) { throw 'Account is Freeze' }
-        console.log("saa")
+
 
         const { userName } = req.user;
         const { _id, members } = req.user.project;
         const { memberName, name } = req.body;
-        
-        if (!req.user.permission ) {
+
+        if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
@@ -282,7 +315,7 @@ module.exports = {
         const member = members.find(member => {
             return member.name === memberName;
         });
-        console.log(member);
+
 
         if (member.permission !== 'Owner') {
 
@@ -315,7 +348,7 @@ module.exports = {
     },
 
     updateMember: (req, res, next) => {
-        
+
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
@@ -334,14 +367,14 @@ module.exports = {
                 }
             };
 
-            
+
             projectModel.findOneAndUpdate({ name: name, 'members.name': member.name }, payload, (err, response) => {
                 if (err) { console.log(err); res.status(500).json({ success: false, msg: err }); return; }
 
                 userModel.findOneAndUpdate({ userName: member.name }, { $push: { notify: { type: 'Project', message: ('Your role for project ' + name + 'has been changed to ' + member.permission) } }, newNotify: true },
                     { useFindAndModify: false }, (err, response) => {
                         if (err) { console.error(err); res.status(500).json({ success: false, msg: err }); return; }
-                        
+
                         req.projectLog = {
                             type: 'EditMember',
                             message: ` ${userName} changed the permission of ${member} to ${member.permission}`,
@@ -364,40 +397,6 @@ module.exports = {
 
     },
 
-
-
-    delete: (req, res, next) => {
-
-
-        if (!req.user.permission) {
-            res.status(400).json({ success: false, msg: "Permission Not granted" });
-            return;
-        }
-
-        if (req.user.project.freeze.isFreeze) { throw 'Account is Freeze' }
-
-
-        const { UserName } = req.user;
-        const { name, _id } = req.user.project;
-
-        userModel.findOneAndUpdate({ UserName: UserName }, { $pull: { projects: { name: name } } }, (err, response) => {
-            if (err) { console.log(err); return; };
-
-        })
-
-        projectModel.deleteOne({ name: name }, (err, response) => {
-            if (err) { res.status(500).json({ success: false, msg: "Saving Error" }); return };
-
-            projectLog.deleteMany({ projectId: _id }, (err, done) => {
-                if (err) { res.status(500).json({ success: false, msg: "Saving Error" }); return };
-
-                res.status(200).json({ success: true });
-            })
-
-        });
-
-        // Delete the Directory now
-    },
 
 
 
@@ -468,10 +467,10 @@ module.exports = {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
-        
+
         try {
             const { _id } = req.user.project;
-            const {userName} = req.user;
+            const { userName } = req.user;
 
             await projectLog.deleteMany({ projectId: _id });
 
@@ -481,8 +480,8 @@ module.exports = {
             }
             next();
 
-        }catch(err) {
-            res.status(400).json({success: false, message: "Server Error"})
+        } catch (err) {
+            res.status(400).json({ success: false, message: "Server Error" })
         }
 
     },
@@ -500,7 +499,7 @@ module.exports = {
             else {
                 const { userName } = req.user;
                 const name = (req.method === 'GET') ? req.params.name : req.body.name;
-                
+
 
                 projectModel.findOne({ name: name })
                     .select("_id private name members stickey")
@@ -521,9 +520,9 @@ module.exports = {
                             // });
 
                             if (!!member && ($role.includes('ALL') || $role.includes(member.permission))) {
-                                
+
                                 // Will be using req.locals soon .. OOps
-                                
+
                                 req.user.permission = true;
 
                                 req.role = member.permission;
@@ -546,14 +545,10 @@ module.exports = {
     projectLogs: async (req, res, next) => {
 
         try {
-            // if (!req.user.permission) {
-            //     res.status(400).json({ success: false, msg: "Permission Not granted" });
-            //     return;
-            // }
 
 
-            const {_id} = req.user.project;
-            const {type, message} = req.projectLog;
+            const { _id } = req.user.project;
+            const { type, message } = req.projectLog;
             const data = req.data;
 
 
@@ -565,15 +560,14 @@ module.exports = {
             }
 
             const log = await projectLog.create(logPayload);
-            res.status(200).json({log: log, data: data, success: true});
+            res.status(200).json({ log: log, data: data, success: true });
 
         }
         catch (err) {
             console.log(err);
-            res.status(200).json({success: false, message: 'Server Err'});
+            res.status(200).json({ success: false, message: 'Server Err' });
 
         }
     }
-
 
 }
