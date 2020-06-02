@@ -46,7 +46,7 @@ const userSchema = mongo.Schema({
         type: types.Date,
         default: Date.now()
     },
-    avatar: {type: types.Number, default: 0 },
+    avatar: {type: types.Number, default: Math.floor(Math.random()*10) },
     following: [{type: types.ObjectId, ref: 'users'}],
     followers: [{type: types.ObjectId, ref: 'users'}],
     personalNotes: [personalNotesSchema],

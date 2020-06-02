@@ -28,7 +28,7 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
     constructor(private _data: DataService, private _http: HttpService) { }
 
     ngOnInit(): void {
-        this._data.fetchfollowing()
+
         this.fetchFollowing();
     }
 

@@ -2,8 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ViewService } from 'src/app/services/view.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { DataService } from 'src/app/services/data.service';
 import { HttpService } from 'src/app/services/http.service';
+
+import {environment} from 'src/environments/environment';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
     selector: 'app-navbar',
@@ -12,17 +16,12 @@ import { HttpService } from 'src/app/services/http.service';
 })
 export class NavBarComponent implements OnInit, OnDestroy {
 
-
-    isVisile = false;
+    currentUrl ='';
     userData: any;
-    searchText: string = '';
-    searchData: any[] = [];
-
-    following: any;
-    searchUser: any;
-
-    $isVisibe: Subscription;
+    
     $userData: Subscription;
+
+    avatars = environment.userImages;
 
     materialIcons = {
         Project: 'domain',
@@ -30,14 +29,18 @@ export class NavBarComponent implements OnInit, OnDestroy {
         Job: 'work_outline'
     }
 
-    constructor(private _view: ViewService, private _auth: AuthService, private _data: DataService, private _http: HttpService) { }
+    constructor( private _auth: AuthService, private _data: DataService, private _http: HttpService, private _router: Router) {
+        _router
+        .events
+        .pipe(
+            filter(e => e instanceof NavigationEnd)
+        )
+        .subscribe((val: any) => {
+            this.currentUrl = val.url;
+        });
+    }
 
     ngOnInit(): void {
-
-        this.$isVisibe = this._view.getObs()
-            .subscribe(data => {
-                this.isVisile = data.navbar.isVisible;
-            });
 
 
         this.$userData = this._data.getUser()
@@ -64,22 +67,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
     logOut(): void {
         if (confirm('Are you sure you want to log out?')) {
             this._auth.LogOut();
-        }
-    }
-
-
-
-    searchUsers(text): void {
-        if (text !== "") {
-
-            this._http.GET('/users/search/' + text)
-                .toPromise()
-                .then(data => {
-                    this.searchData = data;
-                })
-
-        } else {
-            this.searchData = [];
         }
     }
 

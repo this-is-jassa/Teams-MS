@@ -53,7 +53,6 @@ export class SettingsComponent implements OnInit {
     constructor(private _http: HttpService, private _view: ViewService, private activatedRoute: ActivatedRoute) { }
 
     ngOnInit(): void {
-        this._view.setObs('navbar', 'isVisible', true);
         this.projectName = this.activatedRoute.snapshot.paramMap.get("name");
 
         this.fetchProject();
@@ -61,7 +60,6 @@ export class SettingsComponent implements OnInit {
 
     onMemberAdded(membersAdded): void {
         this.membersAdded = [...membersAdded];
-        console.log(this.membersAdded)
     }
     reset(): void {
         this.project = this.resetState;
@@ -138,9 +136,21 @@ export class SettingsComponent implements OnInit {
         this._http.REDIRECT('/home')
     }
 
-    async changePermission() {
+    async changePermission(value: string, index: number) {
         if (!confirm('Are you sure you want to remove this user?')) return;
 
+        const member = this.projectData.members[index];
+        console.log(value)
+        const payload ={
+            member: {
+                name: member.name,
+                permission: value
+            },
+            name: this.projectName
+        }
+
+        await this._http.POST('/projects/update/member', payload).toPromise()
+        member.permission = value;
     }
 
 }

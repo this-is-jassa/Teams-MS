@@ -11,16 +11,12 @@ import * as firebase from "firebase";
     templateUrl: './signin.html',
     styleUrls: ['./signin.scss']
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent {
     
     public userName: string; 
     public password: string;
 
     constructor(private _http: HttpService, private _auth: AuthService, private _router: Router, private _view: ViewService) {}
-
-    ngOnInit(): void {
-        this._view.setObs('navbar','isVisible', false);
-    }
 
 
     async signIn(){

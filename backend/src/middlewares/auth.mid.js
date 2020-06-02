@@ -44,6 +44,9 @@ module.exports = {
             userName: userName,
             password: password,
             avatar: avatar,
+            followers: [],
+            following: [],
+            projects: []
         });
 
         newUser.save((err, user) => {

@@ -34,8 +34,8 @@
         <img alt="Claire Connors" [src]="avatars[item.avatar]" class="avatar mr-2" />
         <span class="h6 mb-0"> {{item?.userName}} </span>
 
-        <button style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
-            class="btn btn-outline-primary float-right" data-dismiss="modal">View Profile</button>
+        <a style="width: 90px; font-size: 11.5px; padding: 2px;" role="button" [href]="'profile/'+item.userName"
+            class="btn btn-outline-primary float-right" >View Profile</a>
 
     </div>
 

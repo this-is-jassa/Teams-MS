@@ -3,8 +3,6 @@
 
 
 <div class="main-container">
-
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-12 col-xl-12">
@@ -18,15 +16,15 @@
                         <div class="row" style="background-color: black; border-radius: 5px;" >
                             <div class="col-4 infoCard">
                                 <p>PROJECTS</p>
-                                <h1>13</h1>
+                                <h1>{{userData?.projects?.length }}</h1>
                             </div>
                             <div class="col-4 infoCard">
                                 <p>PERSONAL NOTES</p>
-                                <h1>10</h1>
+                                <h1>{{personalNotesData?.length}} </h1>
                             </div>
                             <div class="col-4 infoCard">
                                 <p>PENDING NOTES</p>
-                                <h1>07</h1>
+                                <h1>{{pendingNotes}}</h1>
                             </div>
                         </div>
 
@@ -42,8 +40,8 @@
                             aria-controls="projects" aria-selected="true">Projects</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#members" role="tab" aria-controls="members"
-                            aria-selected="false">Members</a>
+                        <a class="nav-link" data-toggle="tab" href="#Productivity" role="tab" aria-controls="members"
+                            aria-selected="false">Productivity</a>
                     </li>
                 </ul>
 
@@ -62,9 +60,10 @@
                     <!--end of tab-->
 
 
-                    <div class="tab-pane fade" id="members" role="tabpanel" data-filter-list="content-list-body">
+                    <div class="tab-pane fade" id="Productivity" role="tabpanel" data-filter-list="content-list-body">
                         <div class="content-list">
-                            <app-users-list-big [usersData]='[1,2,3,4,5]'></app-users-list-big>
+                            <h1>Coming soon</h1>
+                            <!-- <app-users-list-big [usersData]='[1,2,3,4,5]'></app-users-list-big> -->
                         </div>
 
                     </div>

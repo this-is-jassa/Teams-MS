@@ -7,7 +7,7 @@ mongo.set('runValidators', true);
 const members = new mongo.Schema({ 
     name: {type: types.String, required: true, maxlength: 20, minlength: 1},
     permission: {type: types.String, default: "Developer", enum: ['Owner', 'Admin', 'Developer']},
-    avatar: {type: types.Number, default: 0},
+    avatar: {type: types.Number, default: Math.floor(Math.random()*10) },
     status: {
         value: {type: types.String, default: 'Do Not Disturb' ,enum: ['Working', 'Break', 'Do Not Disturb'] }, 
         timeStamp: {type: types.Date, default: Date.now()} 
@@ -91,11 +91,7 @@ const projectSchema = mongo.Schema({
     stickey: [stickey]
 });
 
-// projectSchema.pre('save', function(next){
-//     const project = this;
-//     project.name = project.name.replace(' ','-');
-//     next();
-// });
+
 
 module.exports =  mongo.model('projects', projectSchema);
 

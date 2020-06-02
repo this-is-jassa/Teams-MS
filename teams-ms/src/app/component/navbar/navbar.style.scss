@@ -1,65 +1,26 @@
-// .navbar {
-//     box-shadow: hsla(215, 35%, 19%, 0.15) 0px 2.4px 28px 0px;
-    
-//     .navbar-brand{
-//         color: hsl(216, 24%, 26%);
-//         width: 220px;
-//         line-height: 24px;
-//         font-weight: 700;
-//         font-size: 16px;
-//         padding: 5px 30px 5px 10px;
-//         letter-spacing: 1.5px;
-//     }
-
-//     #dropdownn:hover{
-//         background-color: rgb(36, 36, 36);
-//         svg{
-//             fill: white;
-//         }
-//     }
-
-//     #search-form {
-//         background: #ECF0F6;
-//         font-weight: 300;
-//         font-size: 13px;
-//         letter-spacing: 0.8px;
-//     }
-
-//     #profilePic {
-//         width: 35px;
-//         height: 35px;
-//         background-image: url(../../../assets/images/profile.jpg);
-//         background-position: center;
-//         background-size: cover;
-//     }
-//     .dropdown-menu{
-//         left:inherit !important;
-//         right:0px;
-//     }
-
-// }
-
-// transform: translate3d(-250px, 0, 0);
-
 nav {
   height: 100%;
   background-color: black;
   width: 230px;
 }
-#wrapper{
+#wrapper {
   color: wheat;
   position: sticky;
   top: 0px;
   padding-top: 30px;
   overflow: scroll;
 
-  h6{
+  h6 {
     color: white;
     text-align: center;
-    font-family: 'Nunito', sans-serif;
-    background: #f2709c;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #ff9472, #f2709c);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #ff9472, #f2709c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    font-family: "Nunito", sans-serif;
+    background: #f2709c; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ff9472, #f2709c); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+      to right,
+      #ff9472,
+      #f2709c
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
     padding: 5px 20px 5px 5px;
     margin: 0 20px;
@@ -68,15 +29,15 @@ nav {
   }
 
   #userInfo {
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
     text-align: center;
     margin-top: 40px;
-    
-    img{
+
+    img {
       cursor: pointer;
     }
 
-    div{
+    div {
       font-size: 15px;
       margin-top: 7px;
       letter-spacing: 2px;
@@ -85,16 +46,16 @@ nav {
     }
   }
 
-  ul{
+  ul {
     padding: 30px 10px;
 
-    li{
-
+    li,
+    a {
       list-style: none;
       padding: 8px 25px;
       margin: 15px 5px;
       position: relative;
-      font-family: 'Nunito', sans-serif;
+      font-family: "Nunito", sans-serif;
       font-size: 12px;
       border-radius: 3px;
       color: white;
@@ -102,27 +63,27 @@ nav {
       letter-spacing: 1px;
       display: flex;
 
-      i{
+      i {
         padding: 5px 10px 2px 2px;
         font-size: 20px;
       }
-      span{
+      span {
         padding: 5px 0;
       }
-      
+
       &:hover {
         color: black;
         background-color: white;
       }
     }
 
-    #contactInfo{
-      p{
-        font-family: 'Nunito', sans-serif;
+    #contactInfo {
+      p {
+        font-family: "Nunito", sans-serif;
         font-size: 12px;
         color: white;
 
-        a{
+        a {
           text-decoration: none;
           color: rgb(160, 160, 160);
           font-size: 11px;
@@ -131,23 +92,17 @@ nav {
       }
     }
 
-    #logOut{
+    #logOut {
       text-align: center;
       color: white;
-      font-family: 'Nunito', sans-serif;
+      font-family: "Nunito", sans-serif;
       margin-top: 30px;
       cursor: pointer;
-
     }
 
-    .active{
+    .active {
       color: black;
       background-color: white;
     }
-
   }
-
-  
-
 }
-

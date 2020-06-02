@@ -64,9 +64,11 @@ module.exports = {
                 }
             }
 
-            const startedFollowing = await userModel.findOneAndUpdate({_id: _id}, payload1);
-            const getFollowed = await userModel.findOneAndUpdate({_id: userId}, payload2);
+            const startedFollowing = userModel.findOneAndUpdate({_id: _id}, payload1);
+            const getFollowed = userModel.findOneAndUpdate({_id: userId}, payload2);
             
+            await Promise.all([startedFollowing,getFollowed])
+
             res.status(200).json({success: true});
         }
         catch(err) {
@@ -89,8 +91,10 @@ module.exports = {
                     followers: _id
                 }
             }
-            await userModel.findOneAndUpdate({_id: _id}, payload1);
-            await userModel.findOneAndUpdate({_id: userId}, payload2);
+            const a = userModel.findOneAndUpdate({_id: _id}, payload1);
+            const b = userModel.findOneAndUpdate({_id: userId}, payload2);
+
+            await Promise.all([a,b])
 
             res.status(200).json({success: true});
         }
@@ -99,27 +103,58 @@ module.exports = {
         }
     },
 
-    getFollowers: async (req, res, next) => {
+    getFollowing: async (req, res, next) => {
         try{
             const { userName } = req.user;
             const skip = 0;
             const limit = 20;
+        
 
-            const following = await userModel.findOne({userName: userName})
+            const following = userModel.findOne({userName: userName})
+            .slice('following', -40)
             .select('following')
             .populate({
                 path: 'following',
                 model: 'users',
                 select: 'userName _id avatar'
-            })
+            });
 
+            const length = userModel.aggregate([{$match: {userName: userName}}, {$project: {following: {$size: '$following'}}}]);
             
-
-            res.status(200).json({success: true, data: following});
+            const result = await Promise.all([following, length]);
+ 
+            res.status(200).json({success: true, data: result[0], length: result[1][0].following});
 
         }
         catch(err) {
             res.status(500).json({ success: false, message: 'Cannot fetch user' }); console.error(err);
+        }
+    },
+
+    getFollowers: async (req, res, next) => {
+        try{
+            const {userName} = req.params;
+
+            const followers = userModel.findOne({userName: userName})
+            .slice('followers', -40)
+            .select('followers')
+            .populate({
+                path: 'followers',
+                model: 'users',
+                select: 'userName _id avatar'
+            });
+
+            const length = userModel.aggregate([{$match: {userName: userName}}, {$project: {followers: {$size: '$followers'}}}]);
+
+            const result = await Promise.all([followers, length]);
+            // console.log(result);
+
+            res.status(200).json({data: result[0], length: result[1][0].followers});
+
+
+        } catch(err) {
+            console.log(err);
+            res.status(400).json({success: false});
         }
     },
 

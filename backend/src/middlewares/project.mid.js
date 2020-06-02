@@ -41,7 +41,7 @@ module.exports = {
 
         try {
 
-            const { userName, avatar } = req.user;
+            const { userName } = req.user;
             const { discription, private, isFreeze, startingDate, endingDate } = req.body;
             let name = req.body.name;
             name = name.trim().split(' ').join('-')
@@ -60,7 +60,7 @@ module.exports = {
                 },
                 startingDate: startingDate,
                 endingDate: endingDate,
-                members: { name: userName, permission: 'Owner', avatar: avatar },
+                members: { name: userName, permission: 'Owner' },
                 dir: dirId
             };
 
@@ -132,7 +132,7 @@ module.exports = {
                         }
                     }
                 }
-                deleteMembers.push(userModel.findOneAndUpdate({ userName: member.name}, payload1 ));
+                deleteMembers.push(userModel.findOneAndUpdate({ userName: member.name }, payload1));
             }
             await Promise.all(deleteMembers);
 
@@ -142,7 +142,7 @@ module.exports = {
             res.status(200).json({ success: true });
         } catch (err) {
             console.log(err);
-            res.status(500).json({message: 'Error Occured deleting project'});
+            res.status(500).json({ message: 'Error Occured deleting project' });
         }
 
     },
@@ -251,7 +251,6 @@ module.exports = {
 
 
         for (const item of projectmembers) {
-
             if (item.name === member.name) { IsMemberAlreadyExist = true; break; }
         }
 
@@ -268,9 +267,19 @@ module.exports = {
                 $push: {
                     projects: _id,
                     notify: { type: 'Project', message: 'You are added to a project ' + name + ' by ' + userName },
-                    newNotify: true
+
                 }
             };
+
+            const projectpayload = {
+                $addToSet: {
+                    members: {
+                        name: member.name,
+                        permission: member.permission,
+                        status: {}
+                    }
+                }
+            }
 
 
 
@@ -278,7 +287,7 @@ module.exports = {
                 if (err) { res.status(500).json({ success: false }); console.log(err); return; }
             });
 
-            projectModel.findOneAndUpdate({ name: name }, { $addToSet: { members: { name: member.name, permission: member.permission, status: {} } } }, (err, response) => {
+            projectModel.findOneAndUpdate({ name: name }, projectpayload, (err, response) => {
                 if (err) { res.status(500).json({ success: false }); console.log(err); return; }
 
             });
@@ -371,7 +380,7 @@ module.exports = {
             projectModel.findOneAndUpdate({ name: name, 'members.name': member.name }, payload, (err, response) => {
                 if (err) { console.log(err); res.status(500).json({ success: false, msg: err }); return; }
 
-                userModel.findOneAndUpdate({ userName: member.name }, { $push: { notify: { type: 'Project', message: ('Your role for project ' + name + 'has been changed to ' + member.permission) } }, newNotify: true },
+                userModel.findOneAndUpdate({ userName: member.name }, { $push: { notify: { type: 'Project', message: ('Your role for project ' + name + ' has been changed to ' + member.permission) } }, newNotify: true },
                     { useFindAndModify: false }, (err, response) => {
                         if (err) { console.error(err); res.status(500).json({ success: false, msg: err }); return; }
 
@@ -381,10 +390,7 @@ module.exports = {
                         };
 
                         next();
-                        // projectLog.create(logPayload, (err, log) => {
-                        //     if (err) { res.status(500).json({ success: false }); console.log(err); return; }
-                        //     res.status(200).json({ success: true, log: log });
-                        // });
+
                     });
 
 

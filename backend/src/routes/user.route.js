@@ -60,7 +60,8 @@ route.post('/unfollow', verifyUser, userMiddleware.unfollow_user);
 * @Access All Authorised users can access any's
 
 */
-route.get('/get/following', verifyUser, userMiddleware.getFollowers);
+route.get('/following/:userName', verifyUser, userMiddleware.getFollowing);
+route.get('/followers/:userName', verifyUser, userMiddleware.getFollowers);
 
 
 route.post('/update/notifySeen', verifyUser, userMiddleware.NotifySeen);

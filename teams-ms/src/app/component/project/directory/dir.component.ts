@@ -117,7 +117,6 @@ export class DirectoryComponent implements OnInit, OnDestroy {
                     this._view.setObs('loader', 'isVisible', false);
 
                 })
-
         }
     }
 
@@ -173,5 +172,4 @@ export class DirectoryComponent implements OnInit, OnDestroy {
         }
 
     }
-
 }

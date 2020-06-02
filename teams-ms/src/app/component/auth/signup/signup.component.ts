@@ -23,7 +23,7 @@ export class SignUpComponent implements OnInit {
     async signUp(){
         
         this._view.setObs('loader','isVisible', true);
-        this._view.setObs('navbar','isVisible', false);
+
 
         const logreq = await this._http.POST('/auth/register', {userName: this.userName, password: this.password})
         .toPromise()
@@ -37,7 +37,6 @@ export class SignUpComponent implements OnInit {
                         else {alert("Error Redirecting")}
 
                         this._view.setObs('loader','isVisible', false);
-                        this._view.setObs('navbar','isVisible', true);
                     });
                 })
                 .catch((err)=>{
@@ -49,7 +48,7 @@ export class SignUpComponent implements OnInit {
                 alert('User Information is wrong');
             }
             this._view.setObs('loader','isVisible', false);
-            this._view.setObs('navbar','isVisible', true);
+          
         });
     }
 

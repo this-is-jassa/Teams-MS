@@ -5,11 +5,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable()
 export class DataService {
 
-    private userData: any = {};
-    private following: any[] =[];
-
-    private $userdata = new BehaviorSubject(this.userData);
-    private $followingData = new BehaviorSubject(this.following);
+    private $userdata = new BehaviorSubject({});
+    private $followingData = new BehaviorSubject([]);
 
     constructor(private _http: HttpService) {}
 
@@ -19,10 +16,8 @@ export class DataService {
     }
 
     reset() {
-        this.userData = {};
-        this.following = [];
-        this.$userdata.next(this.userData);
-        this.$followingData.next(this.following);
+        this.$userdata.next({});
+        this.$followingData.next([]);
     }
 
     getUser(): Observable<any> {
@@ -30,8 +25,9 @@ export class DataService {
     }
 
     setUser(key: string, value: any): void {
-        this.userData[key] = value;
-        this.$userdata.next(this.userData);
+        let userData = this.$userdata.value;
+        userData[key] = value;
+        this.$userdata.next(userData);
     }
 
     getFollowing(): Observable<any> {
@@ -39,15 +35,13 @@ export class DataService {
     }
 
     setFollowing(following) {
-        this.following = [...following];
-        this.$followingData.next(following);
+        this.$followingData.next([...following]);
     }
 
     async fetchUser() {
         try {
             const userReq = await this._http.GET('/users/get').toPromise();
-            this.userData = userReq.data;
-            this.$userdata.next(this.userData);
+            this.$userdata.next(userReq.data);
             
         }
         catch (err) {
@@ -58,11 +52,11 @@ export class DataService {
     async fetchfollowing() {
         
         try {
-
-            const followingReq = await this._http.GET('/users/get/following').toPromise();
-            
-            this.following = [...followingReq.data.following];
-            this.$followingData.next(this.following);
+            const {userName} =  this.$userdata.getValue();
+ 
+            const followingReq = await this._http.GET(`/users/following/${userName}`).toPromise();
+            console.log(followingReq)      
+            this.$followingData.next([...followingReq.data.following]);
 
         } catch(err) {
             console.log("error loading following")

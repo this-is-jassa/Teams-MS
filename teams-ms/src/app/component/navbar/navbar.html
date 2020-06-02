@@ -1,6 +1,5 @@
-<nav *ngIf="isVisile">
+<nav *ngIf="!['/auth/signin', '/auth/signup'].includes(currentUrl)">
     <div id="wrapper">
-        <!-- <img alt="..." height="400px" width="400px" class="" src="../../../assets/images/logo2.png" /> -->
 
         <h6>
             <img alt="..." class="avatar mr-1" src="../../../assets/images/logo.png" />
@@ -8,7 +7,7 @@
         </h6>
 
         <div id="userInfo">
-            <img alt="..." class="avatar avatar-lg mr-1" src="../../../assets/images/profile.jpg" />
+            <img alt="..." class="avatar avatar-lg mr-1" [src]="avatars[userData.avatar]" />
 
             <div style="color: white;">
                 {{userData?.userName}}
@@ -18,14 +17,14 @@
         <hr style="width: 40%; margin-bottom: 10px;">
 
         <ul>
-            <li class="active">
+            <a [ngClass]="{'active': currentUrl==='/home'}" href="home">
                 <i class="material-icons">
                     bar_chart
                 </i>
                 <span style="text-align: center;">
                     Dashboard
                 </span>
-            </li>
+            </a>
 
             <li data-toggle="modal" data-target="#findUsers">
                 <i class="material-icons">
@@ -48,14 +47,14 @@
             </li>
 
 
-            <li>
+            <a [ngClass]="{'active': currentUrl=== ('/profile/'+userData.userName) }" [href]="'profile/'+userData.userName">
                 <i class="material-icons">
                     account_circle
                 </i>
-                <span style="text-align: center;">
+                <span style="text-align: center; ">
                     Profile
                 </span>
-            </li>
+            </a>
             <li id="settings">
                 <i class="material-icons">
                     settings

@@ -5,32 +5,32 @@
 
     <div class="card p-3">
 
-            <h3 class="pt-2">Edit</h3>
+        <h3 class="pt-2">Edit</h3>
 
-            <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Project Name</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputEmail3" placeholder="{{projectName}}" disabled>
-                </div>
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Project Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputEmail3" placeholder="{{projectName}}" disabled>
             </div>
-            <div class="form-group row">
-                <label for="inputEmail33" class="col-sm-2 col-form-label">Discription</label>
-                <div class="col-sm-10">
-                    <textarea [(ngModel)]="formsData.discription" type="text" class="form-control" name="disc"
-                        id="inputEmail33" placeholder="Discription" rows="3" [disabled]="role === 'Developer'"> </textarea>
-                </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputEmail33" class="col-sm-2 col-form-label">Discription</label>
+            <div class="col-sm-10">
+                <textarea [(ngModel)]="formsData.discription" type="text" class="form-control" name="disc"
+                    id="inputEmail33" placeholder="Discription" rows="3" [disabled]="role === 'Developer'"> </textarea>
             </div>
+        </div>
 
-            <div class="form-group row">
-                <label for="duedate" class="col-sm-2 col-form-label" >Due Date</label>
-                <div class="col-sm-10">
-                    <span>
-                        {{project?.endingDate | date}}
-                    </span>
-                    <input [(ngModel)]="formsData.endingDate" class="form-control" id="duedate" type="date"
-                        name="dueDate" [disabled]="role === 'Developer'">
-                </div>
+        <div class="form-group row">
+            <label for="duedate" class="col-sm-2 col-form-label">Due Date</label>
+            <div class="col-sm-10">
+                <span>
+                    {{project?.endingDate | date}}
+                </span>
+                <input [(ngModel)]="formsData.endingDate" class="form-control" id="duedate" type="date" name="dueDate"
+                    [disabled]="role === 'Developer'">
             </div>
+        </div>
 
 
     </div>
@@ -73,7 +73,8 @@
         <div class="form-group row">
             <div class="col-sm-2"><strong>Quit Project</strong></div>
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-sm btn-danger mt-2">Quit This project</button>
+                <button type="submit" class="btn btn-sm btn-danger mt-2" [disabled]="role === 'Owner'">Quit This
+                    project</button>
             </div>
         </div>
 
@@ -87,58 +88,63 @@
         </div>
     </div>
 
-</div>
 
-<hr>
+    <hr>
 
-<div class="card p-3">
-    <h3>Members</h3>
-    <div class="form-group row">
-        
-        <div class="col-sm-10 ">
-    
-            <div class="form-group-users" style="overflow: visible; max-height: 300px; overflow: scroll;">
-    
-                <button type="button" class="btn btn-primary btn-sm mb-3" data-toggle="modal" data-target="#addmembers" [disabled]="role === 'Developer'">
-                    + Add Member
-                </button>
-    
-    
-                <div class="my-3" *ngFor="let item of project?.members; let index = index">
-    
-                    <span class="p-2 mr-3">{{index+1}}</span>
-                    <img alt="Claire Connors" [src]="userImages[item.avatar]" class="avatar mr-2 ml-1"
-                        style="transform: scale(1.2); " />
-                    <span class="h6 mb-0 mx-1"> {{item.name}} </span>
-    
-                    <span class="badge badge-pill badge-dark">{{item.permission}}</span>
-    
-                    <div class="btn-group mx-5">
-                        <button type="button" class="btn btn-primary btn-sm btn-sm dropdown-toggle px-3"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                            
-                            [disabled]="item.permission=== 'Owner' || role === 'Developer'">
-                            {{item.permission}}
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#" (click)="changePermission('Admin', index)">Admin</a>
-                            <a class="dropdown-item" href="#" (click)="changePermission('Developer' ,index)">Developer</a>
-                        </div>
-                    </div>
-    
-                    <button (click)="deleteUser(item)" type="button" class="btn btn-danger btn-sm my-auto"
-                        [disabled]="role === 'Developer' || item.permission=== 'Owner'" >
-                        Delete
+    <div class="card p-3">
+        <h3>Members</h3>
+        <div class="form-group row">
+
+            <div class="col-sm-10 ">
+
+                <div class="form-group-users" style="overflow: visible; max-height: 300px; overflow: scroll;">
+
+                    <button type="button" class="btn btn-primary btn-sm mb-3" data-toggle="modal"
+                        data-target="#addmembers" [disabled]="role === 'Developer'">
+                        + Add Member
                     </button>
-    
+
+
+                    <div class="my-3" *ngFor="let item of project?.members; let index = index">
+
+                        <span class="p-2 mr-3">{{index+1}}</span>
+                        <img alt="Claire Connors" [src]="userImages[item.avatar]" class="avatar mr-2 ml-1"
+                            style="transform: scale(1.2); " />
+                        <span class="h6 mb-0 mx-1"> {{item.name}} </span>
+
+                        <span class="badge badge-pill "
+                            [ngClass]="{'badge-dark': item.permission ==='Owner', 'badge-warning': item.permission ==='Admin', 'badge-secondary': item.permission ==='Developer'}">{{item.permission}}</span>
+
+                        <div class="btn-group mx-5">
+                            <button type="button" class="btn btn-sm btn-primary btn-sm dropdown-toggle px-3"
+                                
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                [disabled]="item.permission=== 'Owner' || role === 'Developer'" style="width: 150px;">
+                                {{item.permission}}
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" (click)="changePermission('Admin', index)">Admin</a>
+                                <a class="dropdown-item" (click)="changePermission('Developer' ,index) ">Developer</a>
+                            </div>
+                        </div>
+
+                        <button (click)="deleteUser(item)" type="button" class="btn btn-danger btn-sm my-auto"
+                            [disabled]="role === 'Developer' || item.permission=== 'Owner'">
+                            Delete
+                        </button>
+
+                    </div>
                 </div>
+
             </div>
-    
         </div>
     </div>
-</div>
 
-<button class="btn btn-danger" [disabled]="['Admin', 'Developer'].includes(role)" (click)="delete()">Delete Project</button>
+    <button class="btn btn-danger" [disabled]="['Admin', 'Developer'].includes(role)" (click)="delete()">Delete
+        Project</button>
+
+
+</div>
 
 
 <!-- Modal -->
