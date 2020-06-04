@@ -8,7 +8,7 @@ module.exports = {
             const { userName } = req.user;
 
             const user = await userModel.findOne({ userName: userName })
-            .select("userName projects notify avatar")
+            .select("userName projects notify avatar lastActive")
             .slice('notify', -40)
             .populate({
                 path: 'projects',
@@ -22,6 +22,13 @@ module.exports = {
         } catch(err) {
             res.status(500).json({ success: false, message: 'Cannot fetch user' }); console.error(err);
         }
+    },
+
+    getUser: async(req, res, next) => {
+
+        const {userName} = req.params;
+        const user = await userModel.findOne({userName: userName}).select('userName _id email bio lastActive avatar');
+        res.status(200).json({data: user});
     },
     
     search: async (req, res, next) => {
@@ -59,8 +66,10 @@ module.exports = {
                     followers: _id
                 },
                 $push: {
-                    type: 'Follow',
-                    message: userName + 'just stared following you'
+                    notify: {
+                        type: 'Follow',
+                        message: userName + ' just stared following you.'
+                    }
                 }
             }
 
@@ -95,7 +104,7 @@ module.exports = {
             const b = userModel.findOneAndUpdate({_id: userId}, payload2);
 
             await Promise.all([a,b])
-
+          
             res.status(200).json({success: true});
         }
         catch(err) {
@@ -105,7 +114,7 @@ module.exports = {
 
     getFollowing: async (req, res, next) => {
         try{
-            const { userName } = req.user;
+            const { userName } = req.params;
             const skip = 0;
             const limit = 20;
         
@@ -116,12 +125,13 @@ module.exports = {
             .populate({
                 path: 'following',
                 model: 'users',
-                select: 'userName _id avatar'
+                select: 'userName _id avatar lastActive'
             });
 
             const length = userModel.aggregate([{$match: {userName: userName}}, {$project: {following: {$size: '$following'}}}]);
             
             const result = await Promise.all([following, length]);
+            
  
             res.status(200).json({success: true, data: result[0], length: result[1][0].following});
 
@@ -141,13 +151,13 @@ module.exports = {
             .populate({
                 path: 'followers',
                 model: 'users',
-                select: 'userName _id avatar'
+                select: 'userName _id avatar lastActive'
             });
 
             const length = userModel.aggregate([{$match: {userName: userName}}, {$project: {followers: {$size: '$followers'}}}]);
 
             const result = await Promise.all([followers, length]);
-            // console.log(result);
+            
 
             res.status(200).json({data: result[0], length: result[1][0].followers});
 
@@ -158,12 +168,20 @@ module.exports = {
         }
     },
 
+    isFollowing: async (req, res, next) => {
+        const {userName} = req.user;
+        const {userId} = req.params;
+
+        const isFollowing = await userModel.findOne({userName: userName, following: userId});
+        
+        res.status(200).json({data: !!isFollowing});
+    },
+
     NotifySeen: async (req, res, next) => {
 
         try {
             const {userName} = req.user;
 
-            console.log(userName );
             const deleteNot = await userModel.findOneAndUpdate({userName: userName}, {notify: []});
     
             res.status(200).json({success: true});

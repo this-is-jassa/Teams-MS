@@ -7,7 +7,8 @@ module.exports = {
 
     login: async (req, res, next) => {
 
-        const { userName, password } = req.body;
+        let { userName, password } = req.body;
+        userName = userName.replace(' ', '-');
 
         userModel.findOne({ userName: userName }, (err, user) => {
             if (err) { console.error(err); res.status(500).json(err); return };
@@ -18,7 +19,7 @@ module.exports = {
                     if (!isMatch) { res.status(200).json({msg: "Password is incorrect " }); return };
     
 
-                    admin.auth().createCustomToken(user.userName)
+                    admin.auth().createCustomToken(user.userName + ' ' +user._id)
                                 .then(customToken => {
 
                                     res.status(200).json({success: true ,token: customToken});
@@ -38,7 +39,9 @@ module.exports = {
 
     register: async (req, res, next) => {
 
-        const { userName, password, avatar } = req.body;
+        let { userName, password, avatar } = req.body;
+        
+        userName = userName.replace(' ', '-');
 
         const newUser = new userModel({
             userName: userName,
@@ -54,7 +57,7 @@ module.exports = {
 
             user.password = "";
 
-            admin.auth().createCustomToken(user.userName)
+            admin.auth().createCustomToken(user.userName + ' ' +user._id )
             .then(customToken => {
 
                 res.status(200).json({success: true ,token: customToken});

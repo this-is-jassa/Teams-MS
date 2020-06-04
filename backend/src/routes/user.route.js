@@ -12,7 +12,7 @@ const userMiddleware = require('../middlewares/user.middleware');
 
 */
 route.get('/get', verifyUser, userMiddleware.get);
-
+route.get('/get/:userName', verifyUser ,userMiddleware.getUser);
 
 /**
 
@@ -23,7 +23,7 @@ route.get('/get', verifyUser, userMiddleware.get);
 * @Access Only user can acccess its own 
 
 */
-route.get('/follow', verifyUser, userMiddleware.follow_user);
+route.post('/follow', verifyUser, userMiddleware.follow_user);
 
 
 /**
@@ -61,6 +61,8 @@ route.post('/unfollow', verifyUser, userMiddleware.unfollow_user);
 
 */
 route.get('/following/:userName', verifyUser, userMiddleware.getFollowing);
+route.get('/isFollowing/:userId', verifyUser, userMiddleware.isFollowing);
+
 route.get('/followers/:userName', verifyUser, userMiddleware.getFollowers);
 
 

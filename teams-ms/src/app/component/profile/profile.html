@@ -8,12 +8,16 @@
                     <h2 style="font-family: 'Bai Jamjuree', sans-serif;">
 
                         {{userName}}
-                        <button class="btn btn-round float-right" (click)="settings()">
+                        <button *ngIf="userName === userData?.userName" class="btn btn-round float-right"
+                            (click)="settings()">
                             <i class="material-icons">settings</i>
                         </button>
+                        <button (click)="friendAction()" *ngIf="userName !== userData?.userName"
+                            class="btn btn-outline-primary btn-sm float-right">
+                            {{isFollowing? 'Unfollow': '+ Follow'}}
+                        </button>
                     </h2>
-                    <p class="lead">smndiwdw</p>
-
+                    <p class="lead">{{friendData?.bio}}</p>
 
 
                     <ul class="nav nav-tabs nav-fill" role="tablist">
@@ -23,9 +27,11 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#Followers" role="tab" aria-controls="members" aria-selected="false">
-                                Followers 
-                                <span class="badge badge-secondary ml-1" style="background-color: #F1F1F1; color: #575F69; font-weight: bold;">
+                            <a class="nav-link" data-toggle="tab" href="#Followers" role="tab" aria-controls="members"
+                                aria-selected="false">
+                                Followers
+                                <span class="badge badge-secondary ml-1"
+                                    style="background-color: #F1F1F1; color: #575F69; font-weight: bold;">
                                     {{followers.length}}
                                 </span>
                             </a>
@@ -34,7 +40,8 @@
                             <a class="nav-link" data-toggle="tab" href="#Following" role="tab" aria-controls="members"
                                 aria-selected="false">
                                 Following
-                                <span class="badge badge-secondary ml-1" style="background-color: #F1F1F1; color: #575F69; font-weight: bold;">
+                                <span class="badge badge-secondary ml-1"
+                                    style="background-color: #F1F1F1; color: #575F69; font-weight: bold;">
                                     {{following.length}}
                                 </span>
                             </a>
@@ -45,30 +52,87 @@
 
                         <div class="tab-pane fade show active" id="Overview" role="tabpanel"
                             data-filter-list="content-list-body">
-                            <div class="content-list">
 
+                            <div class="row">
+                                <div *ngFor="let project of projects" class="col-sm-12 col-lg-6">
+                                    <div class="card card-project">
+
+                                        <div class="card-body">
+
+                                            <div class="card-title">
+                                                <a [href]="'project/'+project.name">
+                                                    <h5>{{project.name}}</h5>
+                                                </a>
+                                            </div>
+                                            <hr>
+                                            <app-avatar-list (click)="showMembers(project.members)" [images]='avatars' data-toggle="modal"
+                                                data-target='#projectMembers'>
+                                            </app-avatar-list>
+
+                                            <p>{{project.discription}}</p>
+                                            <div class="card-meta d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <i class="material-icons mr-1">playlist_add_check</i>
+                                                    <span class="text-small">-/-</span>
+                                                </div>
+                                                <span class="text-small">{{project.timeStamp | date}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="projects.length === 0" style="text-align: center; margin-top: 50px;">
+                                    <img style="width: 60%" src="../../../assets/images/noProject.svg" alt="..">
+                                </div>
                             </div>
+
+
+                            <!--end of task-->
 
                         </div>
                         <!--end of tab-->
 
 
                         <div class="tab-pane fade" id="Followers" role="tabpanel" data-filter-list="content-list-body">
-                            <div class="content-list">
-
+                            <div class="content-list ">
+                                <app-users-list-big [title]='"Followers"' [members]="followers.list">
+                                </app-users-list-big>
+                                <div *ngIf="followers.length === 0" style="text-align: center; margin-top: 80px;">
+                                    <img style="width: 400px" src="../../../assets/images/adduser.svg" alt="...">
+                                </div>
                             </div>
 
                         </div>
+
+
                         <div class="tab-pane fade" id="Following" role="tabpanel" data-filter-list="content-list-body">
-                            <div class="content-list">
+                            <div class="content-list ">
+                                <app-users-list-big [title]='"Following"' [members]="following.list">
+                                </app-users-list-big>
+                                <div *ngIf="following.length === 0" style="text-align: center; margin-top: 80px;">
+                                    <img style="width: 400px;" src="../../../assets/images/adduser.svg" alt="...">
+                                </div>
 
                             </div>
-
                         </div>
                     </div>
 
 
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="projectMembers" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <app-users-list-big [members]='modelMembers'></app-users-list-big>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

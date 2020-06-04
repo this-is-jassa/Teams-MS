@@ -16,8 +16,8 @@ module.exports = {
         admin.auth().verifyIdToken(token)
             .then((decodedToken) => {
 
-                let uid = decodedToken.uid;
-                req.user = { userName: uid };
+                let uid = decodedToken.uid.split(' ');
+                req.user = { userName: uid[0], _id: uid[1] };
                 next();
 
             })

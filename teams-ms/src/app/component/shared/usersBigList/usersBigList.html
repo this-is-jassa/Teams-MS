@@ -1,6 +1,6 @@
 <div class="row content-list-head">
     <div class="col-auto">
-        <h3>Members</h3>
+        <h3>{{title}}</h3>
     </div>
     <form class="col-md-auto">
         <div class="input-group input-group-round">
@@ -19,14 +19,18 @@
 <div class="content-list-body row">
 
     <div class="col-6" *ngFor="let item of members">
-        <a class="media media-member" [href]="'profile/' + item.name">
+        <a class="media media-member" [href]="'profile/' + (item.name || item.userName)">
             <img alt="Claire Connors" [src]="avatars[item.avatar]"
                 class="avatar avatar-lg" />
             <div class="media-body">
-                <h6 class="mb-0" data-filter-by="text">{{item.name}} <strong style="font-size: 10px; color: rgb(197, 197, 197);">{{' - ' + item.status.value}}</strong> </h6>
+                <h6 class="mb-0" data-filter-by="text">{{item.name || item.userName}} <strong *ngIf="item.status" style="font-size: 10px; color: rgb(197, 197, 197);">{{' - ' + item.status.value}}</strong> </h6>
                 
-                <span data-filter-by="text" class="badge badge-pill badge-primary my-1" [ngClass]="badgeStyleClass[item.permission]">
+                <span *ngIf="item.permission" data-filter-by="text" class="badge badge-pill badge-primary my-1" [ngClass]="badgeStyleClass[item.permission]">
                     {{item.permission}}
+                </span>
+                <span *ngIf="!item.permission" data-filter-by="text" class="badge badge-pill badge-secondary my-1" >
+                    Active
+                    {{item.lastActive | timeAgo}}
                 </span>
                 
             </div>

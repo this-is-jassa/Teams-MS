@@ -3,6 +3,7 @@ import { HttpService } from 'src/app/services/http.service';
 import { ViewService } from 'src/app/services/view.service';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
     selector: 'app-project-settings',
@@ -14,6 +15,7 @@ export class SettingsComponent implements OnInit {
     projectName = '';
     private projectData: any;
     role: string ='Developer';
+    userInProject;
 
     resetState: any;
 
@@ -50,9 +52,11 @@ export class SettingsComponent implements OnInit {
         isFreeze: true,
     }
 
-    constructor(private _http: HttpService, private _view: ViewService, private activatedRoute: ActivatedRoute) { }
+    constructor(private _http: HttpService, private _view: ViewService, private activatedRoute: ActivatedRoute, private _data: DataService) { }
 
     ngOnInit(): void {
+        this._data.refresh()
+        
         this.projectName = this.activatedRoute.snapshot.paramMap.get("name");
 
         this.fetchProject();
@@ -87,7 +91,8 @@ export class SettingsComponent implements OnInit {
 
         const response = await this._http.GET('/projects/get/' + this.projectName).toPromise();
         this.project = response.data;
-        this.role = response.role;
+        this.userInProject = response.userInProject;
+        this.role = response.userInProject.permission;
 
         this._view.setObs('loader', 'isVisible', false);
     }

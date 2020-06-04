@@ -14,12 +14,11 @@ module.exports = {
         }
 
         try {
-            const { _id } = req.user.project;
+            const { _id, freeze } = req.user.project;
             const { fileName, fileType, codeText, parentDirId } = req.body;
 
-            console.log(fileName +' '+ fileType + ' ' + codeText + ' ' + parentDirId)
 
-            if([fileType, parentDirId].includes(undefined)) throw('Error occured')
+            if([fileType, parentDirId].includes(undefined) || freeze.isFreeze) throw('Error occured')
 
             const dirId = mongo.Types.ObjectId();
 
@@ -108,13 +107,14 @@ module.exports = {
 
     update_dir: async (req, res, next) => {
 
-        if (!req.user.permission) {
+        const { _id, freeze } = req.user.project;
+
+        if (!req.user.permission || freeze.isFreeze) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
 
         try {
-            const { _id } = req.user.project;
             const { dirId, newName } = req.body;
 
             const directory = await directoryModel.findOne({ projectId: _id, _id: dirId });
@@ -162,12 +162,14 @@ module.exports = {
 
 
     update_file: async (req, res, next) => {
-        if (!req.user.permission) {
+
+        const { _id, freeze } = req.user.project;
+
+        if (!req.user.permission || freeze.isFreeze) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
         try {
-            const { _id } = req.user.project;
             const { fileId, codeText, dirId } = req.body;
 
             const directory = await directoryModel.findOne({ projectId: _id, _id: dirId });
@@ -209,14 +211,16 @@ module.exports = {
     },
 
     delete_file: async(req, res, next) => {
-        if (!req.user.permission) {
+        
+        const {_id, freeze} = req.user.project;
+        
+        if (!req.user.permission || freeze.isFreeze) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
 
         try{
             const {userName} = req.user;
-            const {_id} = req.user.project;
             const {fileId} = req.body;
 
         }

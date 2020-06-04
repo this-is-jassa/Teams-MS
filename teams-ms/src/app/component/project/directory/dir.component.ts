@@ -17,6 +17,8 @@ export class DirectoryComponent implements OnInit, OnDestroy {
     $projectData = new BehaviorSubject<any>(null);
 
 
+    @Input() freeze ;
+
     @Input() set projectData(data: any) {
         this.$projectData.next(data);
     };

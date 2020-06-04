@@ -10,6 +10,26 @@ const mongo = require('mongoose');
 
 module.exports = {
 
+
+    getAll: async (req, res, next) => {
+        
+        const myName = req.user.userName;
+        const {userName} = req.params;
+        
+        let where = {
+            "members.name": userName
+        }
+        
+        if(myName !== userName) {
+            where.private = false
+        }
+
+        const projects = await projectModel.find(where).select("members discription name _id timeStamp endingDate dir")
+
+        res.status(200).json(projects);
+
+    },
+
     get: async (req, res, next) => {
 
         if (!req.user.permission) {
@@ -23,7 +43,7 @@ module.exports = {
             const project = await projectModel.findOne({ name: name })
                 .select('-stickey');
 
-            res.status(200).json({ success: true, data: project, role: req.role });
+            res.status(200).json({ success: true, data: project, userInProject: req.userInProject });
 
         }
         catch (err) {
@@ -508,7 +528,7 @@ module.exports = {
 
 
                 projectModel.findOne({ name: name })
-                    .select("_id private name members stickey")
+                    .select("_id private name members stickey freeze")
                     .exec((err, response) => {
                         if (err || response === null) { res.status(400).json({ success: false, message: "Error Loading Projects" }); console.log(err); return; }
 
@@ -531,7 +551,7 @@ module.exports = {
 
                                 req.user.permission = true;
 
-                                req.role = member.permission;
+                                req.userInProject = member;
 
                             } else {
                                 req.user.permission = false;
@@ -539,7 +559,7 @@ module.exports = {
                         } else {
                             req.user.permission = true;
 
-                            req.role = member.permission;
+                            req.userInProject = member;
 
                         }
 

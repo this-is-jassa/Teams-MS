@@ -19,7 +19,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     userData: any;
     projectData: any;
-    role: string;
+    userInProject: any;
 
     $userData: Subscription;
 
@@ -37,20 +37,29 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 this.userData = me;
             });
 
-            this._http.GET('/projects/get/' + this.projectName)
-                .toPromise()
-                .then(project => {
-                    this.projectData = project.data;
-                    this.role = project.role
-                });
+        this._http.GET('/projects/get/' + this.projectName)
+            .toPromise()
+            .then(project => {
+                this.projectData = project.data;
+                this.userInProject = project.userInProject;
+                console.log(!!this.userInProject)
+            });
 
     }
 
     settings(): void {
-        this._http.REDIRECT(window.location.pathname+'/settings')
+        this._http.REDIRECT(window.location.pathname + '/settings')
     }
 
     ngOnDestroy(): void {
         this.$userData.unsubscribe();
+    }
+
+    async OnstatusChanged() {
+        await this._http.POST('/projects/update/member/status', {
+            value: this.userInProject.status.value,
+            name: this.projectName
+        })
+            .toPromise();
     }
 }

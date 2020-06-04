@@ -8,12 +8,13 @@ import { NewProjectComponent } from '../component/shared/model/newProject/newPro
 import { ChatComponent } from '../component/shared/chat/chat.component';
 import { PersonalNotes } from '../component/personalNotes/personalNotes.component';
 import { SelectUsersComponent } from '../component/shared/selectUsers/selectUsers.component';
+import { PipesModule } from './pipes.module';
 
 
 
 @NgModule({
     declarations: [ChecklistComponent, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes, SelectUsersComponent ],
-    imports: [ CommonModule, FormsModule ],
+    imports: [ CommonModule, FormsModule, PipesModule ],
     exports: [ChecklistComponent, FormsModule, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes, SelectUsersComponent], 
     providers: [],
 })

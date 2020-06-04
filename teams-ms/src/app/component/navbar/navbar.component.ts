@@ -42,7 +42,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-
         this.$userData = this._data.getUser()
             
             .subscribe(data => {
@@ -60,7 +59,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy(): void {
-        this.$isVisibe.unsubscribe();
+        
         this.$userData.unsubscribe();
     }
 

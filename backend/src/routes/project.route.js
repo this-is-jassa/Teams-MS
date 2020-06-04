@@ -9,13 +9,28 @@ const $role = require('../../config/config').role;
 
 * @ROUTE GET /get
 
-* @DESC Get your project
+* @DESC Get a perticular project
 
 * @Access Only members can access it
 
 */
 
 route.get('/get/:name', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], false) ,projectMiddleware.get);
+
+
+/**
+
+* @ROUTE GET /:userName
+
+* @DESC Get all of the public projects of a user and all projects of its own
+
+* @Access Only members can access it
+
+*/
+
+route.get('/:userName', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.getAll);
+
+
 
 /**
 
@@ -82,7 +97,7 @@ route.post('/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.p
 
 */
 // route.post('/update/stickey', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.update_stickey_req); // D
-route.post('/update/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ADMIN, $role.OWNER], true), projectMiddleware.updateMember, projectMiddleware.projectLogs); 
+route.post('/update/member', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.updateMember, projectMiddleware.projectLogs); 
 
 
 

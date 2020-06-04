@@ -7,11 +7,12 @@ export class DataService {
 
     private $userdata = new BehaviorSubject({});
     private $followingData = new BehaviorSubject([]);
+    private currentUserName = '';
 
     constructor(private _http: HttpService) {}
 
     async refresh() {
-        this.fetchUser();
+        await this.fetchUser();
         this.fetchfollowing();
     }
 
@@ -19,7 +20,7 @@ export class DataService {
         this.$userdata.next({});
         this.$followingData.next([]);
     }
-
+ 
     getUser(): Observable<any> {
         return this.$userdata
     }
@@ -40,7 +41,11 @@ export class DataService {
 
     async fetchUser() {
         try {
+            
+            if(this.currentUserName === undefined) {return}
+
             const userReq = await this._http.GET('/users/get').toPromise();
+            this.currentUserName = userReq.data.userName;
             this.$userdata.next(userReq.data);
             
         }
@@ -51,11 +56,9 @@ export class DataService {
 
     async fetchfollowing() {
         
-        try {
-            const {userName} =  this.$userdata.getValue();
- 
-            const followingReq = await this._http.GET(`/users/following/${userName}`).toPromise();
-            console.log(followingReq)      
+        try { 
+
+            const followingReq = await this._http.GET(`/users/following/${this.currentUserName}`).toPromise(); 
             this.$followingData.next([...followingReq.data.following]);
 
         } catch(err) {

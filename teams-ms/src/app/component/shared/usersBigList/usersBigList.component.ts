@@ -10,6 +10,7 @@ import {environment} from 'src/environments/environment';
 export class UsersBigListComponent implements OnInit {
     
     @Input() members: any[]; 
+    @Input() title = 'Members';
     public badgeStyleClass = {
         'Owner': 'badge-dark',
         'Admin': 'badge-warning',
@@ -21,6 +22,5 @@ export class UsersBigListComponent implements OnInit {
     constructor() { }
 
     ngOnInit(): void {
-        console.log(this.members)
     }
 }

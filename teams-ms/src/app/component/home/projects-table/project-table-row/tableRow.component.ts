@@ -33,7 +33,7 @@ export class ProjectTableRowComponent implements OnInit {
     constructor(private _http: HttpService) { }
 
     ngOnInit(): void {
-
+       
         for (const item of this.members) {
 
             if (item.name === this.userName) {
@@ -48,15 +48,12 @@ export class ProjectTableRowComponent implements OnInit {
     }
 
     async OnstatusChanged() {
-        console.log(this.userInProjectData.status.value);
         
         const response = await this._http.POST('/projects/update/member/status', {
             value: this.userInProjectData.status.value,
             name: this.projectData.name
         })
         .toPromise();
-
-        console.log(response)
 
     }
 

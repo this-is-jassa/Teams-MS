@@ -1,12 +1,19 @@
-<div class="container ">
+<div class="container " >
     <div class="row justify-content-center">
+        
+        <div *ngIf="!!userInProject" class="col-12" style="text-align: end;" >
+            <select  style="max-width: 150px;" [(ngModel)]="userInProject?.status.value" (ngModelChange)="OnstatusChanged()" class="custom-select" id="inputGroupSelect02">
+                <option *ngFor="let status of [ 'Break', 'Working','Do Not Disturb']">{{status}}</option>
+            </select>
+        </div>
+
         <div class="col-lg-12 col-xl-12">
 
             <div class="page-header">
                 <h2 style="font-family: 'Bai Jamjuree', sans-serif;">
 
                     {{projectName}}
-                    <button class="btn btn-round float-right" (click)="settings()">
+                    <button *ngIf="!!userInProject" class="btn btn-round float-right" (click)="settings()">
                         <i class="material-icons">settings</i>
                     </button>
                 </h2>
@@ -35,39 +42,38 @@
 
             <ul class="nav nav-tabs nav-fill" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" href="#tasks" role="tab" aria-controls="projects"
+                    <a class="nav-link active"  data-toggle="tab" href="#tasks" role="tab" aria-controls="projects"
                         aria-selected="true">Project</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#directory" role="tab" aria-controls="members"
+                    <a class="nav-link" [ngClass]="{'disabled': !!!userInProject}" data-toggle="tab" href="#directory" role="tab" aria-controls="members"
                         aria-selected="false">Tasks</a>
                 </li>
-                <li class="nav-item">
+                <li [ngClass]="{'disabled': !!!userInProject}" class="nav-item">
                     <a class="nav-link" data-toggle="tab" href="#Logs" role="tab" aria-controls="members"
                         aria-selected="false">Logs</a>
                 </li>
-
             </ul>
 
 
             <div class="tab-content ">
                 <div class="tab-pane fade show active card" id="tasks" role="tabpanel">
 
-                    <app-project-dir [projectData]="projectData"></app-project-dir>
+                    <app-project-dir [freeze]="!!!userInProject " [projectData]="projectData"></app-project-dir>
 
                 </div>
                 <!--end of tab-->
 
 
-                <div class="tab-pane fade" id="directory" role="tabpanel">
+                <div *ngIf="!!userInProject" class="tab-pane fade" id="directory" role="tabpanel">
 
-                    <app-tasks [projectData]="projectData" [userName]="userData.userName" [role]="role"></app-tasks>
+                    <app-tasks [projectData]="projectData" [userName]="userData.userName" [role]="userInProject?.permission"></app-tasks>
 
                 </div>
 
-                <div class="tab-pane fade" id="Logs" role="tabpanel">
+                <div *ngIf="!!userInProject" class="tab-pane fade" id="Logs" role="tabpanel">
 
-                    <app-logs *ngIf="projectName !== ''" [projectName]='projectName' ></app-logs>
+                    <app-logs *ngIf="projectName !== ''" [projectName]='projectName'></app-logs>
 
                 </div>
             </div>

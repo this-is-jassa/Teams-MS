@@ -47,7 +47,8 @@
             </li>
 
 
-            <a [ngClass]="{'active': currentUrl=== ('/profile/'+userData.userName) }" [href]="'profile/'+userData.userName">
+            <a [ngClass]="{'active': currentUrl=== ('/profile/'+userData.userName) }"
+                [href]="'profile/'+userData.userName">
                 <i class="material-icons">
                     account_circle
                 </i>
@@ -109,6 +110,8 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+
+
             <div *ngIf="userData.notify?.length > 0" style="text-align: right;" class="mr-1 p-1">
                 <span (click)="deleteNotify()" class="badge badge-pill badge-primary" style="cursor: pointer;">
                     <i style="font-size: 11px;" class="material-icons">
@@ -125,17 +128,18 @@
                         <ul class="avatars">
                             <li>
                                 <div class="avatar bg-primary">
-                                    <i class="material-icons">
-                                        {{ materialIcons[notif?.type] }}
-                                    </i>
+                                    <i class="material-icons">{{ materialIcons[notif?.type] }}</i>
                                 </div>
                             </li>
+                            <!-- <li>
+                                <img alt="..." src="..." class="avatar" />
+                            </li> -->
                         </ul>
                         <div class="media-body">
                             <div>
-                                <span>{{notif.message}} </span>
+                                <span>{{notif.message}}</span>
                             </div>
-                            <div class="text-small" style="text-align: right;">{{notif?.timeStamp | timeAgo}}</div>
+                            <span class="text-small">{{notif?.timeStamp | timeAgo}}</span>
                         </div>
                     </div>
                 </li>

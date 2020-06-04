@@ -63,7 +63,6 @@ export class HomeComponent implements OnInit {
             .then(res => {
                 if (res.success) {
                     this.personalNotesData = res.data.personalNotes;
-                    console.log(res);
                 }
                 else {
                     alert("error");

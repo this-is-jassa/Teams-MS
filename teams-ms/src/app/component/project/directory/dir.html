@@ -14,7 +14,7 @@
     <hr class="p-0 my-2">
 
     <div class="pb-2">
-        <button *ngIf="this.dirStructure.length >1" (click)="backDir()" class="btn btn-outline-light btn-sm mx-2">
+        <button *ngIf="this.dirStructure.length >1 || !freeze" (click)="backDir()" class="btn btn-outline-light btn-sm mx-2">
             <svg style="margin-bottom: 4px;" class="bi bi-arrow-left-short" width="1em" height="1em" viewBox="0 0 16 16"
                 fill="black" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -26,7 +26,7 @@
         </button>
         <span *ngIf="openedDir?.fileType === 'dir'">
 
-            <button style="font-size: 13px; color: black;" type="button" class="btn btn-outline-light btn-sm "
+            <button [disabled]="freeze" style="font-size: 13px; color: black;" type="button" class="btn btn-outline-light btn-sm " 
                 data-toggle="modal" data-target="#createFile">
                 <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-file-code " width="1.3em"
                     height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -39,8 +39,8 @@
                 </svg>
                 New File
             </button>
-            <button data-toggle="modal" data-target="#newDir" style="font-size: 13px; color: black;" type="button"
-                class="btn btn-outline-light btn-sm mx-2 ">
+            <button [disabled]="freeze" data-toggle="modal" data-target="#newDir" style="font-size: 13px; color: black;" type="button"
+                class="btn btn-outline-light btn-sm mx-2 " >
                 <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-folder-plus" width="1.3em"
                     height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -55,7 +55,7 @@
                 New directory
             </button>
             <button style="font-size: 12.5px; color: black;" type="button"
-                class="btn btn-outline-light btn-sm float-lg-right d-none d-lg-block">+ README</button>
+                class="btn btn-outline-light btn-sm float-lg-right d-none d-lg-block " [disabled]="freeze"  >+ README</button>
             <button style="font-size: 12.5px; color: black;" type="button"
                 class="btn btn-outline-light btn-sm mx-2 float-lg-right d-none d-lg-block" data-toggle="modal"
                 data-target="#findFile">
@@ -133,7 +133,7 @@
         </span>
 
         <span>
-            <button type="button" class="btn btn-primary btn-sm">+ READ ME</button>
+            <button type="button" class="btn btn-primary btn-sm" [disabled]="freeze">+ READ ME</button>
         </span>
     </div>
 
@@ -173,9 +173,6 @@
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content container m-2">
-
-
-
 
             <div class="input-group input-group-round mt-1">
                 <div class="input-group-prepend">

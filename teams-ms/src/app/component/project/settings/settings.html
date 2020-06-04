@@ -1,7 +1,5 @@
-<div class="container" style="margin-top: 30px;">
+<div *ngIf="!!userInProject" class="container" style="margin-top: 30px;">
     <h1 style="padding: 40px 0;">{{projectName}} Settings</h1>
-
-
 
     <div class="card p-3">
 
@@ -31,8 +29,6 @@
                     [disabled]="role === 'Developer'">
             </div>
         </div>
-
-
     </div>
 
     <div class="card p-3">
@@ -119,7 +115,7 @@
                             <button type="button" class="btn btn-sm btn-primary btn-sm dropdown-toggle px-3"
                                 
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                [disabled]="item.permission=== 'Owner' || role === 'Developer'" style="width: 150px;">
+                                [disabled]="item.permission=== 'Owner' || ['Developer', 'Admin'].includes(role)" style="width: 150px;">
                                 {{item.permission}}
                             </button>
                             <div class="dropdown-menu">
@@ -129,7 +125,7 @@
                         </div>
 
                         <button (click)="deleteUser(item)" type="button" class="btn btn-danger btn-sm my-auto"
-                            [disabled]="role === 'Developer' || item.permission=== 'Owner'">
+                            [disabled]=" role === 'Developer' || item.permission=== 'Owner'">
                             Delete
                         </button>
 
