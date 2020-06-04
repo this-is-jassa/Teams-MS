@@ -17,7 +17,7 @@
         <hr style="width: 40%; margin-bottom: 10px;">
 
         <ul>
-            <a [ngClass]="{'active': currentUrl==='/home'}" href="home">
+            <a [ngClass]="{'active': currentUrl==='/home'}" [routerLink]='["/home"]' >
                 <i class="material-icons">
                     bar_chart
                 </i>

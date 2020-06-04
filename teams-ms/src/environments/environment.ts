@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseApi: 'http://localhost:3000',
+  baseApi: '',
 
   firebaseConfig: {
     apiKey: "AIzaSyDD5kKr9o7fQ1fZj-sWPDQDaSd7bKqmCZ4",
@@ -25,11 +25,6 @@ export const environment = {
     'https://pipeline.mediumra.re/assets/img/avatar-female-3.jpg',
     'https://pipeline.mediumra.re/assets/img/avatar-male-3.jpg',
     'https://pipeline.mediumra.re/assets/img/avatar-female-4.jpg',
-    // 'https://pipeline.mediumra.re/assets/img/avatar-male-4.jpg',
-    // 'https://pipeline.mediumra.re/assets/img/avatar-female-5.jpg',
-    // 'https://pipeline.mediumra.re/assets/img/avatar-male-5.jpg',
-    // 'https://pipeline.mediumra.re/assets/img/avatar-female-6.jpg',
-    // 'https://pipeline.mediumra.re/assets/img/avatar-male-6.jpg'
 
   ]
 };
