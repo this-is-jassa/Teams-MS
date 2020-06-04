@@ -1,5 +1,15 @@
 <div *ngIf="!!userInProject" class="container" style="margin-top: 30px;">
-    <h1 style="padding: 40px 0;">{{projectName}} Settings</h1>
+    <h1 style="padding: 40px 0;">
+        {{projectName}} Settings
+
+        <img style="float: right; cursor: pointer;" class="avatar avatar-lg " [src]="userImages[userInProject.avatar]" alt=""
+            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+        <div  class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <img *ngFor="let img of userImages; let index = index" class="avatar" style="cursor: pointer; " (click)="changeAvatar(index)" onMouseOver="this.style.transform='scale(1.2)'" onMouseOut = "this.style.transform='scale(1)'" [src]="img" alt="..">
+           
+        </div>
+    </h1>
 
     <div class="card p-3">
 
@@ -69,7 +79,7 @@
         <div class="form-group row">
             <div class="col-sm-2"><strong>Quit Project</strong></div>
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-sm btn-danger mt-2" [disabled]="role === 'Owner'">Quit This
+                <button (click)="quit()" type="submit" class="btn btn-sm btn-danger mt-2" [disabled]="role === 'Owner'">Quit This
                     project</button>
             </div>
         </div>
@@ -113,9 +123,9 @@
 
                         <div class="btn-group mx-5">
                             <button type="button" class="btn btn-sm btn-primary btn-sm dropdown-toggle px-3"
-                                
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                [disabled]="item.permission=== 'Owner' || ['Developer', 'Admin'].includes(role)" style="width: 150px;">
+                                [disabled]="item.permission=== 'Owner' || ['Developer', 'Admin'].includes(role)"
+                                style="width: 150px;">
                                 {{item.permission}}
                             </button>
                             <div class="dropdown-menu">

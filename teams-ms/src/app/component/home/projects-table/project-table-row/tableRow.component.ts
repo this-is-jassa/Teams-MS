@@ -49,7 +49,7 @@ export class ProjectTableRowComponent implements OnInit {
 
     async OnstatusChanged() {
         
-        const response = await this._http.POST('/projects/update/member/status', {
+        const response = await this._http.POST('/projects/update/member/details', {
             value: this.userInProjectData.status.value,
             name: this.projectData.name
         })

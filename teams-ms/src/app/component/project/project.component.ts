@@ -56,7 +56,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
 
     async OnstatusChanged() {
-        await this._http.POST('/projects/update/member/status', {
+        await this._http.POST('/projects/update/member/details', {
             value: this.userInProject.status.value,
             name: this.projectName
         })

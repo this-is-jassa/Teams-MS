@@ -8,7 +8,7 @@ import * as firebase from "firebase";
 @Component({
     selector: 'app-sign-up',
     templateUrl: './signup.html',
-    styleUrls: ['./signup.scss']
+    styleUrls: ['../signin/signin.scss']
 })
 export class SignUpComponent implements OnInit {
 
@@ -36,13 +36,14 @@ export class SignUpComponent implements OnInit {
                         if(success) {this._http.REDIRECT('/home') }
                         else {alert("Error Redirecting")}
 
-                        this._view.setObs('loader','isVisible', false);
+                        // this._view.setObs('loader','isVisible', false);
                     });
                 })
                 .catch((err)=>{
                     console.log(err);
                     alert("Error, check the console");
                 })
+
 
             }else{
                 alert('User Information is wrong');

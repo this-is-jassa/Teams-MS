@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ViewService } from 'src/app/services/view.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -36,6 +35,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
             filter(e => e instanceof NavigationEnd)
         )
         .subscribe((val: any) => {
+            console.log(val.url);
             this.currentUrl = val.url;
         });
     }

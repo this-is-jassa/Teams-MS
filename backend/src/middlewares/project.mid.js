@@ -220,15 +220,27 @@ module.exports = {
         try {
             const { userName } = req.user;
             const { _id } = req.user.project;
-            const { value } = req.body;
+            const { value, avatar } = req.body;
 
-            if (req.user.project.freeze.isFreeze) { throw 'Account is Freeze' }
-
-            const payload = {
-                $set: {
-                    'members.$.status.value': value
-                }
+            // if (req.user.project.freeze.isFreeze) { throw 'Account is Freeze' }
+            let payload = {
+                $set: {}
             }
+            let logMessage = {
+                type: 'Project',
+                message: '',
+            }
+            
+            if(avatar !== undefined) {
+                payload.$set['members.$.avatar'] = avatar;
+                logMessage.message = ` ${userName} changed his avatar`;
+            }
+
+            if(value !== undefined) {
+                payload.$set['members.$.status.value'] = value;
+                logMessage.message = ` ${userName} changed its status to ${value} `;
+            }
+   
 
 
             await projectModel.findOneAndUpdate({ _id: _id, 'members.name': userName }, payload);

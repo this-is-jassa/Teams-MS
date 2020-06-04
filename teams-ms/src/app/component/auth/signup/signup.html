@@ -1,4 +1,4 @@
-<div class="main">
+<!-- <div class="main">
     <p class="sign" align="center">Sign up</p>
     <form class="form1">
         <input class="un" name="userName" [(ngModel)]="userName" required minlength="1" maxlength="16" type="text" align="center" placeholder="Username">
@@ -7,4 +7,69 @@
         <a class="submit" (click)="signUp()" align="center">Sign up</a>
         <p class="create" align="center"><a routerLink ='/auth/signin' routerLinkActive="active">Sign in</a> </p>
     </form>
+</div> -->
+
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <div class="login100-pic js-tilt" data-tilt>
+                <img src="../../../../assets/images/img-01.png" alt="IMG">
+            </div>
+
+            <form class="login100-form validate-form">
+                <span class="login100-form-title">
+                    <strong>Member Login</strong>
+                </span>
+
+                <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+                    <input class="input100" [(ngModel)]="userName" type="text" name="email" placeholder="User Name"
+                        required>
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <input class="input100" [(ngModel)]="password" type="password" name="pass" placeholder="Password"
+                        minlength="8">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                    </span>
+                </div>
+                <div class="wrap-input100 validate-input" data-validate="Password is required">
+                    <input class="input100" [(ngModel)]="cPassword" type="password" name="cpass" placeholder="Confirm Password"
+                        minlength="8">
+                    <span class="focus-input100"></span>
+                    <span class="symbol-input100">
+                        <i class="fa fa-lock" aria-hidden="true"></i>
+                    </span>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <button (click)="signUp()" class="login100-form-btn">
+                        Sign Up
+                    </button>
+                </div>
+
+                <div class="text-center p-t-12">
+                    <span class="txt1">
+                        Forgot
+                    </span>
+                    <a class="txt2" href="#">
+                        Username / Password?
+                    </a>
+                </div>
+
+                <div class="text-center p-t-136">
+                    <a class="txt2" [routerLink] ='["/auth/signin"]' >
+                        Sign In
+                        <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

@@ -8,9 +8,12 @@ const personalNotes = require('./src/routes/personalNotes.route');
 const project = require('./src/routes/project.route');
 const user = require('./src/routes/user.route');
 const directory = require('./src/routes/directory.route');
+const path = require('path');
 
 // Middleware
-app.use('/public', express.static('./stat'));
+// app.use('/public', express.static('./stat'));
+app.use(express.static(path.join(__dirname, '../teams-ms/dist/teams-ms/')))
+
 app.disable('x-powered-by');
 app.use(helmet());
 app.use(express.urlencoded({limit: '20mb', extended: true}));
@@ -24,6 +27,9 @@ app.use((req, res, next) => {
 });
 
 // ROUTE
+app.get('/', function (req, res) {
+    res.sendfile('../teams-ms/dist/teams-ms/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+});
 app.use('/auth', auth);
 app.use('/personalnotes', personalNotes);
 app.use('/projects', project);

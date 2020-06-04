@@ -70,7 +70,8 @@ route.post('/post/member', sharedMiddleware.checkTokenAndSetUser, projectMiddlew
 
 */
 route.post('/update', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.OWNER], true), projectMiddleware.update, projectMiddleware.projectLogs);
-route.post('/update/member/status', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), projectMiddleware.updateMemberStatus, projectMiddleware.projectLogs );
+route.post('/update/member/details', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), projectMiddleware.updateMemberStatus, projectMiddleware.projectLogs );
+
 
 
 /**

@@ -142,7 +142,7 @@ export class SettingsComponent implements OnInit {
     }
 
     async changePermission(value: string, index: number) {
-        if (!confirm('Are you sure you want to remove this user?')) return;
+        if (!confirm('Are you sure you want to change permissions of this user?')) return;
 
         const member = this.projectData.members[index];
         console.log(value)
@@ -156,6 +156,22 @@ export class SettingsComponent implements OnInit {
 
         await this._http.POST('/projects/update/member', payload).toPromise()
         member.permission = value;
+    }
+
+    async changeAvatar(index) {
+        await this._http.POST('/projects/update/member/details', {
+            avatar: index,
+            name: this.projectName
+        })
+        .toPromise();
+        this.userInProject.avatar = index;
+    }
+
+    async quit() {
+        if(!confirm('Are you sure you want to leave this project ?')) return
+
+        const res = await this._http.POST('/projects/quit',{name: this.projectName}).toPromise();
+        this._http.REDIRECT('home');
     }
 
 }
