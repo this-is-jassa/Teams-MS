@@ -19,7 +19,7 @@
 <div class="content-list-body row">
 
     <div class="col-6" *ngFor="let item of members">
-        <a class="media media-member" [href]="'profile/' + (item.name || item.userName)">
+        <a class="media media-member" [routerLink]="['/profile/' + (item.name || item.userName)]" data-dismiss="modal">
             <img alt="Claire Connors" [src]="avatars[item.avatar]"
                 class="avatar avatar-lg" />
             <div class="media-body">

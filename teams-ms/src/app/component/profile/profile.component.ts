@@ -38,14 +38,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-        this._data.refresh()
+    
+        this._router.params.subscribe(params => {
+            this.userName = params['userName'];
+            this._data.refresh()
+            this.fetch();
+        })
+
         this.$userData = this._data.getUser().subscribe(user => {
             this.userData = user;
         })
 
-        this.userName = this._router.snapshot.paramMap.get('userName');
-
-        this.fetch();
     }
 
     ngOnDestroy(): void {

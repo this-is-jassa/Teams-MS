@@ -9,13 +9,14 @@ import { ChatComponent } from '../component/shared/chat/chat.component';
 import { PersonalNotes } from '../component/personalNotes/personalNotes.component';
 import { SelectUsersComponent } from '../component/shared/selectUsers/selectUsers.component';
 import { PipesModule } from './pipes.module';
+import { RouterModule } from '@angular/router';
 
 
 
 @NgModule({
     declarations: [ChecklistComponent, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes, SelectUsersComponent ],
-    imports: [ CommonModule, FormsModule, PipesModule ],
-    exports: [ChecklistComponent, FormsModule, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes, SelectUsersComponent], 
+    imports: [ CommonModule, FormsModule, PipesModule, RouterModule ],
+    exports: [ChecklistComponent, FormsModule, AvatarListComponent, UsersBigListComponent, NewProjectComponent, ChatComponent, PersonalNotes, SelectUsersComponent, RouterModule], 
     providers: [],
 })
 export class SharedModule {}

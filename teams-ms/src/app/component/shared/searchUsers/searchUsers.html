@@ -18,7 +18,7 @@
             <span class="h6 mb-0"> {{item.userName}} </span>
 
             <a (click)="buttonClicked(item)" style="width: 90px; font-size: 11.5px; padding: 2px;" role="button"
-                class="btn btn-outline-primary float-right" [href]="'profile/'+item.userName">{{buttonText}}</a>
+                class="btn btn-outline-primary float-right" [routerLink]="['profile/'+item.userName]" >{{buttonText}}</a>
 
         </div>
 

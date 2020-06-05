@@ -48,7 +48,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
 
     settings(): void {
-        this._http.REDIRECT(window.location.pathname + '/settings')
+        this._http.REDIRECT('project/'+ this.projectName+'/settings')
     }
 
     ngOnDestroy(): void {
