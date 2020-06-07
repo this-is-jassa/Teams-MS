@@ -27,14 +27,14 @@ app.use((req, res, next) => {
 });
 
 // ROUTE
-app.get('/', function (req, res) {
-    res.sendfile('../teams-ms/dist/teams-ms/index.html'); // load the single view file (angular will handle the page changes on the front-end)
-});
-app.use('/auth', auth);
-app.use('/personalnotes', personalNotes);
-app.use('/projects', project);
-app.use('/users', user);
-app.use('/dir', directory);
+// app.get('/', function (req, res) {
+//     res.sendfile('../teams-ms/dist/teams-ms/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+// });
+app.use('/api/auth', auth);
+app.use('/api/personalnotes', personalNotes);
+app.use('/api/projects', project);
+app.use('/api/users', user);
+app.use('/api/dir', directory);
 
 // Connect to the database
 connectDB();

@@ -52,4 +52,10 @@ export class SignInComponent {
             
         });
     }
+
+    signInAsDemo() {
+        this.userName = 'jassa';
+        this.password = 'jassa66223';
+        this.signIn();
+    }
 }

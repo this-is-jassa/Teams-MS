@@ -1,5 +1,3 @@
-
-
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100">
@@ -8,12 +6,15 @@
             </div>
 
             <form class="login100-form validate-form">
+
+
                 <span class="login100-form-title">
-                    <strong>Member Login</strong> 
+                    <strong>Member Login</strong>
                 </span>
 
                 <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-                    <input class="input100" [(ngModel)]="userName" type="text" name="email" placeholder="User Name" required>
+                    <input class="input100" [(ngModel)]="userName" type="text" name="email" placeholder="User Name"
+                        required>
                     <span class="focus-input100"></span>
                     <span class="symbol-input100">
                         <i class="fa fa-envelope" aria-hidden="true"></i>
@@ -21,7 +22,8 @@
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="Password is required">
-                    <input class="input100" [(ngModel)]="password" type="password" name="pass" placeholder="Password" minlength="8">
+                    <input class="input100" [(ngModel)]="password" type="password" name="pass" placeholder="Password"
+                        minlength="8">
                     <span class="focus-input100"></span>
                     <span class="symbol-input100">
                         <i class="fa fa-lock" aria-hidden="true"></i>
@@ -33,22 +35,21 @@
                         Login
                     </button>
                 </div>
-
-                <div class="text-center p-t-12">
-                    <span class="txt1">
-                        Forgot
-                    </span>
-                    <a class="txt2" href="#">
-                        Username / Password?
-                    </a>
-                </div>
-
                 <div class="text-center p-t-136">
-                    <a class="txt2" [routerLink]='["/auth/signup"]'>
+                    <a class="txt2" style="color: rgb(179, 179, 179); font-size: 12px; text-decoration: underline;"
+                        [routerLink]='["/auth/signup"]'>
                         Create your Account
                         <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
                     </a>
                 </div>
+                <div class="text-center p-t-136">
+                    <a class="txt2 btn btn-primary" style="color: white; margin: 18px 0 10px 0; cursor: pointer;" (click)="signInAsDemo()">
+                        Explore a demo user
+                        <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+
             </form>
         </div>
     </div>
