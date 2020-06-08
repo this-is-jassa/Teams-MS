@@ -22,6 +22,7 @@ import {
   subchannelAddressEqual,
 } from './subchannel';
 import { ChannelCredentials } from './channel-credentials';
+import { GrpcUri, uriToString } from './uri-parser';
 
 // 10 seconds in milliseconds. This value is arbitrary.
 /**
@@ -63,12 +64,12 @@ export class SubchannelPool {
     /* These objects are created with Object.create(null), so they do not
      * have a prototype, which means that for (... in ...) loops over them
      * do not need to be filtered */
-    // tslint:disable-next-line:forin
+    // eslint-disable-disable-next-line:forin
     for (const channelTarget in this.pool) {
       const subchannelObjArray = this.pool[channelTarget];
 
       const refedSubchannels = subchannelObjArray.filter(
-        value => !value.subchannel.unrefIfOneRef()
+        (value) => !value.subchannel.unrefIfOneRef()
       );
 
       if (refedSubchannels.length > 0) {
@@ -114,13 +115,13 @@ export class SubchannelPool {
    * @param channelCredentials
    */
   getOrCreateSubchannel(
-    channelTarget: string,
+    channelTargetUri: GrpcUri,
     subchannelTarget: SubchannelAddress,
     channelArguments: ChannelOptions,
     channelCredentials: ChannelCredentials
   ): Subchannel {
     this.ensureCleanupTask();
-
+    const channelTarget = uriToString(channelTargetUri);
     if (channelTarget in this.pool) {
       const subchannelObjArray = this.pool[channelTarget];
       for (const subchannelObj of subchannelObjArray) {
@@ -141,7 +142,7 @@ export class SubchannelPool {
     }
     // If we get here, no matching subchannel was found
     const subchannel = new Subchannel(
-      channelTarget,
+      channelTargetUri,
       subchannelTarget,
       channelArguments,
       channelCredentials
