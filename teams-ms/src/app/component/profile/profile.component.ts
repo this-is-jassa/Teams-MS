@@ -78,7 +78,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             length: result[1].length
         }
 
-        this.projects.push(...result[3]);
+        this.projects = result[3];
 
         const isFollowingReq = await this._http.GET(`/users/isFollowing/${this.friendData._id}`).toPromise();
         this.isFollowing = isFollowingReq.data;
