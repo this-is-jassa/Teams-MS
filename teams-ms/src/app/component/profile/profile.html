@@ -8,8 +8,7 @@
                     <h2 style="font-family: 'Bai Jamjuree', sans-serif;">
 
                         {{userName}}
-                        <button *ngIf="userName === userData?.userName" class="btn btn-round float-right"
-                            (click)="settings()">
+                        <button *ngIf="userName === userData?.userName" class="btn btn-round float-right">
                             <i class="material-icons">settings</i>
                         </button>
                         <button (click)="friendAction()" *ngIf="userName !== userData?.userName"

@@ -90,7 +90,7 @@
     [message]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.message: ""'
     [group]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.group: ""'
     [crossOff]='(groupIndexOnFocus > -1)? notes[groupIndexOnFocus][noteIndexOnFocus]?.crossOff: false' [groups]='groups'
-    (onEdit)="onEdit($event)" (onDelete)="onDelete($event)" (onDeleteJob)="onDeleteJob($event)">
+    (onEdit)="onEdit($event)" (onDelete)="onDelete()" (onDeleteJob)="onDeleteJob()">
 </app-notes-action-model>
 
 <div *ngIf="groups.size === 0" style="text-align: center;">
