@@ -4,8 +4,8 @@
             <i class="material-icons">filter_list</i>
         </span>
     </div>
-    <input name="search2" type="text" class="form-control" [(ngModel)]="searchText"
-        (ngModelChange)="searchUsers($event)" autocomplete="off" placeholder="Search ">
+    <input name="search2" type="text" class="form-control" 
+        (keyup)="search($event.target.value)" autocomplete="off" placeholder="Search ">
 </div>
 
 

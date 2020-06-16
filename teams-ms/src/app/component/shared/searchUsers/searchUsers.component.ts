@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { DataService } from 'src/app/services/data.service';
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject, Observable } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { environment } from 'src/environments/environment'
 
 @Component({
@@ -15,10 +16,17 @@ export class SearchUsersComponent implements OnInit, OnDestroy {
     @Output() onUserSelected: EventEmitter<any> = new EventEmitter();
 
     $following: Subscription;
+    $text: Subscription;
+
+    $_text: any = new BehaviorSubject<string>('')
+    .pipe(
+        debounceTime(900)
+    );
+    
 
     searchData = [];
     following: any[];
-    searchText = '';
+
     avatars = environment.userImages;
 
     constructor(private _http: HttpService, private _data: DataService) { }
@@ -26,17 +34,29 @@ export class SearchUsersComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.$following = this._data.getFollowing().subscribe(following => {
             this.following = following;
+        });
+
+        this.$text = this.$_text.subscribe(text => {
+            this.searchUsers(text)
         })
+
+    }
+
+    search(val) {
+        this.$_text.next(val);
     }
 
     async searchUsers(text) {
+
         try {
             if (text === "") return
             
-            const response = await this._http.GET('/users/search/' + text).toPromise();
-            console.time()
+            const response = await this._http.GET('/users/search/' + text)
+            .pipe(
+                debounceTime(10000)
+            )
+            .toPromise();
             this.searchData = [...response];
-            console.timeEnd()
         }
         catch (err) {
             alert('Error Occured');
@@ -50,5 +70,6 @@ export class SearchUsersComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.$following.unsubscribe();
+        this.$text.unsubscribe();
     }
 }

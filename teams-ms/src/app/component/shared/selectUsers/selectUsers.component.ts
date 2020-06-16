@@ -2,7 +2,8 @@ import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angu
 import { DataService } from 'src/app/services/data.service';
 import { HttpService } from 'src/app/services/http.service';
 import { environment } from 'src/environments/environment'
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
     selector: 'app-select-users',
@@ -16,8 +17,13 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
     @Output() onMemberAdded = new EventEmitter()
 
     $following: Subscription;
+    $text: Subscription;
 
-    searchText = '';
+    $_text: any = new BehaviorSubject<string>('')
+    .pipe(
+        debounceTime(900)
+    );
+
     following: any[] = [];
     searchData: any[] = [];
     membersAdded: any[] = [];
@@ -30,6 +36,11 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         this.fetchFollowing();
+
+        this.$text = this.$_text.subscribe(text => {
+            this.searchUsers(text)
+        });
+
     }
 
     toggleUser(user): void {
@@ -54,11 +65,16 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
         })
     }
 
-    async searchUsers() {
-        if(this.searchText === '') return;
+
+    search(val: string) {
+        this.$_text.next(val)
+    }
+
+    async searchUsers(text) {
+        if(text === '') return;
 
         try {
-            this.searchData = [ ...await this._http.GET('/users/search/' + this.searchText).toPromise()];
+            this.searchData = [ ...await this._http.GET('/users/search/' + text).toPromise()];
         }
         catch(err) {
             alert("Opprs")
@@ -67,7 +83,8 @@ export class SelectUsersComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.$following.unsubscribe()
+        this.$following.unsubscribe();
+        this.$text.unsubscribe();
     }
 
 }
