@@ -9,10 +9,15 @@ export class AppComponent {
 
   constructor() {}
 
+  navVisible = false;
   title = 'teams-ms';
 
   ngOnInit(): void {
     
+  }
+
+  toggleNav() {
+    this.navVisible = !this.navVisible;
   }
 
 }

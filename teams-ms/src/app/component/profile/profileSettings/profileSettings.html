@@ -33,7 +33,7 @@
             <div class="col-sm-10">
                 <textarea [(ngModel)]="formsData.bio" type="text" class="form-control" name="disc" id="inputEmail33"
                     placeholder="Bio" rows="4" maxlength="400"> </textarea>
-                <p style="text-align: right;" class="m-2">{{400 - formsData.bio.length}}</p>
+                <p style="text-align: right;" class="m-2">{{400 - formsData.bio?.length }}</p>
             </div>
         </div>
     </div>

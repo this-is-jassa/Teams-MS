@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -15,6 +15,9 @@ import { Router, NavigationEnd } from '@angular/router';
     styleUrls: ['./navbar.style.scss']
 })
 export class NavBarComponent implements OnInit, OnDestroy {
+
+
+    @Input() isVisible = false;
 
     currentUrl ='';
     userData: any;

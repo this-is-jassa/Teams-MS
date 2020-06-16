@@ -2,107 +2,111 @@ nav {
   height: 100%;
   background-color: black;
   width: 230px;
-}
-#wrapper {
-  color: wheat;
-  position: sticky;
-  top: -100px;
-  padding-top: 30px;
-  overflow: scroll;
+  overflow: visible;
 
-  h6 {
-    color: white;
-    text-align: center;
-    font-family: "Nunito", sans-serif;
-    background: #f2709c; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #ff9472, #f2709c); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-      to right,
-      #ff9472,
-      #f2709c
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-    padding: 5px 20px 5px 5px;
-    margin: 0 20px;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  #userInfo {
-    font-family: "Nunito", sans-serif;
-    text-align: center;
-    margin-top: 40px;
-
-    img {
-      cursor: pointer;
-    }
-
-    div {
-      font-size: 15px;
-      margin-top: 7px;
-      letter-spacing: 2px;
+  #wrapper {
+    color: wheat;
+    position: sticky;
+    top: -100px;
+    padding-top: 30px;
+    overflow: scroll;
+  
+    h6 {
       color: white;
-      text-transform: capitalize;
-    }
-  }
-
-  ul {
-    padding: 30px 10px;
-
-    li,
-    a {
-      list-style: none;
-      padding: 8px 25px;
-      margin: 15px 5px;
-      position: relative;
+      text-align: center;
       font-family: "Nunito", sans-serif;
-      font-size: 12px;
-      border-radius: 3px;
-      color: white;
+      background: #f2709c; /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right, #ff9472, #f2709c); /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(
+        to right,
+        #ff9472,
+        #f2709c
+      ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
+      padding: 5px 20px 5px 5px;
+      margin: 0 20px;
+      border-radius: 10px;
       cursor: pointer;
-      letter-spacing: 1px;
-      display: flex;
-
-      i {
-        padding: 5px 10px 2px 2px;
-        font-size: 20px;
+    }
+  
+    #userInfo {
+      font-family: "Nunito", sans-serif;
+      text-align: center;
+      margin-top: 40px;
+  
+      img {
+        cursor: pointer;
       }
-      span {
-        padding: 5px 0;
+  
+      div {
+        font-size: 15px;
+        margin-top: 7px;
+        letter-spacing: 2px;
+        color: white;
+        text-transform: capitalize;
       }
-
-      &:hover {
+    }
+  
+    ul {
+      padding: 30px 10px;
+  
+      li,
+      a {
+        list-style: none;
+        padding: 8px 25px;
+        margin: 15px 5px;
+        position: relative;
+        font-family: "Nunito", sans-serif;
+        font-size: 12px;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+        letter-spacing: 1px;
+        display: flex;
+  
+        i {
+          padding: 5px 10px 2px 2px;
+          font-size: 20px;
+        }
+        span {
+          padding: 5px 0;
+        }
+  
+        &:hover {
+          color: black;
+          background-color: white;
+        }
+      }
+  
+      #contactInfo {
+        p {
+          font-family: "Nunito", sans-serif;
+          font-size: 12px;
+          color: white;
+  
+          a {
+            text-decoration: none;
+            color: rgb(160, 160, 160);
+            font-size: 11px;
+            padding-top: 5px;
+          }
+        }
+      }
+  
+      #logOut {
+        text-align: center;
+        color: white;
+        font-family: "Nunito", sans-serif;
+        margin-top: 30px;
+        cursor: pointer;
+      }
+  
+      .active {
         color: black;
         background-color: white;
       }
     }
-
-    #contactInfo {
-      p {
-        font-family: "Nunito", sans-serif;
-        font-size: 12px;
-        color: white;
-
-        a {
-          text-decoration: none;
-          color: rgb(160, 160, 160);
-          font-size: 11px;
-          padding-top: 5px;
-        }
-      }
-    }
-
-    #logOut {
-      text-align: center;
-      color: white;
-      font-family: "Nunito", sans-serif;
-      margin-top: 30px;
-      cursor: pointer;
-    }
-
-    .active {
-      color: black;
-      background-color: white;
-    }
   }
 }
+

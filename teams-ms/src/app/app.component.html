@@ -1,8 +1,14 @@
-<div style="display:flex; background-color: black;" >
+<div id="main-app-wrapper">
 
-    <app-navbar></app-navbar>
- 
-    <div style="width:100%; flex-grow: 2; margin: 30px 2px; background-color: #F8F9FA; border-top-left-radius: 30px; border-bottom-left-radius: 30px ;padding: 20px;" >
+    <app-navbar [isVisible]='navVisible'></app-navbar>
+
+    <div id="router-wrapper">
+        <button (click)="toggleNav()" id="nav-toggle-button" class="btn btn-round ">
+            <span class="material-icons">
+                menu
+            </span>
+        </button>
+
         <router-outlet></router-outlet>
     </div>
 
