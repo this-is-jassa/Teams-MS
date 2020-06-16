@@ -8,7 +8,7 @@ module.exports = {
             const { userName } = req.user;
 
             const user = await userModel.findOne({ userName: userName })
-            .select("userName projects notify avatar lastActive")
+            .select("userName projects notify bio avatar lastActive _id")
             .slice('notify', -40)
             .populate({
                 path: 'projects',
@@ -24,10 +24,26 @@ module.exports = {
         }
     },
 
+    update: async (req, res) => {
+        
+        try {
+            
+            const {bio, avatar} = req.body;
+            const {_id} = req.user;
+
+            await userModel.findOneAndUpdate({_id: _id}, {bio: bio, avatar: avatar});
+            res.status(200).json({success: true});
+            
+
+        } catch(err) {
+            res.status(500).json({ success: false, message: 'Cannot update user' }); console.error(err);
+        }
+    },
+
     getUser: async(req, res, next) => {
 
         const {userName} = req.params;
-        const user = await userModel.findOne({userName: userName}).select('userName _id email bio lastActive avatar');
+        const user = await userModel.findOne({userName: userName}).select('userName _id bio lastActive avatar');
         res.status(200).json({data: user});
     },
     

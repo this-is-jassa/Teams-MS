@@ -41,7 +41,6 @@ export class HomeComponent implements OnInit {
 
 
     ngOnInit(): void {
-        this._data.refresh();
 
         this.fetchData();
     }

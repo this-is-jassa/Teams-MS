@@ -5,9 +5,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ViewService {
     
     private data = {
-        navbar: {
-            isVisible: false
-        },
         loader: {
             isVisible: false
         }

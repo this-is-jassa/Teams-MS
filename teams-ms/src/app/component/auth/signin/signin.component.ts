@@ -36,7 +36,7 @@ export class SignInComponent {
                         else {alert("Error Redirecting")}
 
                         this._view.setObs('loader','isVisible', false);
-                        this._view.setObs('navbar','isVisible', true);
+                        
                     });
                     
                 })

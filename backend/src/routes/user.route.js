@@ -61,11 +61,13 @@ route.post('/unfollow', verifyUser, userMiddleware.unfollow_user);
 
 */
 route.get('/following/:userName', verifyUser, userMiddleware.getFollowing);
-route.get('/isFollowing/:userId', verifyUser, userMiddleware.isFollowing);
-
 route.get('/followers/:userName', verifyUser, userMiddleware.getFollowers);
 
+route.get('/isFollowing/:userId', verifyUser, userMiddleware.isFollowing);
 
+
+
+route.post('/update', verifyUser, userMiddleware.update);
 route.post('/update/notifySeen', verifyUser, userMiddleware.NotifySeen);
 
 

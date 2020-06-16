@@ -13,10 +13,10 @@ export class HttpService {
     }
 
     POST(route: string, data: any): Observable<any> {
-        return this._http.post('http://localhost:3000/api'+route, data);
+        return this._http.post('/api'+route, data);
     }
 
     REDIRECT(route): Promise<boolean> {
-        return this.router.navigate([route]);
+        return this.router.navigate([route]); 
     }
 }

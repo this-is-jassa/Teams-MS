@@ -55,7 +55,6 @@ export class SettingsComponent implements OnInit {
     constructor(private _http: HttpService, private _view: ViewService, private activatedRoute: ActivatedRoute, private _data: DataService) { }
 
     ngOnInit(): void {
-        this._data.refresh()
         
         this.projectName = this.activatedRoute.snapshot.paramMap.get("name");
 

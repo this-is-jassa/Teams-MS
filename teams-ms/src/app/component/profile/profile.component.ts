@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
         this._router.params.subscribe(params => {
             this.userName = params['userName'];
-            this._data.refresh()
+            
             this.fetch();
         })
 
