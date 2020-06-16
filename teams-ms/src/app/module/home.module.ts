@@ -6,10 +6,11 @@ import { HeaderComponent } from '../component/home/header/header.component';
 import { SharedModule } from './shared.module';
 import { ProjectTableRowComponent } from '../component/home/projects-table/project-table-row/tableRow.component';
 import { ProfileComponent } from '../component/profile/profile.component';
+import { ProfileSettingsComponent } from '../component/profile/profileSettings/pofileSettings';
 
 
 @NgModule({
-    declarations: [HomeComponent, ProjectTableComponent, ProjectTableRowComponent, HeaderComponent, ProfileComponent],
+    declarations: [HomeComponent, ProjectTableComponent, ProjectTableRowComponent, HeaderComponent, ProfileComponent, ProfileSettingsComponent],
     imports: [ CommonModule, SharedModule ],
     exports: [HomeComponent, HeaderComponent, ProfileComponent],
     providers: [],

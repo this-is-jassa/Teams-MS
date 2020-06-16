@@ -9,7 +9,7 @@ export class DataService {
     private $followingData = new BehaviorSubject([]);
     private currentUserName = '';
 
-    constructor(private _http: HttpService) {}
+    constructor(private _http: HttpService) { }
 
     async refresh() {
         await this.fetchUser();
@@ -17,21 +17,23 @@ export class DataService {
     }
 
     reset() {
+        this.currentUserName = '';
         this.$userdata.next({});
         this.$followingData.next([]);
     }
- 
+
     getUser(): Observable<any> {
-        return this.$userdata
+        if (this.currentUserName === '') { this.refresh() }
+        return this.$userdata;
     }
 
-    setUser(key: string, value: any): void {
-        let userData = this.$userdata.value;
-        userData[key] = value;
-        this.$userdata.next(userData);
+    setUser(newUser): void {
+        this.$userdata.next(newUser);
     }
+
 
     getFollowing(): Observable<any> {
+        if (this.currentUserName === '') { this.refresh() }
         return this.$followingData;
     }
 
@@ -39,29 +41,30 @@ export class DataService {
         this.$followingData.next([...following]);
     }
 
-    async fetchUser() {
+
+
+    private async fetchUser() {
         try {
-            
-            if(this.currentUserName === undefined) {return}
+
+            if (this.currentUserName === undefined) { return }
 
             const userReq = await this._http.GET('/users/get').toPromise();
             this.currentUserName = userReq.data.userName;
             this.$userdata.next(userReq.data);
-            
+
         }
         catch (err) {
             console.log("Error loading User")
         }
     }
 
-    async fetchfollowing() {
-        
-        try { 
+    private async fetchfollowing() {
 
-            const followingReq = await this._http.GET(`/users/following/${this.currentUserName}`).toPromise(); 
+        try {
+            const followingReq = await this._http.GET(`/users/following/${this.currentUserName}`).toPromise();
             this.$followingData.next([...followingReq.data.following]);
 
-        } catch(err) {
+        } catch (err) {
             console.log("error loading following")
         }
     }

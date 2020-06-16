@@ -30,24 +30,25 @@ export class NewProjectComponent implements OnInit {
     constructor(private _http: HttpService, private _data: DataService) { }
 
 
-    ngOnInit() {}
+    ngOnInit() { }
 
 
     onMemberAdded(membersAdded): void {
-        
+
         this.membersAdded = membersAdded;
     }
 
 
     async createProject() {
-
+        
         let payload = {
             name: this.formData.name,
             discription: this.formData.description,
             private: !this.formData.isPrivate,
             isFreeze: this.formData.isFreeze,
             startingDate: this.formData.startingDate,
-            endingDate: this.formData.endingDate
+            endingDate: this.formData.endingDate,
+            members: []
         }
 
         const project = await this._http.POST('/projects/post', payload).toPromise()
@@ -55,14 +56,24 @@ export class NewProjectComponent implements OnInit {
         let promisArr = [];
 
         this.membersAdded.forEach((item: any) => {
+
+            payload.members.push({ name: item.userName, permission: 'Developer', avatar: item.avatar, status: {value: 'Do Not Disturb'} })
+
             promisArr.push(
                 this._http.POST('/projects/post/member', { name: project.data, member: { name: item.userName, permission: 'Developer', avatar: item.avatar } })
                     .toPromise()
             )
         });
 
-        await Promise.all(promisArr)
-        this._data.fetchUser();
+        payload.name = project.data;
+
+        payload.members.push({name: this.userInformation.userName, permission: 'Owner', avatar: this.userInformation.avatar  , status: {value: 'Do Not Disturb'} })        
+        this.userInformation.projects.push(payload);
+
+        this._data.setUser(this.userInformation);
+
+        await Promise.all(promisArr);
+
     }
 
-}
+} 

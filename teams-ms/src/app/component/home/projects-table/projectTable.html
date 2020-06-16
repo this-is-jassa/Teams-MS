@@ -22,7 +22,7 @@
 
 <div class=" content-list-body row">
     <div class="col-lg-6" *ngFor="let item of tableData; let i = index;">
-        <app-project-table-row [index]="i" [members]="item.members" [projectData]="item" [userName]="userName"
+        <app-project-table-row [index]="i" [projectData]="item" [userName]="userName"
             (OnshowMembers)="setMembersModelData($event)">
         </app-project-table-row>
     </div>

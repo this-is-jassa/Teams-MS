@@ -17,9 +17,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     userName = '';
     isFollowing = false;
-    
+
     userData: any = {};
-    friendData: any ={};
+    friendData: any = {};
 
     following = {
         length: 0,
@@ -38,7 +38,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
-    
+
         this._router.params.subscribe(params => {
             this.userName = params['userName'];
             this._data.refresh()
@@ -47,7 +47,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
         this.$userData = this._data.getUser().subscribe(user => {
             this.userData = user;
-        })
+        });
+
 
     }
 
@@ -67,7 +68,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 
         this.friendData = result[0].data;
-      
+
         this.followers = {
             list: [...result[2].data.followers],
             length: result[2].length
@@ -88,12 +89,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     // Follow or Unfollow
     async friendAction() {
         let url;
-        if(this.isFollowing) { url = '/users/unfollow'; this.followers.length-=1;}
-        else {url = '/users/follow'; this.followers.length+=1; this.followers.list.push(this.userData)}
+        if (this.isFollowing) { url = '/users/unfollow'; this.followers.length -= 1; }
+        else { url = '/users/follow'; this.followers.length += 1; this.followers.list.push(this.userData) }
 
         this.isFollowing = !this.isFollowing;
 
-        await this._http.POST(url, {_id: this.friendData._id}).toPromise();
+        await this._http.POST(url, { _id: this.friendData._id }).toPromise();
     }
 
     showMembers(members: any) {

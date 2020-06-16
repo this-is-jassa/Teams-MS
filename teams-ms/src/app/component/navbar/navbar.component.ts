@@ -36,7 +36,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
             filter(e => e instanceof NavigationEnd)
         )
         .subscribe((val: any) => {
-            console.log(val.url);
             this.currentUrl = val.url;
         });
     }
@@ -71,12 +70,13 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
 
     deleteNotify() {
-
+        
+        this.userData.notify = [];
         this._http.POST('/users/update/notifySeen', {})
             .toPromise()
             .then(res => {
                 if (res.success) {
-                    this._data.setUser('notify', [])
+                    this._data.setUser(this.userData);
                 }
 
             })

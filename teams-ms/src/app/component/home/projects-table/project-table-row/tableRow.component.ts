@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
-import {environment} from '../../../../../environments/environment'
+import { environment } from '../../../../../environments/environment'
 
 
 @Component({
@@ -11,12 +11,12 @@ import {environment} from '../../../../../environments/environment'
 export class ProjectTableRowComponent implements OnInit {
 
     @Input() projectData: any = [];
-
     @Input() index: number;
-    @Input() members;
     @Input() userName: String;
-
+    
     @Output() OnshowMembers = new EventEmitter();
+    
+    members = [];
 
     public userImages = environment.userImages;
 
@@ -33,27 +33,35 @@ export class ProjectTableRowComponent implements OnInit {
     constructor(private _http: HttpService) { }
 
     ngOnInit(): void {
-       
-        for (const item of this.members) {
 
+        this.members = this.projectData.members;
+
+        const length = this.members.length;
+
+        for (let i = 0; i < length; i++) {
+            let item = this.members[i];
+            
+            
             if (item.name === this.userName) {
                 this.userInProjectData = item;
                 break;
             }
         }
+
     }
+
 
     loadMembersmodel(): void {
         this.OnshowMembers.emit(this.members);
     }
 
     async OnstatusChanged() {
-        
+
         const response = await this._http.POST('/projects/update/member/details', {
             value: this.userInProjectData.status.value,
             name: this.projectData.name
         })
-        .toPromise();
+            .toPromise();
 
     }
 

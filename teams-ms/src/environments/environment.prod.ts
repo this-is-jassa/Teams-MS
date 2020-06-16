@@ -19,6 +19,9 @@ export const environment = {
     'https://pipeline.mediumra.re/assets/img/avatar-female-3.jpg',
     'https://pipeline.mediumra.re/assets/img/avatar-male-3.jpg',
     'https://pipeline.mediumra.re/assets/img/avatar-female-4.jpg',
+    'https://pipeline.mediumra.re/assets/img/avatar-female-3.jpg',
+    'https://pipeline.mediumra.re/assets/img/avatar-male-3.jpg',
+    'https://pipeline.mediumra.re/assets/img/avatar-female-4.jpg',
 
   ]
 };

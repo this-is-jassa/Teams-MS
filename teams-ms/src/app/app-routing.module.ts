@@ -3,12 +3,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './component/home/home.component';
 import { CanActivateGuard } from './services/authGuard.service';
 import { ProfileComponent } from './component/profile/profile.component';
+import { ProfileSettingsComponent } from './component/profile/profileSettings/pofileSettings';
 
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent, canActivate: [CanActivateGuard]},
+  {path: 'settings', component: ProfileSettingsComponent, canActivate: [CanActivateGuard]},
   {path: 'profile', children: [
-    {path: ':userName', component: ProfileComponent}
+    {path: ':userName', component: ProfileComponent},
   ],
   canActivate: [CanActivateGuard]
 },
