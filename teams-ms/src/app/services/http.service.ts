@@ -9,7 +9,7 @@ export class HttpService {
     constructor(private _http: HttpClient, private router: Router){}
 
     GET(route: string): Observable<any>{
-        return this._http.get('http://localhost:3000/api'+route);
+        return this._http.get('/api'+route);
     }
 
     POST(route: string, data: any): Observable<any> {
