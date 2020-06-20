@@ -2,21 +2,22 @@ nav {
   height: 100%;
   background-color: black;
   width: 230px;
+  overflow: visible;
 }
 
-#wrapper {
+nav #wrapper {
   color: wheat;
   position: -webkit-sticky;
   position: sticky;
-  top: 0px;
+  top: -100px;
   padding-top: 30px;
   overflow: scroll;
 }
 
-#wrapper h6 {
+nav #wrapper h6 {
   color: white;
   text-align: center;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   background: #f2709c;
   /* fallback for old browsers */
   /* Chrome 10-25, Safari 5.1-6 */
@@ -29,17 +30,17 @@ nav {
   cursor: pointer;
 }
 
-#wrapper #userInfo {
-  font-family: 'Nunito', sans-serif;
+nav #wrapper #userInfo {
+  font-family: "Nunito", sans-serif;
   text-align: center;
   margin-top: 40px;
 }
 
-#wrapper #userInfo img {
+nav #wrapper #userInfo img {
   cursor: pointer;
 }
 
-#wrapper #userInfo div {
+nav #wrapper #userInfo div {
   font-size: 15px;
   margin-top: 7px;
   letter-spacing: 2px;
@@ -47,16 +48,17 @@ nav {
   text-transform: capitalize;
 }
 
-#wrapper ul {
+nav #wrapper ul {
   padding: 30px 10px;
 }
 
-#wrapper ul li {
+nav #wrapper ul li,
+nav #wrapper ul a {
   list-style: none;
   padding: 8px 25px;
   margin: 15px 5px;
   position: relative;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 12px;
   border-radius: 3px;
   color: white;
@@ -67,42 +69,45 @@ nav {
   display: flex;
 }
 
-#wrapper ul li i {
+nav #wrapper ul li i,
+nav #wrapper ul a i {
   padding: 5px 10px 2px 2px;
   font-size: 20px;
 }
 
-#wrapper ul li span {
+nav #wrapper ul li span,
+nav #wrapper ul a span {
   padding: 5px 0;
 }
 
-#wrapper ul li:hover {
+nav #wrapper ul li:hover,
+nav #wrapper ul a:hover {
   color: black;
   background-color: white;
 }
 
-#wrapper ul #contactInfo p {
-  font-family: 'Nunito', sans-serif;
+nav #wrapper ul #contactInfo p {
+  font-family: "Nunito", sans-serif;
   font-size: 12px;
   color: white;
 }
 
-#wrapper ul #contactInfo p a {
+nav #wrapper ul #contactInfo p a {
   text-decoration: none;
   color: #a0a0a0;
   font-size: 11px;
   padding-top: 5px;
 }
 
-#wrapper ul #logOut {
+nav #wrapper ul #logOut {
   text-align: center;
   color: white;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   margin-top: 30px;
   cursor: pointer;
 }
 
-#wrapper ul .active {
+nav #wrapper ul .active {
   color: black;
   background-color: white;
 }

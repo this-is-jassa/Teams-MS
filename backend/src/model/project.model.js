@@ -30,7 +30,7 @@ const stickey = new mongo.Schema({
     message: {
         type: types.String,
         minlength: 1,
-        maxlength: [400, 'Maximum length of message should be 300']
+        maxlength: [400, 'Maximum length of message should be 400']
     },              // A, O
     timeStamp: {
         type: types.Date,

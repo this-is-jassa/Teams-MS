@@ -10,10 +10,11 @@ import { NotesActionModelComponent } from '../component/project/models/notesActi
 import { LogsComponent } from '../component/project/logs/logs.component';
 import { SettingsComponent } from '../component/project/settings/settings.component';
 import { PipesModule } from './pipes.module';
+import { EditFileModelComponent } from '../component/project/models/editFile/editFile.model.component';
 
 
 @NgModule({
-    declarations: [ProjectComponent, DirectoryComponent, CreateFileModelComponent, TasksComponent, NotesActionModelComponent, LogsComponent, SettingsComponent ],
+    declarations: [ProjectComponent, DirectoryComponent, CreateFileModelComponent, TasksComponent, NotesActionModelComponent, LogsComponent, SettingsComponent, EditFileModelComponent ],
     imports: [ CommonModule, ProjectRoutingModule, SharedModule, PipesModule],
     exports: [],
     providers: [],

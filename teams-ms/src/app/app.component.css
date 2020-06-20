@@ -1,1 +1,39 @@
-/* No CSS *//*# sourceMappingURL=app.component.css.map */
+#main-app-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: black;
+}
+
+#router-wrapper {
+  width: 100%;
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+  margin: 30px 2px;
+  background-color: #f8f9fa;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  padding: 30px 20px;
+}
+
+#nav-toggle-button {
+  position: fixed;
+  top: 10px;
+  z-index: 3;
+  padding: 13px;
+  background-color: black;
+  color: white;
+  visibility: hidden;
+}
+
+@media only screen and (max-width: 768px) {
+  #router-wrapper {
+    border-radius: 0px;
+    margin: 0px;
+  }
+  #nav-toggle-button {
+    visibility: visible;
+  }
+}
+/*# sourceMappingURL=app.component.css.map */

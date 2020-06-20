@@ -1,0 +1,31 @@
+<div class="modal fade" id="editFile" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <a id="editModelTrigger" data-toggle="modal" data-target="#editFile"></a>
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit File</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Name:</label>
+                        <input type="text" name="fileName_" [(ngModel)]="fileName" class="form-control" id="recipient-name"
+                            maxlength="20">
+                        <p style="text-align: right;">{{20 - fileName?.length}} </p>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Code:</label>
+                        <textarea name="codetext_" [(ngModel)]="codeText" class="form-control" id="message-text" rows="9"
+                            maxlength="200000"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="save()" data-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>

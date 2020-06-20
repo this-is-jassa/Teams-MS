@@ -7,7 +7,7 @@ const mongo = require('mongoose');
 module.exports = {
 
     post: async (req, res, next) => {
-        
+
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
@@ -18,7 +18,7 @@ module.exports = {
             const { fileName, fileType, codeText, parentDirId } = req.body;
 
 
-            if([fileType, parentDirId].includes(undefined) || freeze.isFreeze) throw('Error occured')
+            if ([fileType, parentDirId].includes(undefined) || freeze.isFreeze) throw ('Error occured')
 
             const dirId = mongo.Types.ObjectId();
 
@@ -37,13 +37,13 @@ module.exports = {
             }
 
 
-            if (['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp', '.py','.json', 'dir'].includes(fileType)) {
-                
+            if (['.js', '.php', '.java', '.txt', '.html', '.scss', '.sass', '.css', '.ts', '.c', '.cpp', '.py', '.json', 'dir'].includes(fileType)) {
 
-                if(fileType !== 'dir') {
+
+                if (fileType !== 'dir') {
                     const fileId = mongo.Types.ObjectId();
                     payload.text = fileId;
-    
+
                     const codePayload = {
                         _id: fileId,
                         projectId: _id,
@@ -56,13 +56,13 @@ module.exports = {
                     await codeModel.create(codePayload);
                 }
 
-               await directoryModel.create(payload);
+                await directoryModel.create(payload);
 
-               await directoryModel.findOneAndUpdate({projectId: _id, _id: parentDirId, fileType:'dir'}, {$push: {child: dirId}});
-                
+                await directoryModel.findOneAndUpdate({ projectId: _id, _id: parentDirId, fileType: 'dir' }, { $push: { child: dirId } });
+
 
                 req.projectLog = log;
-                req.data = {_id: dirId};
+                req.data = { _id: dirId };
 
                 next();
 
@@ -89,7 +89,7 @@ module.exports = {
         }
 
         try {
-            
+
             const { _id } = req.user.project;
             const { dirId } = req.params;
 
@@ -107,31 +107,33 @@ module.exports = {
 
     update_dir: async (req, res, next) => {
 
-        const { _id, freeze } = req.user.project;
-
-        if (!req.user.permission || freeze.isFreeze) {
+        
+        if (!req.user.permission ) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
-
+        
         try {
+
+            const { _id } = req.user.project;
             const { dirId, newName } = req.body;
 
+            if(!!!dirId && !!!newName){throw 'Validation Error'}
+
             const directory = await directoryModel.findOne({ projectId: _id, _id: dirId });
-            
+
             req.projectLog = {
                 type: 'Dir',
                 message: `${req.user.userName} renamed a folder from ${directory.name} to ${newName}`
             }
+            req.data = {};
 
             directory.name = newName;
-            
+
             await directory.save();
             // await directoryModel.findOneAndUpdate({ projectId: _id, _id: dirId }, { name: newName });
 
             next();
-
-            // res.status(200).json({ success: true });
 
         } catch (err) {
             console.log(err);
@@ -163,27 +165,41 @@ module.exports = {
 
     update_file: async (req, res, next) => {
 
-        const { _id, freeze } = req.user.project;
 
-        if (!req.user.permission || freeze.isFreeze) {
+        if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
         try {
-            const { fileId, codeText, dirId } = req.body;
+
+            const { _id } = req.user.project;
+            const { codeText, dirId, fileName } = req.body;
+
+            if(!!!codeText && !!!dirId && !!!fileName) {
+                throw 'Data Validation error';
+            }
 
             const directory = await directoryModel.findOne({ projectId: _id, _id: dirId });
+
+            if (!!!directory) throw 'Error Occured!'
 
             req.projectLog = {
                 type: 'EditFile',
                 message: `${req.user.userName} updated ${directory.name}.${directory.fileType}`
             }
 
-            await codeModel.findOneAndUpdate({ projectId: _id, _id: fileId }, { code: codeText });
-            
-            next();
+            if (directory.name !== fileName) {
+                req.projectLog.message = `${req.user.userName} updated the name of ${directory.name}.${directory.fileType} to ${fileName}.${directory.fileType}. (Might have updated the Content as well)`;
+                directory.name = fileName;
+                await directory.save();
+            }
 
-            res.status(200).json({ success: true });
+
+            await codeModel.findOneAndUpdate({ projectId: _id, _id: directory.text }, { code: codeText });
+
+            req.data = {};
+
+            next();
 
         } catch (err) {
             console.log(err);
@@ -191,42 +207,42 @@ module.exports = {
         }
     },
 
-    findFile: async(req, res, next) => {
+    findFile: async (req, res, next) => {
         if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
-        try{
-            const {searchText} = req.params;
-            const {_id} = req.user.project;
+        try {
+            const { searchText } = req.params;
+            const { _id } = req.user.project;
 
-            const result = await directoryModel.find({projectId: _id, name: {$regex: '^' + searchText}} ).limit(30);
+            const result = await directoryModel.find({ projectId: _id, name: { $regex: '^' + searchText } }).limit(30);
 
-            res.status(200).json({success: true, data: result});
+            res.status(200).json({ success: true, data: result });
         }
-        catch(err) {
+        catch (err) {
             console.log(err)
-            res.status(400).json({success: false, message: 'Server Err'})
+            res.status(400).json({ success: false, message: 'Server Err' })
         }
     },
 
-    delete_file: async(req, res, next) => {
-        
-        const {_id, freeze} = req.user.project;
-        
+    delete_file: async (req, res, next) => {
+
+        const { _id, freeze } = req.user.project;
+
         if (!req.user.permission || freeze.isFreeze) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
 
-        try{
-            const {userName} = req.user;
-            const {fileId} = req.body;
+        try {
+            const { userName } = req.user;
+            const { fileId } = req.body;
 
         }
-        catch(err) {
+        catch (err) {
             console.log(err)
-            res.status(400).json({success: false, message: 'Server Err'})
+            res.status(400).json({ success: false, message: 'Server Err' })
         }
 
 

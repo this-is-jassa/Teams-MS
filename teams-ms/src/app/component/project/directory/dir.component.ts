@@ -17,7 +17,7 @@ export class DirectoryComponent implements OnInit, OnDestroy {
     $projectData = new BehaviorSubject<any>(null);
 
 
-    @Input() freeze ;
+    @Input() freeze;
 
     @Input() set projectData(data: any) {
         this.$projectData.next(data);
@@ -38,6 +38,9 @@ export class DirectoryComponent implements OnInit, OnDestroy {
     searchText: string = '';
 
     clipboard: string = '';
+    
+    fileToEdit: any = {};
+    codeToEdit: string = ''
 
 
     constructor(private _http: HttpService, private _view: ViewService) { }
@@ -71,8 +74,44 @@ export class DirectoryComponent implements OnInit, OnDestroy {
         this.$projectSubscription.unsubscribe()
     }
 
+
+    async edit(file) {
+
+        if (file.fileType === 'dir') {
+            var person = prompt("Please enter new name of this directory", file.name);
+
+            if (person != null && person !== file.name) {
+                await this._http.POST('/dir/update/dir', { dirId: file._id, newName: person, name: this.projectData.name }).toPromise();
+                file.name = person;
+            }
+
+        }
+        else {
+            
+            this.fileToEdit = file;
+            this._view.setObs('loader', 'isVisible', true);
+            const code = await this.getFile(file.text);
+            this._view.setObs('loader', 'isVisible', false);
+
+            this.codeToEdit = code.data.code;
+
+            document.getElementById('editModelTrigger').click();
+        }
+
+    }
+
+    async editFile(data) {
+        try {
+            await this._http.POST('/dir/update/file', { ...data, dirId: this.fileToEdit._id ,name: this.projectData.name }).toPromise();
+            this.fileToEdit.name = data.fileName;
+        }catch(err) {
+            alert('Error Occured while saving changes');
+        }
+    }
+
+
+
     async getDir(dirArr: any[]): Promise<any> {
-        this._view.setObs('loader', 'isVisible', true);
 
         let tasks = [];
 
@@ -88,12 +127,11 @@ export class DirectoryComponent implements OnInit, OnDestroy {
     }
 
     async getFile(fileId: string) { // fileId is dir Id
-        this._view.setObs('loader', 'isVisible', true);
 
         return this._http.GET('/dir/get/file/' + this.projectData.name + '/' + fileId).toPromise()
     }
 
-    dirClick(index, searched = false): void {
+    async dirClick(index, searched = false) {
         this._view.setObs('loader', 'isVisible', true);
 
         let dirInstance = this.openedDir.child[index];
@@ -102,6 +140,7 @@ export class DirectoryComponent implements OnInit, OnDestroy {
         }
 
         if (dirInstance.fileType === 'dir') {
+            this._view.setObs('loader', 'isVisible', true);
             this.getDir(dirInstance.child)
                 .then(dir => {
                     this.dirStructure.push({ child: dir, _id: dirInstance._id, fileType: 'dir', name: dirInstance.name });
@@ -109,16 +148,16 @@ export class DirectoryComponent implements OnInit, OnDestroy {
 
                 })
         } else {
-            this.getFile(dirInstance.text)
-                .then(file => {
-                    this.clipboard = file.data.code;
+            this._view.setObs('loader', 'isVisible', true);
+            const file = await this.getFile(dirInstance.text);
 
-                    file.data.code = file.data.code.split(/\r?\n/);
+            this.clipboard = file.data.code;
 
-                    this.dirStructure.push({ ...file.data, name: dirInstance.name, fileType: dirInstance.fileType, child: [] });
-                    this._view.setObs('loader', 'isVisible', false);
+            file.data.code = file.data.code.split(/\r?\n/);
 
-                })
+            this.dirStructure.push({ ...file.data, name: dirInstance.name, fileType: dirInstance.fileType, child: [] });
+            this._view.setObs('loader', 'isVisible', false);
+
         }
     }
 

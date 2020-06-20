@@ -14,7 +14,7 @@
     <hr class="p-0 my-2">
 
     <div class="pb-2">
-        <button *ngIf="this.dirStructure.length >1 || !freeze" (click)="backDir()" class="btn btn-outline-light btn-sm mx-2">
+        <button *ngIf="this.dirStructure.length >1 " (click)="backDir()" class="btn btn-outline-light btn-sm mx-2">
             <svg style="margin-bottom: 4px;" class="bi bi-arrow-left-short" width="1em" height="1em" viewBox="0 0 16 16"
                 fill="black" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
@@ -26,8 +26,8 @@
         </button>
         <span *ngIf="openedDir?.fileType === 'dir'">
 
-            <button [disabled]="freeze" style="font-size: 13px; color: black;" type="button" class="btn btn-outline-light btn-sm " 
-                data-toggle="modal" data-target="#createFile">
+            <button [disabled]="freeze" style="font-size: 13px; color: black;" type="button"
+                class="btn btn-outline-light btn-sm " data-toggle="modal" data-target="#createFile">
                 <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-file-code " width="1.3em"
                     height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -39,8 +39,8 @@
                 </svg>
                 New File
             </button>
-            <button [disabled]="freeze" data-toggle="modal" data-target="#newDir" style="font-size: 13px; color: black;" type="button"
-                class="btn btn-outline-light btn-sm mx-2 " >
+            <button [disabled]="freeze" data-toggle="modal" data-target="#newDir" style="font-size: 13px; color: black;"
+                type="button" class="btn btn-outline-light btn-sm mx-2 ">
                 <svg style="margin-bottom: 3px; margin-right: 4px;" class="bi bi-folder-plus" width="1.3em"
                     height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -55,7 +55,8 @@
                 New directory
             </button>
             <button style="font-size: 12.5px; color: black;" type="button"
-                class="btn btn-outline-light btn-sm float-lg-right d-none d-lg-block " [disabled]="freeze"  >+ README</button>
+                class="btn btn-outline-light btn-sm float-lg-right d-none d-lg-block " [disabled]="freeze">+
+                README</button>
             <button style="font-size: 12.5px; color: black;" type="button"
                 class="btn btn-outline-light btn-sm mx-2 float-lg-right d-none d-lg-block" data-toggle="modal"
                 data-target="#findFile">
@@ -82,7 +83,7 @@
         <li class="list-group-item headd">
 
             <b>Name</b>
-            <b class="float-right">Last Update</b>
+            <b class="float-right">Directory Actions</b>
 
         </li>
 
@@ -90,8 +91,7 @@
         <img class="p-3" *ngIf="openedDir?.child.length === 0 " height="300px"
             src="../../../../assets/images/directoryEmpty.svg" alt="">
 
-        <li (click)="dirClick(i)" *ngFor="let file of openedDir?.child; let i = index" class="list-group-item "
-            style="cursor: pointer;">
+        <li *ngFor="let file of openedDir?.child; let i = index" class="list-group-item " style="cursor: pointer;">
 
             <svg *ngIf="file.fileType !== 'dir'" style="margin-bottom: 3px; margin-right: 3px;" class="bi bi-file-code "
                 width="1.3em" height="1.3em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -112,18 +112,27 @@
                     clip-rule="evenodd" />
             </svg>
 
-            <span class="file-name">
+            <span (click)="dirClick(i)" class="file-name">
                 {{ (file.fileType !== 'dir')? file.name + file.fileType : file.name+''}}
             </span>
+
+            <i style="float: right" class="material-icons btn btn-round mx-2">
+                delete
+            </i>
+
+            <i (click)="edit(file)" style="float: right" class="material-icons btn btn-round mx-1">
+                create
+            </i>
 
         </li>
     </ul>
 
-    <button *ngIf="openedDir?.fileType !== 'dir'" (click)="copyCode($event)" style="font-size: 12.5px;  position:sticky; top: 10px;"
-        type="button" class="btn btn-outline-dark btn-sm mx-2 float-lg-right ">
+    <button *ngIf="openedDir?.fileType !== 'dir'" (click)="copyCode($event)"
+        style="font-size: 12.5px;  position:sticky; top: 10px;" type="button"
+        class="btn btn-outline-dark btn-sm mx-2 float-lg-right ">
         Copy Code
     </button>
-    <pre id="foo" *ngIf="openedDir?.fileType !== 'dir'" class="code p-1 py-3" >
+    <pre id="foo" *ngIf="openedDir?.fileType !== 'dir'" class="code p-1 py-3">
     <span *ngFor="let line of openedDir?.code" class="tr first-row"><span class="th p-0"></span><code>{{line}}</code></span>
     </pre>
 
@@ -167,7 +176,7 @@
 <!-- /get/find/:name/:searchText -->
 
 
-
+<app-edit-file *ngIf="!!fileToEdit" [fileName]='fileToEdit?.name' [codeText]='codeToEdit' (onSave)='editFile($event)'></app-edit-file>
 <!-- Modal -->
 <div class="modal fade" id="findFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
     aria-hidden="true">
