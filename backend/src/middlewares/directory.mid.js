@@ -107,18 +107,18 @@ module.exports = {
 
     update_dir: async (req, res, next) => {
 
-        
-        if (!req.user.permission ) {
+
+        if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
-        
+
         try {
 
             const { _id } = req.user.project;
             const { dirId, newName } = req.body;
 
-            if(!!!dirId && !!!newName){throw 'Validation Error'}
+            if (!!!dirId && !!!newName) { throw 'Validation Error' }
 
             const directory = await directoryModel.findOne({ projectId: _id, _id: dirId });
 
@@ -175,7 +175,7 @@ module.exports = {
             const { _id } = req.user.project;
             const { codeText, dirId, fileName } = req.body;
 
-            if(!!!codeText && !!!dirId && !!!fileName) {
+            if (!!!codeText && !!!dirId && !!!fileName) {
                 throw 'Data Validation error';
             }
 
@@ -228,23 +228,88 @@ module.exports = {
 
     delete_file: async (req, res, next) => {
 
-        const { _id, freeze } = req.user.project;
 
-        if (!req.user.permission || freeze.isFreeze) {
+        if (!req.user.permission) {
             res.status(400).json({ success: false, msg: "Permission Not granted" });
             return;
         }
 
         try {
-            const { userName } = req.user;
-            const { fileId } = req.body;
+            const { _id } = req.user.project;
+            const { parentDirId, dirId } = req.body;
+
+
+            const pDirectory = await directoryModel.findOne({ projectId: _id, _id: parentDirId });
+            const cDirectory = await directoryModel.findOne({ projectId: _id, _id: dirId });
+
+
+            if (!!!pDirectory || !!!cDirectory) { throw 'Validation Error .' }
+            if (cDirectory.fileType === "dir" || pDirectory.fileType !== "dir") { throw 'Validation Error .' }
+
+
+            const index = pDirectory.child.findIndex(id => dirId == id);
+
+            if (index === -1) { throw 'Validation Error .' }
+
+            pDirectory.child.splice(index, 1);
+
+
+            const unlink = pDirectory.save();
+            const deleteDir = cDirectory.remove();
+            const file = codeModel.deleteOne({ projectId: _id, _id: cDirectory.text });
+
+            req.projectLog = {
+                type: 'Delete',
+                message: `${req.user.userName} deleted a file called ${cDirectory.name}${cDirectory.fileType} from the folder ${pDirectory.name}`
+            }
+
+            res.data = {};
+
+            await Promise.all([unlink, deleteDir, file]);
+
+            next();
+        }
+        catch (err) {
+            console.log(err)
+            res.status(400).json({ success: false, message: 'Server Err' });
+        }
+
+    },
+
+    delete_dir: async (req, res, next) => {
+
+        try {
+            const {_id} = req.user.project;
+            const {parentDirId, dirId} = req.body;
+
+            const pDirectory = await directoryModel.findOne({ projectId: _id, _id: parentDirId });
+            const cDirectory = await directoryModel.findOne({ projectId: _id, _id: dirId });
+
+            if (!!!pDirectory || !!!cDirectory) { throw 'Validation Error .' }
+            if (cDirectory.fileType !== "dir" || pDirectory.fileType !== "dir") { throw 'Validation Error .' }
+
+            const index = pDirectory.child.findIndex(id => dirId == id);
+
+            if (index === -1) { throw 'Validation Error .' }
+
+            pDirectory.child.splice(index, 1);
+
+            req.projectLog = {
+                type: 'Delete',
+                message: `${req.user.userName} deleted a Folder called ${cDirectory.name} from the folder ${pDirectory.name}.`
+            }
+
+            res.data = {};
+
+            await pDirectory.save();
+
+            next();
 
         }
         catch (err) {
             console.log(err)
-            res.status(400).json({ success: false, message: 'Server Err' })
+            res.status(400).json({ success: false, message: 'Server Err' });
         }
-
 
     }
 

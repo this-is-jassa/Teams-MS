@@ -6,6 +6,7 @@ module.exports = {
 
         try {
             const { userName } = req.user;
+            if(!!!userName){throw 'Validation Error . '}
 
             const user = await userModel.findOne({ userName: userName })
             .select("userName projects notify bio avatar lastActive _id")
@@ -20,7 +21,7 @@ module.exports = {
             next();
             
         } catch(err) {
-            res.status(500).json({ success: false, message: 'Cannot fetch user' }); console.error(err);
+            res.status(500).json({ success: false, message: 'Cannot fetch user' }); 
         }
     },
 

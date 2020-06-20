@@ -14,7 +14,8 @@ route.post('/update/file', sharedMiddleware.checkTokenAndSetUser, projectMiddlew
 
 route.post('/post', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true) , dirMid.post, projectMiddleware.projectLogs);
 
-
+route.post('/delete', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), dirMid.delete_dir, projectMiddleware.projectLogs);
+route.post('/delete/file', sharedMiddleware.checkTokenAndSetUser, projectMiddleware.permissions([$role.ALL], true), dirMid.delete_file, projectMiddleware.projectLogs);
 
 
 

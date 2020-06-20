@@ -38,7 +38,7 @@ export class DirectoryComponent implements OnInit, OnDestroy {
     searchText: string = '';
 
     clipboard: string = '';
-    
+
     fileToEdit: any = {};
     codeToEdit: string = ''
 
@@ -87,7 +87,7 @@ export class DirectoryComponent implements OnInit, OnDestroy {
 
         }
         else {
-            
+
             this.fileToEdit = file;
             this._view.setObs('loader', 'isVisible', true);
             const code = await this.getFile(file.text);
@@ -102,13 +102,28 @@ export class DirectoryComponent implements OnInit, OnDestroy {
 
     async editFile(data) {
         try {
-            await this._http.POST('/dir/update/file', { ...data, dirId: this.fileToEdit._id ,name: this.projectData.name }).toPromise();
+            await this._http.POST('/dir/update/file', { ...data, dirId: this.fileToEdit._id, name: this.projectData.name }).toPromise();
             this.fileToEdit.name = data.fileName;
-        }catch(err) {
+        } catch (err) {
             alert('Error Occured while saving changes');
         }
     }
 
+    async delete(file) {
+
+        if(!confirm('Are you sure you want delete it ?')) {return}
+        if(!confirm('You cannot recover this file later on. Are you sure.')) {return}
+        
+        const currentDir = this.openedDir;
+
+        if(file.fileType === 'dir'){
+            const isDeleted = await this._http.POST('/dir/delete', { parentDirId: currentDir._id , dirId: file._id, name: this.projectData.name }).toPromise();
+        }else{
+            const isDeleted = await this._http.POST('/dir/delete/file', { parentDirId: currentDir._id , dirId: file._id, name: this.projectData.name }).toPromise();
+        }
+        const index = currentDir.child.findIndex(id => file._id == id);
+        currentDir.child.splice(index, 1);
+    }
 
 
     async getDir(dirArr: any[]): Promise<any> {

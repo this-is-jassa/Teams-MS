@@ -116,7 +116,7 @@
                 {{ (file.fileType !== 'dir')? file.name + file.fileType : file.name+''}}
             </span>
 
-            <i style="float: right" class="material-icons btn btn-round mx-2">
+            <i (click)="delete(file)" style="float: right" class="material-icons btn btn-round mx-2">
                 delete
             </i>
 
@@ -172,8 +172,6 @@
     </div>
 
 </div>
-
-<!-- /get/find/:name/:searchText -->
 
 
 <app-edit-file *ngIf="!!fileToEdit" [fileName]='fileToEdit?.name' [codeText]='codeToEdit' (onSave)='editFile($event)'></app-edit-file>
