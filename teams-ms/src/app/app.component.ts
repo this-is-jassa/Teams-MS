@@ -15,10 +15,16 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.innerWidth = window.innerWidth;
+    
+    console.log(this.innerWidth);
     if(this.innerWidth > 768){
       this.navVisible = true;
+      
+    }else {
+      
+      document.getElementById('supportedBtn').click();
     }
-    console.log(this.innerWidth)
+
   }
 
   toggleNav() {
