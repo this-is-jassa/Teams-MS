@@ -1,7 +1,6 @@
 # Teams-MS
-Team management
+Team management & Directory sharing
 
 
-<!-- BUGS TO FIX  -->
- change the requirement of project's name to project's id while accessing any API Calls related to Project.
+
 
